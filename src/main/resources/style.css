@@ -1,0 +1,30 @@
+.jfx-button {
+    -fx-min-width: 110px;
+    -fx-pref-width: 130px;
+    -fx-background-color: #09129d;
+    -fx-background-radius: 60px;
+    -fx-text-fill: WHITE;
+
+    -jfx-button-type: RAISED;
+}
+
+.jfx-button .jfx-rippler{
+
+    -jfx-rippler-fill: rgb(153, 154, 255);
+}
+
+/*Datepicker parameters*/
+.jfx-date-picker > .arrow-button > .jfx-svg-glyph{
+    -fx-background-color: #0400e9;
+}
+
+
+.jfx-date-picker .month-year-pane{
+    -fx-background-color: #0400e9;
+    -fx-image: #0400e9;
+}
+
+.tab {
+
+    -fx-pref-width: 150
+}
