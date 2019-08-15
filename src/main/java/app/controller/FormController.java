@@ -1,7 +1,6 @@
 package app.controller;
 
 
-
 import app.model.Haulier;
 import app.model.OrderDetails;
 import app.model.Supplier;
@@ -17,10 +16,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+
 
 public class FormController  implements Initializable {
 
@@ -30,7 +31,7 @@ public class FormController  implements Initializable {
     @FXML
     GridPane gridPane;
 
-    private final ObservableList<String> BAYNAMES = FXCollections.observableArrayList("Bay01","Bay02","Bay03", "Bay04");
+    private final ObservableList<String> BAY_NAMES = FXCollections.observableArrayList("Bay01", "Bay02", "Bay03", "Bay04");
 
     //form labels
     private Label dPoint = new Label("Delivery point:"), supplier = new Label("Supplier:"),
@@ -49,7 +50,7 @@ public class FormController  implements Initializable {
             ETATime = new JFXTextField(), arrivedTime = new JFXTextField(),
             departureTime = new JFXTextField(), bookedInTime = new JFXTextField();
 
-    private ChoiceBox<String> bays = new ChoiceBox<>();
+    private JFXComboBox<String> bays = new JFXComboBox<>();
 
 
     private JFXDatePicker expectedETA = new JFXDatePicker(), arrivedDate = new JFXDatePicker(),
@@ -67,7 +68,7 @@ public class FormController  implements Initializable {
             dPoint,supplier,poNumber,haulier,pallets,
             arrivalTime,expectedETA,unloadingTime,poDetails};
 
-    private Node [] leftRightList ={
+    private Node[] leftRightList = {
             bays,supplierField, poField,haulierField,palletsField,placeHolder,ETATime,
             approxUnloadField};
 
@@ -102,6 +103,8 @@ public class FormController  implements Initializable {
 
     private void initializeForm(){
 
+        getArrivedTime.getStyleClass().add("form-button");
+
         for(int i = 0; i < leftLeftList.length; i++){
             gridPane.add(leftLeftList[i], 1, i+1 );
 
@@ -131,7 +134,8 @@ public class FormController  implements Initializable {
     }
 
     private void addBaysToChoiceBox(){
-        bays.setItems(BAYNAMES);
+
+        bays.setItems(BAY_NAMES);
         bays.getSelectionModel().selectFirst();
 
     }
@@ -213,6 +217,7 @@ public class FormController  implements Initializable {
 
 
     }
+
 
     //Load order data to table view if it is not new entry
     public ObservableList<OrderDetails> getOrderDetails(String poNumber) throws SQLException {

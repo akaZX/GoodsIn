@@ -119,7 +119,7 @@ public class AccessDatabase {
                 }
             }
             catch (SQLException sqlex) {
-                System.out.println("********** Entry exists ******************");
+                sqlex.printStackTrace();
             }
         }
 

@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import jfxtras.styles.jmetro8.JMetro;
+
 import java.net.URL;
 
 
@@ -15,6 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage)throws Exception{
 
+
         GoodsInController contr = new GoodsInController();
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("goodsInMenu.fxml"));
@@ -22,10 +25,17 @@ public class Main extends Application {
         Parent root = loader.load();
 
 
+        Scene scene = new Scene(root);
+
 
         primaryStage.setTitle("GI");
 
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(scene);
+
+
+
+//        new JMetro(JMetro.Style.LIGHT).applyTheme(scene);
+
 
 
         URL url = this.getClass().getResource("/style.css");

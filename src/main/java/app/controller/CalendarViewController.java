@@ -5,14 +5,10 @@ import com.calendarfx.model.CalendarSource;
 import com.calendarfx.view.CalendarView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.StackPane;
-
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ResourceBundle;
 
 public class CalendarViewController{
 
@@ -26,21 +22,24 @@ public class CalendarViewController{
         final CalendarView calendarView = new CalendarView();
         calendarView.setShowAddCalendarButton(false);
         calendarView.setShowDeveloperConsole(true);
-        Calendar katja = new Calendar("Katja");
-        Calendar dirk = new Calendar("Dirk");
-        Calendar philip = new Calendar("Philip");
-        Calendar jule = new Calendar("Jule");
-        katja.setShortName("K");
-        dirk.setShortName("D");
-        philip.setShortName("P");
-        jule.setShortName("J");
-        katja.setStyle(Calendar.Style.STYLE1);
-        dirk.setStyle(Calendar.Style.STYLE2);
-        philip.setStyle(Calendar.Style.STYLE3);
-        jule.setStyle(Calendar.Style.STYLE4);
-        CalendarSource familyCalendarSource = new CalendarSource("Family");
-        familyCalendarSource.getCalendars().addAll(new Calendar[]{katja, dirk, philip, jule});
-        calendarView.getCalendarSources().setAll(new CalendarSource[]{familyCalendarSource});
+        Calendar bayOne = new Calendar("BAY 1");
+        Calendar bayTwo = new Calendar("BAY 2");
+        Calendar bayThree = new Calendar("BAY 3");
+        Calendar bayFour = new Calendar("BAY 4");
+
+        bayOne.setShortName("BAY 1");
+        bayTwo.setShortName("BAY 2");
+        bayThree.setShortName("BAY 3");
+        bayFour.setShortName("BAY 4");
+
+        bayOne.setStyle(Calendar.Style.STYLE1);
+        bayTwo.setStyle(Calendar.Style.STYLE2);
+        bayThree.setStyle(Calendar.Style.STYLE3);
+        bayFour.setStyle(Calendar.Style.STYLE4);
+
+        CalendarSource goodsInBayCalendarSource = new CalendarSource("Family");
+        goodsInBayCalendarSource.getCalendars().addAll(bayOne, bayTwo, bayThree, bayFour);
+        calendarView.getCalendarSources().setAll(goodsInBayCalendarSource);
         calendarView.setRequestedTime(LocalTime.now());
         calendarViewPane.getChildren().addAll(calendarView);
         calendarViewTab.setContent(calendarViewPane);

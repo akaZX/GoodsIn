@@ -1,8 +1,6 @@
 package app.controller;
 
 
-
-
 import app.model.PurchaseOrder;
 import app.model.Supplier;
 import com.jfoenix.controls.JFXButton;
@@ -13,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -113,6 +112,20 @@ public class POTableTab{
 
         table.getColumns().addAll(idCol, orderNumber, supplierNameCol, supplierIDCol, poDateCol, haulierCol, palletsCol,unloadingTimeCol);
 
+
+//TODO padaryti kad atidarytu forma su orderio detalemis...
+        table.setRowFactory( tv -> {
+            TableRow<PurchaseOrder> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+
+
+                }
+            });
+            return row ;
+        });
+
+
     }
 
 
@@ -153,9 +166,6 @@ public class POTableTab{
             e.printStackTrace();
         }
 
-
-
-
         return orders;
 
     }
@@ -175,11 +185,14 @@ public class POTableTab{
         ResultSet rs = SQLDatabase.querySQL(proteanQuery);
         try{
             while(rs.next()){
-                String supplierName = rs.getString("SUPPLIER").replaceAll("'","");
+
+                String supplierName = rs.getString("SUPPLIER");
+                System.out.println("Supplier: " + supplierName.replaceAll("'", ""));
+
                 PurchaseOrder temp = new PurchaseOrder(
                         rs.getString("EXPECTRCPTDOCNUM"),
                         rs.getTimestamp("DATE"),
-                        supplierName,
+                        supplierName.replaceAll("'", ""),
                         rs.getString("SUPPID"));
 
                 insertOrdersInToAccessDB(temp);
@@ -195,14 +208,12 @@ public class POTableTab{
 
     private static void insertSupplier(Supplier supplier){
 
-        String insertSupplier = "INSERT INTO SUPPLIERS(DESC, [SUPPLIER_ID]) VALUES('" + supplier.getName()+ "','"+ supplier.getSupplierId() +"')";
+        String insertSupplier =
+                "INSERT INTO SUPPLIERS(DESC, [SUPPLIER_ID]) VALUES('"
+                        + supplier.getName() + "','" + supplier.getSupplierId() + "')";
 
-        try {
+
             AccessDatabase.accessConectionIsertUpdate(insertSupplier);
-            System.out.println("SUPPLIER ADDED!");
-        } catch (Exception e) {
-            System.out.println("SUPPLIER EXISTS!");
-        }
 
 
     }
@@ -210,8 +221,15 @@ public class POTableTab{
     private static void insertOrdersInToAccessDB(PurchaseOrder order){
 
         System.out.println(order.getOrderNumber());
-        final String checkQuery = "Select * from ORDERS WHERE PO_NUMBER ='" + order.getOrderNumber() + "' AND PROTEAN_ENTRY = 1;";
-        String insert = "INSERT INTO ORDERS(SUPPLIER,[SUPPLIER_ID],[PO_DATE],[PO_NUMBER]) VALUES('"+ order.getSupplierName() + "','" + order.getSupplierID() + "',#" + order.getExpectedDate() + "#,'"+ order.getOrderNumber() +"')";
+
+        final String checkQuery =
+                "Select * from ORDERS WHERE PO_NUMBER ='"
+                        + order.getOrderNumber() + "' AND PROTEAN_ENTRY = 1;";
+
+        String insert =
+                "INSERT INTO ORDERS(SUPPLIER,[SUPPLIER_ID],[PO_DATE],[PO_NUMBER]) VALUES('"
+                        + order.getSupplierName() + "','" + order.getSupplierID() + "',#"
+                        + order.getExpectedDate() + "#,'" + order.getOrderNumber() + "')";
         ResultSet rs = AccessDatabase.accessConnectionSelect(checkQuery);
 
         try {
@@ -229,10 +247,6 @@ public class POTableTab{
         }
 
     }
-
-
-
-
 
 
 }
