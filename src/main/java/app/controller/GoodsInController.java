@@ -1,7 +1,6 @@
 package app.controller;
 
 
-import com.jfoenix.controls.JFXTabPane;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -40,11 +39,12 @@ public class GoodsInController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //adds calendar tab to tabpane
-        mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
+//        mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
 
 
         mainTabPane.getTabs().add(loadTab(new FXMLLoader(getClass().getResource("/deliveryForm.fxml")), form));
-        mainTabPane.getTabs().add(POTableTab.createTab());
+        mainTabPane.getTabs().add(new POTableTab().createTab());
+
 
         //pane.getTabs().addAll((Tab)FXMLLoader.load(this.getClass().getResource("MyTab.fxml")));
 

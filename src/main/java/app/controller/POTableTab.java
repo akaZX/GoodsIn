@@ -5,18 +5,22 @@ import app.model.PurchaseOrder;
 import app.model.Supplier;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTabPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -28,24 +32,30 @@ import java.time.LocalTime;
 public class POTableTab{
 
 
+    public POTableTab() {
 
-    private static Tab tab = new Tab("Orders List");
-    private static TableView <PurchaseOrder> table = new TableView<>();
-    private static StackPane pane = new StackPane();
-    private static BorderPane bPane = new BorderPane();
-    private static HBox controllBox = new HBox();
+    }
 
+    @FXML
+    JFXTabPane mainTabPane;
 
-    private static JFXButton importOrders = new JFXButton("Import Orders");
-    private static JFXButton listOrders = new JFXButton("List");
-    private static JFXButton deleteOrder = new JFXButton("Delete");
-    private static JFXButton duplicateOrder = new JFXButton("Duplicate");
-    private static JFXDatePicker dateField = new JFXDatePicker();
-
+    private  Tab tab = new Tab("Orders List");
+    private  TableView <PurchaseOrder> table = new TableView<>();
+    private  StackPane pane = new StackPane();
+    private  BorderPane bPane = new BorderPane();
+    private  HBox controllBox = new HBox();
 
 
+    private  JFXButton importOrders = new JFXButton("Import Orders");
+    private  JFXButton listOrders = new JFXButton("List");
+    private  JFXButton deleteOrder = new JFXButton("Delete");
+    private  JFXButton duplicateOrder = new JFXButton("Duplicate");
+    private  JFXDatePicker dateField = new JFXDatePicker();
 
-    public static Tab createTab(){
+
+
+
+    public  Tab createTab(){
 
         controllBox.setPadding(new Insets(15, 20, 15, 25));
         controllBox.setSpacing(25);
@@ -66,7 +76,7 @@ public class POTableTab{
 
 
 
-    private static void CreateTableView(){
+    private void CreateTableView(){
 
 
         TableColumn<PurchaseOrder, Integer> idCol =
@@ -114,23 +124,14 @@ public class POTableTab{
 
 
 //TODO padaryti kad atidarytu forma su orderio detalemis...
-        table.setRowFactory( tv -> {
-            TableRow<PurchaseOrder> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 
-
-                }
-            });
-            return row ;
-        });
 
 
     }
 
 
-
-    private static void initializeButtons(){
+//    adds action listeners for buttons and table rows
+    private  void initializeButtons(){
 
         //TODO prideti likusias knopkes
 
@@ -143,12 +144,41 @@ public class POTableTab{
             table.setItems(getOrdersFromAccessDB());
 
         });
+
+        table.setRowFactory( tr -> {
+            TableRow<PurchaseOrder> row = new TableRow<>();
+
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    PurchaseOrder order = table.getSelectionModel().getSelectedItem();
+                    loadOrderForm(order);
+
+                }
+            });
+            return row ;
+        });
     }
 
 
+    //loads delivery form with order details
+    private void loadOrderForm(PurchaseOrder order) {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/deliveryForm.fxml"));
+        FormController contr = new FormController(order);
+        loader.setController(contr);
+
+        try {
+            Scene scene = new Scene(loader.load(),950,750);
+            Stage formstage = new Stage();
+            formstage.setScene(scene);
+            formstage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
-    private static ObservableList<PurchaseOrder> getOrdersFromAccessDB(){
+    private  ObservableList<PurchaseOrder> getOrdersFromAccessDB(){
 
         ObservableList<PurchaseOrder> orders =
                 FXCollections.observableArrayList();
@@ -170,7 +200,7 @@ public class POTableTab{
 
     }
 
-    private static void getOrderFromProtean(){
+    private  void getOrderFromProtean(){
 
         Timestamp date1 = Timestamp.valueOf(LocalDateTime.of(dateField.getValue(), LocalTime.of(0, 0, 0)));
         Timestamp date2 = Timestamp.valueOf(LocalDateTime.of(dateField.getValue(), LocalTime.of(23, 59, 59)));
@@ -206,7 +236,7 @@ public class POTableTab{
     }
 
 
-    private static void insertSupplier(Supplier supplier){
+    private  void insertSupplier(Supplier supplier){
 
         String insertSupplier =
                 "INSERT INTO SUPPLIERS(DESC, [SUPPLIER_ID]) VALUES('"
@@ -218,7 +248,7 @@ public class POTableTab{
 
     }
 
-    private static void insertOrdersInToAccessDB(PurchaseOrder order){
+    private  void insertOrdersInToAccessDB(PurchaseOrder order){
 
         System.out.println(order.getOrderNumber());
 

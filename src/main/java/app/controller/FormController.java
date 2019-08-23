@@ -1,8 +1,10 @@
 package app.controller;
 
 
+import app.CustomGUI.DateTimeInput;
 import app.model.Haulier;
 import app.model.OrderDetails;
+import app.model.PurchaseOrder;
 import app.model.Supplier;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
@@ -16,10 +18,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-
+import javafx.scene.layout.HBox;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -49,6 +54,8 @@ public class FormController  implements Initializable {
             approxUnloadField = new JFXTextField(), trailerNoField = new JFXTextField(),
             ETATime = new JFXTextField(), arrivedTime = new JFXTextField(),
             departureTime = new JFXTextField(), bookedInTime = new JFXTextField();
+
+    DateTimeInput dateTime = new DateTimeInput();
 
     private JFXComboBox<String> bays = new JFXComboBox<>();
 
@@ -81,9 +88,19 @@ public class FormController  implements Initializable {
             getDepartedTime, departureTime, getBookedInTime, bookedInTime};
 
 
+    public FormController() {
+
+    }
+
+    public FormController(PurchaseOrder order) {
+
+        loadOrderDetails(order);
+
+    }
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("veikia forma");
 
         try {
 //            querryAccessDB("hauliersList", hauliers);
@@ -93,17 +110,14 @@ public class FormController  implements Initializable {
             e.printStackTrace();
         }
 
-
-
         initializeOrderDetailsTable();
         initializeForm();
-
     }
 
 
     private void initializeForm(){
 
-        getArrivedTime.getStyleClass().add("form-button");
+//        getArrivedTime.getStyleClass().add("form-button");
 
         for(int i = 0; i < leftLeftList.length; i++){
             gridPane.add(leftLeftList[i], 1, i+1 );
@@ -126,10 +140,122 @@ public class FormController  implements Initializable {
         }
 
         gridPane.add(orderDetailsTable, 1, 10, 2, 5);
-        gridPane.add(submitForm, 5, 14);
+        gridPane.add(submitForm, 5, 13);
+        gridPane.add(dateTime, 5, 12);
 //        submitForm.minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.4));
 //        leftLeftList[6].minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.2));
+       addNumberFormatt(palletsField);
+       addNumberFormatt(approxUnloadField);
+        formatFieldForTimeInput(trailerNoField);
+
         addBaysToChoiceBox();
+
+        addActionsForButtons();
+
+    }
+
+//adds event handler for buttons
+    private void addActionsForButtons(){
+
+        getArrivedTime.setOnAction(event ->
+                getCurrentTime(arrivedDate,arrivedTime));
+
+        getDepartedTime.setOnAction(event ->
+                getCurrentTime(departedDate,departureTime));
+
+        getBookedInTime.setOnAction(event ->
+            getCurrentTime(bookedInDate,bookedInTime));
+
+        submitForm.setOnAction(event ->
+                System.out.println("veikia"));
+    }
+
+    // fills current time in fields provided
+    private void getCurrentTime(JFXDatePicker dateField, JFXTextField timeField) {
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
+        dateField.setValue(LocalDate.now());
+        timeField.setText(LocalTime.now().format(format));
+
+
+
+
+    }
+
+    private void formatFieldForTimeInput(JFXTextField field){
+
+        field.textProperty().addListener((observable, oldValue, newValue) -> {
+
+            if(oldValue.length()> newValue.length()){
+                field.setText(newValue);
+
+            }else{
+
+
+                if (newValue.length() == 1){
+                    if(newValue.matches("[\\d]")){
+                        if (Integer.parseInt(field.getText()) > 2){
+                            field.setText(oldValue);
+                        }
+                        return;
+                    }else{
+                        field.setText(oldValue);
+                    }
+                }
+                if(newValue.length() == 2){
+
+                    if(newValue.matches("[\\d]{2}")){
+                        if(Integer.parseInt(field.getText()) > 23){
+                            field.setText(oldValue);
+                        }else {
+                            field.setText(newValue + ":");
+                        }
+                    }else{
+                        field.setText(oldValue);
+                    }
+                }
+                if(newValue.length() ==3){
+                    if(newValue.charAt(2) != ':'){
+                        field.setText(oldValue + ":");
+                    }
+
+                }
+                if(newValue.length() == 4){
+                    if(newValue.matches("[\\d]{2}:[\\d]")){
+                        if(Character.getNumericValue(newValue.charAt(3)) < 6){
+                            field.setText(newValue);
+                        }else{
+                            field.setText(oldValue);
+                        }
+                    }else{
+                        field.setText(oldValue);
+                    }
+                }
+                if(newValue.length() == 5){
+                    if(newValue.matches("[\\d]{2}:[\\d]{2}")){
+                        if(Character.getNumericValue(newValue.charAt(4)) < 10){
+                            field.setText(newValue);
+                        }else{
+                            field.setText(oldValue);
+                        }
+                    }else{
+                        field.setText(oldValue);
+                    }
+                }
+                if(newValue.length() >5){
+                    field.setText(oldValue);
+                }
+
+
+
+            }
+
+
+
+
+        });
+
+
 
     }
 
@@ -139,6 +265,8 @@ public class FormController  implements Initializable {
         bays.getSelectionModel().selectFirst();
 
     }
+
+
     private void initializeOrderDetailsTable(){
 
         System.out.println(orderDetailsTable.widthProperty().get());
@@ -219,8 +347,8 @@ public class FormController  implements Initializable {
     }
 
 
-    //Load order data to table view if it is not new entry
-    public ObservableList<OrderDetails> getOrderDetails(String poNumber) throws SQLException {
+    //Load order data to table view if it is has an PO number
+    private ObservableList<OrderDetails> getOrderDetails(String poNumber) throws SQLException {
 
         ObservableList<OrderDetails> orders = FXCollections.observableArrayList();
 
@@ -249,8 +377,8 @@ public class FormController  implements Initializable {
     }
 
     private void getHauliersList(String table, HashMap<Integer, Haulier> hauliers) throws SQLException{
-        String querry = "SELECT * FROM " + table + " ORDER BY Desc";
-        ResultSet rs = AccessDatabase.accessConnectionSelect(querry);
+        String query = "SELECT * FROM " + table + " ORDER BY Desc";
+        ResultSet rs = AccessDatabase.accessConnectionSelect(query);
         while(rs.next()){
             hauliers.put(rs.getInt(1), new Haulier( rs.getString(2), rs.getInt(1)));
 
@@ -285,6 +413,17 @@ public class FormController  implements Initializable {
         addAutocomplete(supplierField, list);
     }
 
+    //add number formatting for textfield
+    private void addNumberFormatt(JFXTextField field){
+
+        field.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.matches("\\d*")) return;
+            field.setText(newValue.replaceAll("[^\\d]", ""));
+        });
+
+    }
+
+
     private void addAutocomplete(TextField field, List<String> listas) {
 
 
@@ -310,6 +449,13 @@ public class FormController  implements Initializable {
                 autoCompletePopup.show(field);
             }
         });
+    }
+
+    private void loadOrderDetails(PurchaseOrder order){
+
+        expectedETA.setValue(order.getPoDate().toLocalDate());
+        supplierField.setText(order.getSupplierName());
+
     }
 
 }

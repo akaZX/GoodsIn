@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root alignment="CENTER_RIGHT" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+
+      <JFXDatePicker fx:id="date" defaultColor="#0400e8" maxWidth="-Infinity" minWidth="100.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" HBox.hgrow="ALWAYS">
+      <HBox.margin>
+         <Insets />
+      </HBox.margin></JFXDatePicker>
+   <HBox maxWidth="1.7976931348623157E308" prefWidth="50.0" HBox.hgrow="ALWAYS" />
+      <JFXTextField fx:id="hours" alignment="CENTER_RIGHT" minWidth="24.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="30.0" />
+      <Label alignment="CENTER" minWidth="10.0" text=" : ">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="minutes" minWidth="24.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="30.0" />
+
+</fx:root>

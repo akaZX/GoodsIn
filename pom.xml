@@ -79,8 +79,13 @@
                 <artifactId>view</artifactId>
                 <version>8.5.0</version>
             </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-fontawesome-pack</artifactId>
+            <version>11.3.4</version>
+        </dependency>
 
-        </dependencies>
+    </dependencies>
 
 
 
