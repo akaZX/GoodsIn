@@ -21,8 +21,10 @@ public class Main extends Application {
         GoodsInController contr = new GoodsInController();
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("goodsInMenu.fxml"));
+        System.out.println(loader);
         loader.setController(contr);
         Parent root = loader.load();
+        System.out.println("islenda");
 
 
         Scene scene = new Scene(root);
@@ -34,7 +36,6 @@ public class Main extends Application {
 
 
 
-//        new JMetro(JMetro.Style.LIGHT).applyTheme(scene);
 
 
 

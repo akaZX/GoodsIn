@@ -42,7 +42,7 @@ public class GoodsInController implements Initializable {
 //        mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
 
 
-        mainTabPane.getTabs().add(loadTab(new FXMLLoader(getClass().getResource("/deliveryForm.fxml")), form));
+        mainTabPane.getTabs().add(loadTab(new FXMLLoader(getClass().getClassLoader().getResource("deliveryForm.fxml")), form));
         mainTabPane.getTabs().add(new POTableTab().createTab());
 
 

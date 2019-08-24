@@ -116,7 +116,7 @@ public class FormController  implements Initializable {
 
     private void initializeForm(){
 
-//        getArrivedTime.getStyleClass().add("form-button");
+        getArrivedTime.getStyleClass().add("form-button");
 
         gridPane.add(poDetailsLabel, 1, 0,2,1);
         gridPane.add(orderDetailsTable, 1, 9,2,5);

@@ -2,69 +2,57 @@
 
 
 
-/*.tree-table-row-cell {*/
 
-/*    -fx-cell-size: 25px;*/
-/*}*/
 
-/*.form-button {*/
+.form-button {
 /*    !*-fx-min-width: 110px;*!*/
 /*    -fx-pref-width: 130px;*/
-/*    -fx-background-color: #0400e9;*/
+    -fx-background-color: #0400e9;
 /*    -fx-background-radius: 60px;*/
-/*    -fx-text-fill: WHITE;*/
+    -fx-text-fill: WHITE;
 
-/*    -jfx-button-type: RAISED;*/
-/*}*/
+    -jfx-button-type: RAISED;
+}
 
-/*.jfx-button:focused {*/
-/*    -fx-background-color: #5653e9;*/
-/*}*/
+.jfx-button:focused {
+    -fx-background-color: #0400e9;
+}
 
-/*.jfx-button:hover {*/
-/*    -fx-background-color: #5653e9;*/
-/*}*/
-/*.jfx-button .jfx-rippler{*/
+.jfx-button:hover {
+    -fx-background-color: #0400e9;
+}
+.jfx-button .jfx-rippler{
 
-/*    -jfx-rippler-fill: rgba(153, 154, 255, 0.6);*/
-/*}*/
-
-/*!*Datepicker parameters*!*/
-/*.jfx-date-picker > .arrow-button > .jfx-svg-glyph{*/
-/*    -fx-background-color: #0400e9;*/
-/*}*/
+    -jfx-rippler-fill: rgba(27, 18, 255, 0.11);
+}
 
 
-/*.jfx-date-picker .month-year-pane{*/
-/*    -fx-background-color: #0400e9;*/
-/*    -fx-image: #0400e9;*/
-/*}*/
 
 /*!*Tabview styling*!*/
 
-/*.jfx-tab-pane .headers-region {*/
-/*    -fx-background-color: #0400e9;*/
-/*}*/
+.jfx-tab-pane .headers-region {
+    -fx-background-color: #0400e9;
+}
 
-/*.jfx-tab-pane .tab-header-background {*/
-/*    -fx-background-color: #0400e9;*/
-/*}*/
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: #0400e9;
+}
 
-/*.jfx-tab-pane .tab-selected-line {*/
-/*    -fx-stroke-width: 5px;*/
-/*    -fx-background-color: #ffffff;*/
-/*}*/
+.jfx-tab-pane .tab-selected-line {
+    -fx-stroke-width: 5px;
+    -fx-background-color: #ffffff;
+}
 
-/*.jfx-tab-pane .tab .tab-label {*/
-/*    -fx-text-fill: #929292;*/
-/*}*/
+.jfx-tab-pane .tab .tab-label {
+    -fx-text-fill: #929292;
+}
 
-/*.jfx-tab-pane .tab:selected .tab-label {*/
-/*    -fx-text-fill: #ffffff;*/
-/*}*/
+.jfx-tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #ffffff;
+}
 
 
-/*.tab {*/
+.tab {
 
-/*    -fx-pref-width: 150*/
-/*}*/
+    -fx-pref-width: 150
+}
