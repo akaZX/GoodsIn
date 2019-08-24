@@ -3,13 +3,15 @@ package app.model;
 
 
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
 
 
-public class PurchaseOrder {
+public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
 
     private int id;
     private String orderNumber;
@@ -43,7 +45,7 @@ public class PurchaseOrder {
 
 
     // used to create object from Access database
-    public PurchaseOrder(int id, String orderNumber, String supplierName, String supplierID, String haulier, int pallets, int unloadingTime, Date poDate) {
+    public PurchaseOrder(int id, String orderNumber, String supplierName, String supplierID, String haulier, int pallets, int unloadingTime, Date poDate, Timestamp expectedEta) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.supplierName = supplierName;
@@ -52,6 +54,7 @@ public class PurchaseOrder {
         this.unloadingTime = unloadingTime;
         this.poDate = poDate;
         this.haulier = haulier;
+        this.expectedEta = expectedEta;
 
     }
 
@@ -119,4 +122,10 @@ public class PurchaseOrder {
     public Timestamp getBooked() {
         return booked;
     }
+
+    public void setExpectedEta(Timestamp expectedEta) {
+
+        this.expectedEta = expectedEta;
+    }
+
 }

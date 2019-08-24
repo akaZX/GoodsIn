@@ -18,7 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,7 +41,7 @@ public class FormController  implements Initializable {
     //form labels
     private Label dPoint = new Label("Delivery point:"), supplier = new Label("Supplier:"),
             poNumber = new Label("Order Number::"), haulier = new Label("Haulier:"),
-            pallets = new Label("Pallets:"), arrivalTime = new Label("Expected ETA:"),
+            pallets = new Label("Pallets:"), expectedArrivalTime = new Label("Expected ETA:"),
             unloadingTime = new Label("Unloading Time:"), poDetails = new Label("PO Details:"),
             trailerNo = new Label("Trailer registration:"), comments = new Label("Comments:"),
             arrived = new Label("Arrived:"), departed = new Label("Departed:"),
@@ -51,41 +51,40 @@ public class FormController  implements Initializable {
 
     private JFXTextField supplierField = new JFXTextField(), poField = new JFXTextField(),
             haulierField = new JFXTextField(), palletsField = new JFXTextField(),
-            approxUnloadField = new JFXTextField(), trailerNoField = new JFXTextField(),
-            ETATime = new JFXTextField(), arrivedTime = new JFXTextField(),
-            departureTime = new JFXTextField(), bookedInTime = new JFXTextField();
+            approxUnloadField = new JFXTextField(), trailerNoField = new JFXTextField();
 
-    DateTimeInput dateTime = new DateTimeInput();
 
     private JFXComboBox<String> bays = new JFXComboBox<>();
 
 
-    private JFXDatePicker expectedETA = new JFXDatePicker(), arrivedDate = new JFXDatePicker(),
-            departedDate = new JFXDatePicker(), bookedInDate = new JFXDatePicker();
+    private DateTimeInput expectedETA = new DateTimeInput(), arrivedDate = new DateTimeInput(),
+            departedDate = new DateTimeInput(), bookedInDate = new DateTimeInput();
 
     private JFXTreeTableView<OrderDetails> orderDetailsTable = new JFXTreeTableView<>();
 
 
 
-    private JFXButton getArrivedTime = new JFXButton("Get Arrival Time"), getDepartedTime = new JFXButton("Get departure Time"),
-            getBookedInTime = new JFXButton("Get booked in Time"), submitForm = new JFXButton("Submit");
+    private JFXButton getArrivedTime = new JFXButton("Get Arrival Time"),
+            getDepartedTime = new JFXButton("Get departure Time"),
+            getBookedInTime = new JFXButton("Get booked in Time"),
+            submitForm = new JFXButton("Submit");
 
 
     private Node [] leftLeftList = {
-            dPoint,supplier,poNumber,haulier,pallets,
-            arrivalTime,expectedETA,unloadingTime,poDetails};
+            dPoint, poNumber, supplier, haulier, pallets, unloadingTime,
+            expectedArrivalTime, poDetails};
 
     private Node[] leftRightList = {
-            bays,supplierField, poField,haulierField,palletsField,placeHolder,ETATime,
-            approxUnloadField};
+            bays, poField, supplierField, haulierField, palletsField, approxUnloadField,
+            expectedETA};
 
     private Node[] rightLeftList = {
             trailerNo,comments,new Label(),new Label(),arrived,arrivedDate,
             departed,departedDate,bookedIn,bookedInDate};
 
     private Node [] rightRightList = {
-            trailerNoField, commentsBox,new Label(),new Label(), getArrivedTime, arrivedTime,
-            getDepartedTime, departureTime, getBookedInTime, bookedInTime};
+            trailerNoField, commentsBox,new Label(),new Label(), new Label(), getArrivedTime, new Label(),
+            getDepartedTime,new Label(), getBookedInTime};
 
 
     public FormController() {
@@ -119,6 +118,9 @@ public class FormController  implements Initializable {
 
 //        getArrivedTime.getStyleClass().add("form-button");
 
+        gridPane.add(poDetailsLabel, 1, 0,2,1);
+        gridPane.add(orderDetailsTable, 1, 9,2,5);
+
         for(int i = 0; i < leftLeftList.length; i++){
             gridPane.add(leftLeftList[i], 1, i+1 );
 
@@ -139,14 +141,13 @@ public class FormController  implements Initializable {
             gridPane.add(rightRightList[i], 5, i+1 );
         }
 
-        gridPane.add(orderDetailsTable, 1, 10, 2, 5);
+
+
         gridPane.add(submitForm, 5, 13);
-        gridPane.add(dateTime, 5, 12);
 //        submitForm.minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.4));
 //        leftLeftList[6].minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.2));
        addNumberFormatt(palletsField);
        addNumberFormatt(approxUnloadField);
-        formatFieldForTimeInput(trailerNoField);
 
         addBaysToChoiceBox();
 
@@ -158,109 +159,22 @@ public class FormController  implements Initializable {
     private void addActionsForButtons(){
 
         getArrivedTime.setOnAction(event ->
-                getCurrentTime(arrivedDate,arrivedTime));
+                arrivedDate.setCurrentTime());
 
         getDepartedTime.setOnAction(event ->
-                getCurrentTime(departedDate,departureTime));
+                departedDate.setCurrentTime());
 
         getBookedInTime.setOnAction(event ->
-            getCurrentTime(bookedInDate,bookedInTime));
+            bookedInDate.setCurrentTime());
 
         submitForm.setOnAction(event ->
-                System.out.println("veikia"));
+
+        System.out.println(expectedETA.getHours())
+                );
     }
 
-    // fills current time in fields provided
-    private void getCurrentTime(JFXDatePicker dateField, JFXTextField timeField) {
-
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
-        dateField.setValue(LocalDate.now());
-        timeField.setText(LocalTime.now().format(format));
-
-
-
-
-    }
-
-    private void formatFieldForTimeInput(JFXTextField field){
-
-        field.textProperty().addListener((observable, oldValue, newValue) -> {
-
-            if(oldValue.length()> newValue.length()){
-                field.setText(newValue);
-
-            }else{
-
-
-                if (newValue.length() == 1){
-                    if(newValue.matches("[\\d]")){
-                        if (Integer.parseInt(field.getText()) > 2){
-                            field.setText(oldValue);
-                        }
-                        return;
-                    }else{
-                        field.setText(oldValue);
-                    }
-                }
-                if(newValue.length() == 2){
-
-                    if(newValue.matches("[\\d]{2}")){
-                        if(Integer.parseInt(field.getText()) > 23){
-                            field.setText(oldValue);
-                        }else {
-                            field.setText(newValue + ":");
-                        }
-                    }else{
-                        field.setText(oldValue);
-                    }
-                }
-                if(newValue.length() ==3){
-                    if(newValue.charAt(2) != ':'){
-                        field.setText(oldValue + ":");
-                    }
-
-                }
-                if(newValue.length() == 4){
-                    if(newValue.matches("[\\d]{2}:[\\d]")){
-                        if(Character.getNumericValue(newValue.charAt(3)) < 6){
-                            field.setText(newValue);
-                        }else{
-                            field.setText(oldValue);
-                        }
-                    }else{
-                        field.setText(oldValue);
-                    }
-                }
-                if(newValue.length() == 5){
-                    if(newValue.matches("[\\d]{2}:[\\d]{2}")){
-                        if(Character.getNumericValue(newValue.charAt(4)) < 10){
-                            field.setText(newValue);
-                        }else{
-                            field.setText(oldValue);
-                        }
-                    }else{
-                        field.setText(oldValue);
-                    }
-                }
-                if(newValue.length() >5){
-                    field.setText(oldValue);
-                }
-
-
-
-            }
-
-
-
-
-        });
-
-
-
-    }
 
     private void addBaysToChoiceBox(){
-
         bays.setItems(BAY_NAMES);
         bays.getSelectionModel().selectFirst();
 
@@ -269,7 +183,7 @@ public class FormController  implements Initializable {
 
     private void initializeOrderDetailsTable(){
 
-        System.out.println(orderDetailsTable.widthProperty().get());
+
         JFXTreeTableColumn<OrderDetails, String> mCodeColumn = new JFXTreeTableColumn<>("M Code");
         mCodeColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
         mCodeColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
@@ -316,7 +230,7 @@ public class FormController  implements Initializable {
 
         ObservableList<OrderDetails> orders = FXCollections.observableArrayList();
 
-        if(poField.getText().length() >=7){
+        if(poField.getText().length() >= 7){
 
             try {
                 orders =  getOrderDetails(poField.getText());
@@ -453,7 +367,7 @@ public class FormController  implements Initializable {
 
     private void loadOrderDetails(PurchaseOrder order){
 
-        expectedETA.setValue(order.getPoDate().toLocalDate());
+        expectedETA.setDate(order.getPoDate().toLocalDate());
         supplierField.setText(order.getSupplierName());
 
     }

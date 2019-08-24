@@ -15,10 +15,13 @@
       </HBox.margin></JFXDatePicker>
    <HBox maxWidth="1.7976931348623157E308" prefWidth="50.0" HBox.hgrow="ALWAYS" />
       <JFXTextField fx:id="hours" alignment="CENTER_RIGHT" minWidth="24.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="30.0" />
-      <Label alignment="CENTER" minWidth="10.0" text=" : ">
+      <Label alignment="CENTER" minWidth="10.0" text=":">
          <font>
             <Font size="13.0" />
          </font>
+      <HBox.margin>
+         <Insets left="2.0" right="2.0" />
+      </HBox.margin>
       </Label>
       <JFXTextField fx:id="minutes" minWidth="24.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="30.0" />
 
