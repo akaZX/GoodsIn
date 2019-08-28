@@ -1,13 +1,11 @@
 package app.controller;
 
 
+import app.model.PoTableColumns;
 import app.model.PurchaseOrder;
 import app.model.Supplier;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,14 +14,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -43,11 +40,14 @@ public class POTableTab{
     JFXTabPane mainTabPane;
 
     private  Tab tab = new Tab("Orders List");
-    private JFXTreeTableView<PurchaseOrder> table = new JFXTreeTableView<>();
-    private  StackPane pane = new StackPane();
-    private  BorderPane bPane = new BorderPane();
-    private  HBox controllBox = new HBox();
 
+    private JFXTreeTableView<PurchaseOrder> table = new JFXTreeTableView<>();
+
+    private  StackPane pane = new StackPane();
+
+    private  BorderPane bPane = new BorderPane();
+
+    private  HBox controllBox = new HBox();
 
     private  JFXButton importOrders = new JFXButton("Import Orders");
     private  JFXButton listOrders = new JFXButton("List");
@@ -58,7 +58,7 @@ public class POTableTab{
 
 
 
-    public  Tab createTab(){
+    public  Tab createTable(){
 
         controllBox.setPadding(new Insets(15, 20, 15, 25));
         controllBox.setSpacing(25);
@@ -73,100 +73,36 @@ public class POTableTab{
         pane.getChildren().addAll(bPane);
         tab.setContent(pane);
 
-        createTableView();
-        initializeButtons();
+        addColumnsToTable();
+        tableViewActionListeners();
 
         return tab;
     }
 
 
 
-    private void createTableView(){
+    private void addColumnsToTable(){
 
-        JFXTreeTableColumn<PurchaseOrder, Integer> idCol = new JFXTreeTableColumn<>("ID");
-        idCol.setStyle("-fx-alignment: CENTER_RIGHT;");
-        idCol.prefWidthProperty().bind(table.widthProperty().multiply(0.03));
-        idCol.minWidthProperty().bind(table.widthProperty().multiply(0.03));
-        idCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, Integer> param) ->{
-            if(idCol.validateValue(param)) {
-                int id = param.getValue().getValue().getId();
-                return new SimpleIntegerProperty(id).asObject();
-            } else return idCol.getComputedValue(param);
-        });
-
-        JFXTreeTableColumn<PurchaseOrder, String> supplierCol = new JFXTreeTableColumn<>("Supplier");
-        supplierCol.prefWidthProperty().bind(table.widthProperty().multiply(0.2));
-        supplierCol.minWidthProperty().bind(table.widthProperty().multiply(0.15));
-        supplierCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
-            if(supplierCol.validateValue(param)) {
-                String supplier = param.getValue().getValue().getSupplierName();
-                return new SimpleStringProperty(supplier);
-            } else return supplierCol.getComputedValue(param);
-        });
-
-        JFXTreeTableColumn<PurchaseOrder, String> poCol = new JFXTreeTableColumn<>("PO Number");
-        poCol.prefWidthProperty().bind(table.widthProperty().multiply(0.07));
-        poCol.minWidthProperty().bind(table.widthProperty().multiply(0.07));
-        poCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
-            if(poCol.validateValue(param)) {
-                String poNumber = param.getValue().getValue().getOrderNumber();
-                return new SimpleStringProperty(poNumber);
-            } else return poCol.getComputedValue(param);
-        });
-
-
-        JFXTreeTableColumn<PurchaseOrder, String> haulierCol = new JFXTreeTableColumn<>("Haulier");
-        haulierCol.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
-        haulierCol.minWidthProperty().bind(table.widthProperty().multiply(0.07));
-        haulierCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
-            if(haulierCol.validateValue(param)) {
-                String haulier = param.getValue().getValue().getHaulier();
-                return new SimpleStringProperty(haulier);
-            } else return haulierCol.getComputedValue(param);
-        });
-
-        JFXTreeTableColumn<PurchaseOrder, Integer> palletsCol = new JFXTreeTableColumn<>("Pallets");
-        palletsCol.prefWidthProperty().bind(table.widthProperty().multiply(0.04));
-        palletsCol.minWidthProperty().bind(table.widthProperty().multiply(0.04));
-        palletsCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, Integer> param) ->{
-            if(palletsCol.validateValue(param)) {
-                int pallets = param.getValue().getValue().getPallets();
-                return new SimpleIntegerProperty(pallets).asObject();
-            } else return palletsCol.getComputedValue(param);
-        });
-
-        JFXTreeTableColumn<PurchaseOrder, Integer> unloadingTimeCol = new JFXTreeTableColumn<>("Unloading Time");
-        unloadingTimeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.04));
-        unloadingTimeCol.minWidthProperty().bind(table.widthProperty().multiply(0.04));
-        unloadingTimeCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, Integer> param) ->{
-            if(unloadingTimeCol.validateValue(param)) {
-                int pallets = param.getValue().getValue().getUnloadingTime();
-                return new SimpleIntegerProperty(pallets).asObject();
-            } else return unloadingTimeCol.getComputedValue(param);
-        });
-
-
-        TreeTableColumn<PurchaseOrder, Timestamp> expectedETACol = new TreeTableColumn<>("Expected");
-//        expectedETACol.prefWidthProperty().bind(table.widthProperty().multiply(0.04));
-//        expectedETACol.minWidthProperty().bind(table.widthProperty().multiply(0.04));
-        expectedETACol.setCellValueFactory(new TreeItemPropertyValueFactory<>("expectedEta"));
-
-
+        PoTableColumns tableColumns = new PoTableColumns(table);
 
         table.columnResizePolicyProperty();
-        table.getColumns().addAll(idCol, supplierCol, poCol, haulierCol, palletsCol, unloadingTimeCol, expectedETACol);
+        table.getColumns().addAll(tableColumns.idCol(), tableColumns.supplierCol(), tableColumns.poCol(),
+                tableColumns.haulierCol(), tableColumns.expectedETACol(), tableColumns.palletsCol(),
+                tableColumns.unloadinTimeCol());
+
+        table.setShowRoot(false);
+        table.setEditable(false);
     }
 
 
 //    adds action listeners for buttons and table rows
-    private  void initializeButtons(){
+    private  void tableViewActionListeners(){
 
         //TODO prideti likusias knopkes
 
         listOrders.setOnAction(event -> {
             table.setRoot(populateTreeItems());
-            table.setShowRoot(false);
-            table.setEditable(false);
+
         });
 
         importOrders.setOnAction(event -> {
@@ -189,7 +125,6 @@ public class POTableTab{
         });
     }
 
-
     //loads delivery form with order details
     private void loadOrderForm(PurchaseOrder order) {
 
@@ -202,9 +137,22 @@ public class POTableTab{
             Stage formstage = new Stage();
             formstage.setScene(scene);
             formstage.show();
+            URL url = this.getClass().getResource("/style.css");
+            if (url == null) {
+                System.out.println("Resource not found. Aborting.");
+                System.exit(-1);
+            }
+            String css = url.toExternalForm();
+            formstage.getScene().getStylesheets().add(css);
+            //reloads table with updated data
+            formstage.setOnCloseRequest(event -> {
+                table.setRoot(populateTreeItems());
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     private TreeItem<PurchaseOrder> populateTreeItems(){
@@ -214,19 +162,26 @@ public class POTableTab{
         return root;
     }
 
-
     private  ObservableList<PurchaseOrder> getOrdersFromAccessDB(){
 
         ObservableList<PurchaseOrder> orders =
                 FXCollections.observableArrayList();
 
-        String query = "Select * from orders where PO_DATE = #" + dateField.getValue()+ "# and visible = 1 ORDER BY SUPPLIER;";
+        String query = "SELECT * FROM ORDERS WHERE PO_DATE = #" + dateField.getValue()+ "# AND VISIBLE = 1 ORDER BY SUPPLIER;";
         ResultSet rs = AccessDatabase.accessConnectionSelect(query);
 
         try {
             while (rs.next()){
 
-                PurchaseOrder temp = new PurchaseOrder(rs.getInt("ID"), rs.getString("PO_NUMBER"), rs.getString("SUPPLIER"),  rs.getString("SUPPLIER_ID"), rs.getString("HAULIER"), rs.getInt("PALLETS"), rs.getInt("UNLOADING_TIME"), rs.getDate("PO_DATE"), rs.getTimestamp("EXPECTED_ETA"));
+                PurchaseOrder temp = new PurchaseOrder(
+                        rs.getInt("ID"), rs.getString("PO_NUMBER"),
+                        rs.getString("SUPPLIER"),  rs.getString("SUPPLIER_ID"),
+                        rs.getString("HAULIER"), rs.getInt("PALLETS"),
+                        rs.getInt("UNLOADING_TIME"), rs.getDate("PO_DATE"),
+                        rs.getTimestamp("EXPECTED_ETA"), rs.getTimestamp("ARRIVED"),
+                        rs.getTimestamp("DEPARTED"), rs.getTimestamp("BOOKED_IN"),
+                        rs.getString("BAY"), rs.getString("COMMENTS"),
+                        rs.getString("TRAILER_NO"));
                 orders.add(temp);
             }
         } catch (SQLException e) {
@@ -236,6 +191,8 @@ public class POTableTab{
         return orders;
 
     }
+
+
 
     private  void getOrderFromProtean(){
 
@@ -252,18 +209,18 @@ public class POTableTab{
         ResultSet rs = SQLDatabase.querySQL(proteanQuery);
         try{
             while(rs.next()){
-
-                String supplierName = rs.getString("SUPPLIER");
-                System.out.println("Supplier: " + supplierName.replaceAll("'", ""));
+//   removes all '  from supplier names as it might break Access insert query and inconsistent results might appear
+                String supplierName = rs.getString("SUPPLIER").replaceAll("'", "");
 
                 PurchaseOrder temp = new PurchaseOrder(
                         rs.getString("EXPECTRCPTDOCNUM"),
-                        rs.getTimestamp("DATE"),
-                        supplierName.replaceAll("'", ""),
+                        rs.getDate("DATE"),
+                        supplierName,
                         rs.getString("SUPPID"));
 
-                insertOrdersInToAccessDB(temp);
-                insertSupplier(new Supplier(temp.getSupplierName(), temp.getSupplierID()));
+                AccessDatabase.insertOrder(temp);
+
+                AccessDatabase.insertSupplier(new Supplier(temp.getSupplierName(), temp.getSupplierID()));
             }
         }catch(SQLException e){
 
@@ -273,47 +230,8 @@ public class POTableTab{
     }
 
 
-    private  void insertSupplier(Supplier supplier){
-
-        String insertSupplier =
-                "INSERT INTO SUPPLIERS(DESC, [SUPPLIER_ID]) VALUES('"
-                        + supplier.getName() + "','" + supplier.getSupplierId() + "')";
 
 
-            AccessDatabase.accessConectionIsertUpdate(insertSupplier);
-
-
-    }
-
-    private  void insertOrdersInToAccessDB(PurchaseOrder order){
-
-        System.out.println(order.getOrderNumber());
-
-        final String checkQuery =
-                "Select * from ORDERS WHERE PO_NUMBER ='"
-                        + order.getOrderNumber() + "' AND PROTEAN_ENTRY = 1;";
-
-        String insert =
-                "INSERT INTO ORDERS(SUPPLIER,[SUPPLIER_ID],[PO_DATE],[PO_NUMBER]) VALUES('"
-                        + order.getSupplierName() + "','" + order.getSupplierID() + "',#"
-                        + order.getExpectedDate() + "#,'" + order.getOrderNumber() + "')";
-        ResultSet rs = AccessDatabase.accessConnectionSelect(checkQuery);
-
-        try {
-
-            if(rs.next() == false){
-
-                AccessDatabase.accessConectionIsertUpdate(insert);
-                System.out.println(order.getOrderNumber() + " added to database");
-            }else{
-                System.out.println(order.getOrderNumber() + " exists in database");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 
 }

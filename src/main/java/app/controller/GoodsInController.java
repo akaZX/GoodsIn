@@ -43,7 +43,7 @@ public class GoodsInController implements Initializable {
 
 
         mainTabPane.getTabs().add(loadTab(new FXMLLoader(getClass().getClassLoader().getResource("deliveryForm.fxml")), form));
-        mainTabPane.getTabs().add(new POTableTab().createTab());
+        mainTabPane.getTabs().add(new POTableTab().createTable());
 
 
         //pane.getTabs().addAll((Tab)FXMLLoader.load(this.getClass().getResource("MyTab.fxml")));

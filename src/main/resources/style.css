@@ -1,29 +1,45 @@
 
 
 
+.form-label {
 
+    -fx-font-size: 1.3em;
+
+}
+
+.form-title-label {
+
+    -fx-font-size: 2.2em;
+    -fx-font-weight: bold;
+
+}
 
 
 .form-button {
-/*    !*-fx-min-width: 110px;*!*/
-/*    -fx-pref-width: 130px;*/
+    -fx-min-width: 110px;
+    -fx-pref-width: 130px;
     -fx-background-color: #0400e9;
-/*    -fx-background-radius: 60px;*/
+    -fx-background-radius: 60px;
     -fx-text-fill: WHITE;
+    -fx-font-size: 1.1em;
 
     -jfx-button-type: RAISED;
 }
 
-.jfx-button:focused {
+.form-button:focused {
     -fx-background-color: #0400e9;
+
 }
 
-.jfx-button:hover {
+.form-button:hover {
+
+    -fx-cursor: hand;
+    -fx-fill: black;
     -fx-background-color: #0400e9;
 }
-.jfx-button .jfx-rippler{
+.form-button .jfx-rippler{
 
-    -jfx-rippler-fill: rgba(27, 18, 255, 0.11);
+    -jfx-rippler-fill: rgb(174, 180, 255);
 }
 
 

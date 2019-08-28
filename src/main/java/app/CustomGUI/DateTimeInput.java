@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -100,11 +101,21 @@ public class DateTimeInput extends HBox {
 
 
     public LocalDateTime getLocalDateTime(){
+        LocalDateTime time = null;
 
-        LocalDate date = this.date.getValue();
-        int hour = Integer.parseInt(hours.getText());
-        int minute = Integer.parseInt(minutes.getText());
-        LocalDateTime time = date.atTime(hour, minute);
+        if(!hours.getText().equalsIgnoreCase("") && !minutes.getText().equalsIgnoreCase("")){
+            try{
+                LocalDate date = this.date.getValue();
+                int hour = Integer.parseInt(hours.getText());
+                int minute = Integer.parseInt(minutes.getText());
+                time = date.atTime(hour, minute);
+
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+            }
+        }
+
+
 
         return time;
     }
@@ -142,6 +153,11 @@ public class DateTimeInput extends HBox {
         this.date.setValue(date);
     }
 
+    public void setLocalDateTime(LocalDateTime localDateTime){
+        setDate(localDateTime.toLocalDate());
+        hours.setText(String.valueOf(localDateTime.getHour()));
+        minutes.setText(String.valueOf(localDateTime.getMinute()));
+    }
 
 
 }

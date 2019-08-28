@@ -1,16 +1,11 @@
 package app.controller;
 
 
+
 import app.CustomGUI.DateTimeInput;
-import app.model.Haulier;
-import app.model.OrderDetails;
-import app.model.PurchaseOrder;
-import app.model.Supplier;
+import app.model.*;
 import com.jfoenix.controls.*;
-import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
-import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,25 +13,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-
 import java.net.URL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static java.lang.String.valueOf;
 
 
 public class FormController  implements Initializable {
 
-    HashMap<Integer, Haulier> hauliers = new HashMap<>();
-    HashMap<Integer, Supplier> suppliers = new HashMap<>();
+    private HashMap<Integer, Haulier> hauliers = new HashMap<>();
+    private HashMap<Integer, Supplier> suppliers = new HashMap<>();
+    private  int id = 0;
 
-    @FXML
-    GridPane gridPane;
+    @FXML private GridPane gridPane;
 
-    private final ObservableList<String> BAY_NAMES = FXCollections.observableArrayList("Bay01", "Bay02", "Bay03", "Bay04");
+    private final ObservableList<String> BAY_NAMES = FXCollections.observableArrayList("BAY01", "BAY02", "BAY03", "BAY04");
 
     //form labels
     private Label dPoint = new Label("Delivery point:"), supplier = new Label("Supplier:"),
@@ -45,7 +39,7 @@ public class FormController  implements Initializable {
             unloadingTime = new Label("Unloading Time:"), poDetails = new Label("PO Details:"),
             trailerNo = new Label("Trailer registration:"), comments = new Label("Comments:"),
             arrived = new Label("Arrived:"), departed = new Label("Departed:"),
-            bookedIn = new Label("Booked In:"), poDetailsLabel = new Label(), placeHolder = new Label();
+            bookedIn = new Label("Booked In:"), poDetailsLabel = new Label();
 
     private TextArea commentsBox = new TextArea();
 
@@ -93,9 +87,12 @@ public class FormController  implements Initializable {
 
     public FormController(PurchaseOrder order) {
 
+        this.id = order.getId();
         loadOrderDetails(order);
 
     }
+
+
 
 
     @Override
@@ -116,29 +113,33 @@ public class FormController  implements Initializable {
 
     private void initializeForm(){
 
-        getArrivedTime.getStyleClass().add("form-button");
 
-        gridPane.add(poDetailsLabel, 1, 0,2,1);
+
+        gridPane.add(poDetailsLabel, 1, 0,5,1);
         gridPane.add(orderDetailsTable, 1, 9,2,5);
 
         for(int i = 0; i < leftLeftList.length; i++){
             gridPane.add(leftLeftList[i], 1, i+1 );
-
+            addCssClassNamesForNodes(leftLeftList[i]);
         }
         for(int i = 0; i < leftRightList.length; i++){
             gridPane.add(leftRightList[i], 2, i+1 );
+            addCssClassNamesForNodes(leftRightList[i]);
         }
         for(int i = 0; i < rightLeftList.length; i++){
 
             gridPane.add(rightLeftList[i], 4, i+1 );
+            addCssClassNamesForNodes(rightLeftList[i]);
         }
         for(int i = 0; i < rightRightList.length; i++){
             if(i+1 == 2){
                 gridPane.add(rightRightList[i], 5, i+1,1,3);
+                addCssClassNamesForNodes(rightRightList[i]);
                 i+=2;
                 continue;
             }
             gridPane.add(rightRightList[i], 5, i+1 );
+            addCssClassNamesForNodes(rightRightList[i]);
         }
 
 
@@ -153,7 +154,11 @@ public class FormController  implements Initializable {
 
         addActionsForButtons();
 
+
     }
+
+
+
 
 //adds event handler for buttons
     private void addActionsForButtons(){
@@ -168,80 +173,76 @@ public class FormController  implements Initializable {
             bookedInDate.setCurrentTime());
 
         submitForm.setOnAction(event ->
+                validateNewOrderInputs()
 
-        System.out.println(expectedETA.getHours())
-                );
+        );
+    }
+
+    private void validateNewOrderInputs(){
+
+        boolean error = false;
+        String errorMessage = "";
+
+       if(palletsField.getText().equalsIgnoreCase("")){
+           errorMessage += "\n Pallets field is empty ";
+           error = true;
+       }
+       if(poField.getText().equalsIgnoreCase("")){
+           errorMessage += "\n PO field is blank";
+           error = true;
+       }
+        if (supplierField.getText().equalsIgnoreCase("")) {
+            errorMessage += "\n Supplier field is blank";
+            error = true;
+        }
+        if (approxUnloadField.getText().equalsIgnoreCase("")) {
+            errorMessage += "\n Unloading time field is blank";
+            error = true;
+        }
+        if (haulierField.getText().equalsIgnoreCase("")) {
+            errorMessage += "\n Haulier field is blank";
+            error = true;
+        }
+        if (expectedETA.getLocalDateTime() == null) {
+            errorMessage += "\n Expected ETA  field is blank";
+            error = true;
+        }
+
+        AccessDatabase.insertHaulier(haulierField.getText());
+
+        if(!error){
+
+
+            if(id == 0){
+                AccessDatabase.insertNewOrderFromForm(generatePurchaseOrder());
+            }else{
+                System.out.println("updating order");
+                AccessDatabase.updateOrder(generatePurchaseOrder(), id);
+            }
+
+        }else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Failed to create new order");
+            alert.setHeaderText("Following fields missing");
+            alert.setContentText(errorMessage);
+
+            alert.showAndWait();
+        }
+
     }
 
 
     private void addBaysToChoiceBox(){
         bays.setItems(BAY_NAMES);
-        bays.getSelectionModel().selectFirst();
-
     }
 
 
     private void initializeOrderDetailsTable(){
 
 
-        JFXTreeTableColumn<OrderDetails, String> mCodeColumn = new JFXTreeTableColumn<>("M Code");
-        mCodeColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
-        mCodeColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
-        mCodeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
-            if(mCodeColumn.validateValue(param)) return param.getValue().getValue().mCode;
-            else return mCodeColumn.getComputedValue(param);
-        });
-
-        JFXTreeTableColumn<OrderDetails, String> descColumn = new JFXTreeTableColumn<>("Description");
-
-        descColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.4));
-        descColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.39));
-
-        descColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
-            if(descColumn.validateValue(param)) return param.getValue().getValue().description;
-            else return descColumn.getComputedValue(param);
-        });
-
-        JFXTreeTableColumn<OrderDetails, String> expectedColumn = new JFXTreeTableColumn<>("Expected");
-        expectedColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
-        expectedColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
-        expectedColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
-            if(expectedColumn.validateValue(param)) return param.getValue().getValue().expected;
-            else return expectedColumn.getComputedValue(param);
-        });
-
-        JFXTreeTableColumn<OrderDetails, String> bookedColumn = new JFXTreeTableColumn<>("Booked");
-        bookedColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.19));
-        bookedColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.19));
-        bookedColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
-            if(bookedColumn.validateValue(param)) return param.getValue().getValue().bookedIn;
-            else return bookedColumn.getComputedValue(param);
-        });
-
-        mCodeColumn.setCellFactory((TreeTableColumn<OrderDetails, String> param) -> new GenericEditableTreeTableCell
-                <>(new TextFieldEditorBuilder()));
-        mCodeColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<OrderDetails, String> t)->{
-            t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow()).getValue().mCode
-                    .set(t.getNewValue());
-        });
-
-
-        //TODO prideti query y protean kad trauktu orderiu detales jeigu PO yra nustatytas
-
         ObservableList<OrderDetails> orders = FXCollections.observableArrayList();
 
-        if(poField.getText().length() >= 7){
-
-            try {
-                orders =  getOrderDetails(poField.getText());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-
-
+        //TODO pakesti  query y protean kad trauktu orderiu detales jeigu PO yra nustatytas
         final TreeItem<OrderDetails> root = new RecursiveTreeItem<>(orders, RecursiveTreeObject::getChildren);
 
 
@@ -249,36 +250,40 @@ public class FormController  implements Initializable {
         orderDetailsTable.setRoot(root);
         orderDetailsTable.setShowRoot(false);
         orderDetailsTable.setEditable(false);
-        orderDetailsTable.getColumns().setAll(mCodeColumn, descColumn, expectedColumn, bookedColumn);
+        OrderDetailsColumns columns = new OrderDetailsColumns(orderDetailsTable);
+        orderDetailsTable.getColumns().setAll(columns.mCodeCol(), columns.descCol(),
+                columns.expectedCol(), columns.bookedCol());
 
 
-
-        Label size = new Label();
-        size.textProperty().bind(Bindings.createStringBinding(()->orderDetailsTable.getCurrentItemsCount()+"",
-                orderDetailsTable.currentItemsCountProperty()));
+//        Label size = new Label();
+//        size.textProperty().bind(Bindings.createStringBinding(()->orderDetailsTable.getCurrentItemsCount()+"",
+//                orderDetailsTable.currentItemsCountProperty()));
 
 
     }
 
 
     //Load order data to table view if it is has an PO number
-    private ObservableList<OrderDetails> getOrderDetails(String poNumber) throws SQLException {
+    private ObservableList<OrderDetails> getOrderDetails(String poNumber){
 
         ObservableList<OrderDetails> orders = FXCollections.observableArrayList();
 
 
         ResultSet rs = SQLDatabase.querySQL("Select * from suppliers where ExpectRcptDocNum='"+ poNumber +"'");
 
-        while (rs.next()){
-            orders.add(new OrderDetails(rs.getString(5), rs.getString(38),
-                    rs.getString(48), rs.getString(39)));
+        try {
+            while (rs.next()){
+                orders.add(new OrderDetails(rs.getString(5), rs.getString(38),
+                        rs.getString(48), rs.getString(39)));
 
+            }
+        } catch (SQLException e) {
+            System.out.println("getOrderDetails inside FormController");
+            e.printStackTrace();
         }
+
         return orders;
     }
-
-
-
 
     private void getSuppliersList(String table, HashMap<Integer, Supplier> suppliers) throws SQLException{
         String querry = "SELECT * FROM " + table + " ORDER BY Desc";
@@ -365,11 +370,72 @@ public class FormController  implements Initializable {
         });
     }
 
+
+
     private void loadOrderDetails(PurchaseOrder order){
 
-        expectedETA.setDate(order.getPoDate().toLocalDate());
+        String odersDetailsLabel = order.getSupplierName()+ "      " + order.getOrderNumber();
+
+        poDetailsLabel.setText(odersDetailsLabel);
+
+        if(order.getExpectedEta() == null){
+            expectedETA.setDate(order.getPoDate().toLocalDate());
+        }else{
+            expectedETA.setLocalDateTime(order.getExpectedEta());
+        }
+        if(order.getBooked() != null){
+            bookedInDate.setLocalDateTime(order.getBooked());
+        }
+        if(order.getArrived() != null){
+            arrivedDate.setLocalDateTime(order.getArrived());
+        }
+        if(order.getDeparted() != null){
+            departedDate.setLocalDateTime(order.getDeparted());
+        }
+
+        poField.setText(order.getOrderNumber());
+        if(!order.getOrderNumber().isEmpty()){
+//            TODO remove comment to get order details
+            System.out.println("Order details is loading...");
+//            getOrderDetails(order.getOrderNumber());
+        }
         supplierField.setText(order.getSupplierName());
+        haulierField.setText(order.getHaulier());
+        trailerNoField.setText(order.getTrailerNo());
+        commentsBox.setText(order.getComments());
+        palletsField.setText(valueOf(order.getPallets()));
+        approxUnloadField.setText(valueOf(order.getUnloadingTime()));
+
+        System.out.println(order.getBay());
+        bays.setValue(order.getBay());
+        bays.getSelectionModel().select(order.getBay());
+
 
     }
+
+    private void addCssClassNamesForNodes(Node node){
+
+        if(node instanceof JFXButton){
+            node.getStyleClass().add("form-button");
+        }
+        if(node instanceof Label){
+            node.getStyleClass().add("form-label");
+        }
+
+    }
+
+
+
+    private PurchaseOrder generatePurchaseOrder(){
+        return new PurchaseOrder(
+                poField.getText(), supplierField.getText(), haulierField.getText(),
+                bays.getValue(), commentsBox.getText(), trailerNoField.getText(),
+                Integer.parseInt(palletsField.getText()), Integer.parseInt(approxUnloadField.getText()),
+                Date.valueOf(expectedETA.getLocalDate()), expectedETA.getLocalDateTime(),arrivedDate.getLocalDateTime(),
+                departedDate.getLocalDateTime(), bookedInDate.getLocalDateTime());
+
+    }
+
+
 
 }
