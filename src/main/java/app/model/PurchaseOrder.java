@@ -4,12 +4,15 @@ package app.model;
 
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.converter.TimeStringConverter;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
@@ -28,13 +31,15 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
     private String haulierID;
     private int visible;
     private int fromProtean;
-    private int pallets;
-    private int unloadingTime;
+    private ObjectProperty<Integer> pallets = new SimpleObjectProperty<>();
+    private ObjectProperty<Integer> unloadingTime = new SimpleObjectProperty<>();
+
     private Date poDate;
-    private LocalDateTime expectedEta;
-    private LocalDateTime arrived;
-    private LocalDateTime departed;
-    private LocalDateTime booked;
+    private final ObjectProperty<LocalDateTime> expectedEta = new SimpleObjectProperty<>();
+    private final ObjectProperty<LocalDateTime> arrived = new SimpleObjectProperty<>();
+    private final ObjectProperty<LocalDateTime> departed = new SimpleObjectProperty<>();
+    private final ObjectProperty<LocalDateTime> booked = new SimpleObjectProperty<>();
+
 
 
     // used to create object from protean and insert it to access database
@@ -57,8 +62,8 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
         this.orderNumber = orderNumber;
         this.supplierName = supplierName;
         this.supplierID = supplierID;
-        this.pallets = pallets;
-        this.unloadingTime = unloadingTime;
+        this.pallets.set(pallets);
+        this.unloadingTime.set(unloadingTime);
         this.poDate = poDate;
         this.haulier = haulier;
         this.bay = bay;
@@ -66,16 +71,16 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
         this.trailerNo = trailerNo;
 
         if(expectedEta != null){
-            this.expectedEta = expectedEta.toLocalDateTime();
+            this.expectedEta.set(expectedEta.toLocalDateTime());
         }
         if(arrived != null){
-            this.arrived = arrived.toLocalDateTime();
+            this.arrived.set(arrived.toLocalDateTime());
         }
         if(departed != null){
-            this.departed = departed.toLocalDateTime();
+            this.arrived.set(departed.toLocalDateTime());
         }
         if(booked != null){
-            this.booked = booked.toLocalDateTime();
+            this.arrived.set(booked.toLocalDateTime());
         }
 
 
@@ -94,21 +99,21 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
         this.comments = comments;
         this.trailerNo = trailerNo;
 
-        this.pallets = pallets;
-        this.unloadingTime = unloadingTime;
+        this.pallets.set(pallets);
+        this.unloadingTime.set(unloadingTime);
         this.poDate = poDate;
 
         if(expectedEta != null){
-            this.expectedEta = expectedEta;
+            this.expectedEta.set(expectedEta);
         }
         if(arrived != null){
-            this.arrived = arrived;
+            this.arrived.set(arrived);
         }
         if(departed != null){
-            this.departed = departed;
+            this.departed.set(departed);
         }
         if(booked != null){
-            this.booked = booked;
+            this.booked.set(booked);
         }
     }
 
@@ -136,11 +141,11 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
         return haulierID;
     }
 
-    public int getPallets() {
+    public ObjectProperty<Integer> getPallets() {
         return pallets;
     }
 
-    public int getUnloadingTime() {
+    public ObjectProperty<Integer> getUnloadingTime() {
         return unloadingTime;
     }
 
@@ -148,19 +153,19 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
         return poDate;
     }
 
-    public LocalDateTime getExpectedEta() {
+    public ObjectProperty<LocalDateTime> getExpectedEta() {
         return expectedEta;
     }
 
-    public LocalDateTime getArrived() {
+    public ObjectProperty<LocalDateTime> getArrived() {
         return arrived;
     }
 
-    public LocalDateTime getDeparted() {
+    public ObjectProperty<LocalDateTime> getDeparted() {
         return departed;
     }
 
-    public LocalDateTime getBooked() {
+    public ObjectProperty<LocalDateTime> getBooked() {
         return booked;
     }
 
@@ -178,7 +183,7 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
 
     public void setExpectedEta(LocalDateTime expectedEta) {
 
-        this.expectedEta = expectedEta;
+        this.expectedEta.set(expectedEta);
     }
 
 }

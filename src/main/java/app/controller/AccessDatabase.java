@@ -187,8 +187,8 @@ public class AccessDatabase {
             insertQuery.setString(1, order.getSupplierName());
             insertQuery.setString(2, order.getOrderNumber());
             insertQuery.setString(3, order.getHaulier());
-            insertQuery.setInt(4, order.getPallets());
-            insertQuery.setInt(5, order.getUnloadingTime());
+            insertQuery.setInt(4, order.getPallets().getValue());
+            insertQuery.setInt(5, order.getUnloadingTime().getValue());
 
 
             if (order.getPoDate() != null) {
@@ -198,25 +198,25 @@ public class AccessDatabase {
             }
 
             if (order.getExpectedEta() != null) {
-                insertQuery.setTimestamp(7, Timestamp.valueOf(order.getExpectedEta()));
+                insertQuery.setTimestamp(7, Timestamp.valueOf(order.getExpectedEta().getValue()));
             } else {
                 insertQuery.setNull(7, Types.TIMESTAMP);
             }
 
             if (order.getArrived() != null) {
-                insertQuery.setTimestamp(8, Timestamp.valueOf(order.getArrived()));
+                insertQuery.setTimestamp(8, Timestamp.valueOf(order.getArrived().getValue()));
             } else {
                 insertQuery.setNull(8, Types.TIMESTAMP);
             }
 
             if (order.getDeparted() != null) {
-                insertQuery.setTimestamp(9, Timestamp.valueOf(order.getDeparted()));
+                insertQuery.setTimestamp(9, Timestamp.valueOf(order.getDeparted().getValue()));
             } else {
                 insertQuery.setNull(9, Types.TIMESTAMP);
             }
 
             if (order.getBooked() != null) {
-                insertQuery.setTimestamp(10, Timestamp.valueOf(order.getBooked()));
+                insertQuery.setTimestamp(10, Timestamp.valueOf(order.getBooked().getValue()));
             } else {
                 insertQuery.setNull(10, Types.TIMESTAMP);
             }
@@ -277,8 +277,8 @@ public class AccessDatabase {
             insertQuery.setString(2, order.getOrderNumber());
 
             insertQuery.setString(3, order.getHaulier());
-            insertQuery.setInt(4, order.getPallets());
-            insertQuery.setInt(5, order.getUnloadingTime());
+            insertQuery.setInt(4, order.getPallets().getValue());
+            insertQuery.setInt(5, order.getUnloadingTime().getValue());
 
 
             if (order.getPoDate() != null) {
@@ -287,26 +287,26 @@ public class AccessDatabase {
                 insertQuery.setNull(6, Types.DATE);
             }
 
-            if (order.getExpectedEta() != null) {
-                insertQuery.setTimestamp(7, Timestamp.valueOf(order.getExpectedEta()));
+            if (order.getExpectedEta().getValue() != null) {
+                insertQuery.setTimestamp(7, Timestamp.valueOf(order.getExpectedEta().getValue()));
             } else {
                 insertQuery.setNull(7, Types.TIMESTAMP);
             }
 
-            if (order.getArrived() != null) {
-                insertQuery.setTimestamp(8, Timestamp.valueOf(order.getArrived()));
+            if (order.getArrived().getValue() != null) {
+                insertQuery.setTimestamp(8, Timestamp.valueOf(order.getArrived().getValue()));
             } else {
                 insertQuery.setNull(8, Types.TIMESTAMP);
             }
 
-            if (order.getDeparted() != null) {
-                insertQuery.setTimestamp(9, Timestamp.valueOf(order.getDeparted()));
+            if (order.getDeparted().getValue() != null) {
+                insertQuery.setTimestamp(9, Timestamp.valueOf(order.getDeparted().getValue()));
             } else {
                 insertQuery.setNull(9, Types.TIMESTAMP);
             }
 
-            if (order.getBooked() != null) {
-                insertQuery.setTimestamp(10, Timestamp.valueOf(order.getBooked()));
+            if (order.getBooked().getValue() != null) {
+                insertQuery.setTimestamp(10, Timestamp.valueOf(order.getBooked().getValue()));
             } else {
                 insertQuery.setNull(10, Types.TIMESTAMP);
             }

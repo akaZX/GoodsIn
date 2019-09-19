@@ -11,12 +11,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -44,28 +42,45 @@ public class POTableTab{
     private JFXTreeTableView<PurchaseOrder> table = new JFXTreeTableView<>();
 
     private  StackPane pane = new StackPane();
-
     private  BorderPane bPane = new BorderPane();
-
-    private  HBox controllBox = new HBox();
 
     private  JFXButton importOrders = new JFXButton("Import Orders");
     private  JFXButton listOrders = new JFXButton("List");
     private  JFXButton deleteOrder = new JFXButton("Delete");
     private  JFXButton duplicateOrder = new JFXButton("Duplicate");
+
     private  JFXDatePicker dateField = new JFXDatePicker();
+
+    private Label selectedDateLabel = new Label();
+
+    private ToolBar toolBar = new ToolBar();
 
 
 
 
     public  Tab createTable(){
 
-        controllBox.setPadding(new Insets(15, 20, 15, 25));
-        controllBox.setSpacing(25);
-        controllBox.setAlignment(Pos.CENTER_RIGHT);
-        controllBox.getChildren().addAll(dateField, importOrders, listOrders, duplicateOrder, deleteOrder);
+        final Pane leftSpacer = new Pane();
+        HBox.setHgrow(
+                leftSpacer,
+                Priority.SOMETIMES
+        );
 
-        bPane.setTop(controllBox);
+        toolBar.getItems().addAll(
+                selectedDateLabel,
+                leftSpacer,
+                dateField,
+                listOrders,
+                importOrders,
+                deleteOrder,
+                duplicateOrder
+        );
+
+
+        toolBar.setPadding(new Insets(15, 25, 15, 25));
+
+
+        bPane.setTop(toolBar);
         bPane.setCenter(table);
 
         dateField.setValue(LocalDate.now());
@@ -85,10 +100,14 @@ public class POTableTab{
 
         PoTableColumns tableColumns = new PoTableColumns(table);
 
+
+
         table.columnResizePolicyProperty();
         table.getColumns().addAll(tableColumns.idCol(), tableColumns.supplierCol(), tableColumns.poCol(),
-                tableColumns.haulierCol(), tableColumns.expectedETACol(), tableColumns.palletsCol(),
-                tableColumns.unloadinTimeCol());
+                tableColumns.haulierCol(), tableColumns.expectedETACol(), tableColumns.bayCol(),
+                tableColumns.unloadingTimeCol(), tableColumns.palletsCol(), tableColumns.arrivedCol(),
+                tableColumns.departedCol(), tableColumns.bookedInCol());
+
 
         table.setShowRoot(false);
         table.setEditable(false);
@@ -102,6 +121,7 @@ public class POTableTab{
 
         listOrders.setOnAction(event -> {
             table.setRoot(populateTreeItems());
+            selectedDateLabel.setText(String.valueOf(dateField.getValue()));
 
         });
 
@@ -114,11 +134,16 @@ public class POTableTab{
         table.setRowFactory( tr -> {
             TreeTableRow<PurchaseOrder> row = new TreeTableRow<>();
 
+
+
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                if (event.getClickCount() == 1 && (!row.isEmpty()) ) {
+                    PurchaseOrder order = table.getSelectionModel().getSelectedItem().getValue();
+                    selectedDateLabel.setText(dateField.getValue().toString() + "  " + order.getSupplierName());
+                }
+                if (event.getClickCount() == 2 && (!row.isEmpty()) ) {
                     PurchaseOrder order = table.getSelectionModel().getSelectedItem().getValue();
                     loadOrderForm(order);
-
                 }
             });
             return row ;
@@ -145,7 +170,7 @@ public class POTableTab{
             String css = url.toExternalForm();
             formstage.getScene().getStylesheets().add(css);
             //reloads table with updated data
-            formstage.setOnCloseRequest(event -> {
+            formstage.setOnHiding(event -> {
                 table.setRoot(populateTreeItems());
             });
         } catch (IOException e) {

@@ -8,6 +8,7 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -82,13 +83,15 @@ public class FormController  implements Initializable {
 
 
     public FormController() {
+        addBaysToChoiceBox();
 
     }
 
     public FormController(PurchaseOrder order) {
-
+        this();
         this.id = order.getId();
         loadOrderDetails(order);
+
 
     }
 
@@ -97,6 +100,7 @@ public class FormController  implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
 
         try {
 //            querryAccessDB("hauliersList", hauliers);
@@ -108,11 +112,11 @@ public class FormController  implements Initializable {
 
         initializeOrderDetailsTable();
         initializeForm();
+
     }
 
 
     private void initializeForm(){
-
 
 
         gridPane.add(poDetailsLabel, 1, 0,5,1);
@@ -143,14 +147,11 @@ public class FormController  implements Initializable {
         }
 
 
-
         gridPane.add(submitForm, 5, 13);
 //        submitForm.minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.4));
 //        leftLeftList[6].minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.2));
-       addNumberFormatt(palletsField);
-       addNumberFormatt(approxUnloadField);
-
-        addBaysToChoiceBox();
+        addNumberFormatt(palletsField);
+        addNumberFormatt(approxUnloadField);
 
         addActionsForButtons();
 
@@ -172,43 +173,44 @@ public class FormController  implements Initializable {
         getBookedInTime.setOnAction(event ->
             bookedInDate.setCurrentTime());
 
-        submitForm.setOnAction(event ->
-                validateNewOrderInputs()
-
-        );
+        submitForm.setOnAction(this::validateNewOrderInputs );
     }
 
-    private void validateNewOrderInputs(){
+    private void validateNewOrderInputs(ActionEvent event){
+
+        System.out.println("haulier field value: " + haulierField.getText());
 
         boolean error = false;
         String errorMessage = "";
 
-       if(palletsField.getText().equalsIgnoreCase("")){
+       if(palletsField.getText() == null){
            errorMessage += "\n Pallets field is empty ";
            error = true;
        }
-       if(poField.getText().equalsIgnoreCase("")){
+       if(poField.getText() == null){
            errorMessage += "\n PO field is blank";
            error = true;
        }
-        if (supplierField.getText().equalsIgnoreCase("")) {
+        if (supplierField.getText() == null) {
             errorMessage += "\n Supplier field is blank";
             error = true;
         }
-        if (approxUnloadField.getText().equalsIgnoreCase("")) {
+        if (approxUnloadField.getText() == null) {
             errorMessage += "\n Unloading time field is blank";
             error = true;
         }
-        if (haulierField.getText().equalsIgnoreCase("")) {
+        if (haulierField.getText() == null) {
             errorMessage += "\n Haulier field is blank";
             error = true;
+        }else{
+            AccessDatabase.insertHaulier(haulierField.getText());
         }
         if (expectedETA.getLocalDateTime() == null) {
             errorMessage += "\n Expected ETA  field is blank";
             error = true;
         }
 
-        AccessDatabase.insertHaulier(haulierField.getText());
+
 
         if(!error){
 
@@ -218,6 +220,8 @@ public class FormController  implements Initializable {
             }else{
                 System.out.println("updating order");
                 AccessDatabase.updateOrder(generatePurchaseOrder(), id);
+                ((Node)(event.getSource())).getScene().getWindow().hide();
+
             }
 
         }else{
@@ -234,6 +238,7 @@ public class FormController  implements Initializable {
 
     private void addBaysToChoiceBox(){
         bays.setItems(BAY_NAMES);
+        bays.getSelectionModel().selectFirst();
     }
 
 
@@ -342,7 +347,6 @@ public class FormController  implements Initializable {
 
     }
 
-
     private void addAutocomplete(TextField field, List<String> listas) {
 
 
@@ -370,27 +374,25 @@ public class FormController  implements Initializable {
         });
     }
 
-
-
     private void loadOrderDetails(PurchaseOrder order){
 
         String odersDetailsLabel = order.getSupplierName()+ "      " + order.getOrderNumber();
 
         poDetailsLabel.setText(odersDetailsLabel);
 
-        if(order.getExpectedEta() == null){
+        if(order.getExpectedEta().getValue() == null){
             expectedETA.setDate(order.getPoDate().toLocalDate());
         }else{
-            expectedETA.setLocalDateTime(order.getExpectedEta());
+            expectedETA.setLocalDateTime(order.getExpectedEta().getValue());
         }
-        if(order.getBooked() != null){
-            bookedInDate.setLocalDateTime(order.getBooked());
+        if(order.getBooked().getValue() != null){
+            bookedInDate.setLocalDateTime(order.getBooked().getValue());
         }
-        if(order.getArrived() != null){
-            arrivedDate.setLocalDateTime(order.getArrived());
+        if(order.getArrived().getValue() != null){
+            arrivedDate.setLocalDateTime(order.getArrived().getValue());
         }
-        if(order.getDeparted() != null){
-            departedDate.setLocalDateTime(order.getDeparted());
+        if(order.getDeparted().getValue() != null){
+            departedDate.setLocalDateTime(order.getDeparted().getValue());
         }
 
         poField.setText(order.getOrderNumber());
@@ -403,12 +405,27 @@ public class FormController  implements Initializable {
         haulierField.setText(order.getHaulier());
         trailerNoField.setText(order.getTrailerNo());
         commentsBox.setText(order.getComments());
-        palletsField.setText(valueOf(order.getPallets()));
-        approxUnloadField.setText(valueOf(order.getUnloadingTime()));
 
-        System.out.println(order.getBay());
-        bays.setValue(order.getBay());
-        bays.getSelectionModel().select(order.getBay());
+        if(order.getPallets().getValue() > 0){
+            palletsField.setText(valueOf(order.getPallets()));
+        }else{
+            palletsField.setText(null);
+        }
+
+        if(order.getUnloadingTime().getValue() > 0){
+            approxUnloadField.setText(valueOf(order.getUnloadingTime()));
+        }else{
+            approxUnloadField.setText(null);
+        }
+
+
+       if(order.getBay() != null){
+           bays.setValue(order.getBay());
+           bays.getSelectionModel().select(order.getBay());
+       }else{
+           bays.getSelectionModel().selectFirst();
+       }
+
 
 
     }
@@ -423,8 +440,6 @@ public class FormController  implements Initializable {
         }
 
     }
-
-
 
     private PurchaseOrder generatePurchaseOrder(){
         return new PurchaseOrder(

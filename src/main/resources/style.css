@@ -1,5 +1,13 @@
 
+.jfx-tree-table-view .tree-table-cell {
 
+    -fx-border-width: 1px 1px 1px 1px;
+
+    -fx-pref-height: 25px;
+
+    -fx-alignment: center;
+
+}
 
 .form-label {
 
