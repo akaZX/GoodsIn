@@ -24,19 +24,12 @@ public class Main extends Application {
         System.out.println(loader);
         loader.setController(contr);
         Parent root = loader.load();
-        System.out.println("islenda");
-
-
         Scene scene = new Scene(root);
 
 
         primaryStage.setTitle("GI");
 
         primaryStage.setScene(scene);
-
-
-
-
 
 
         URL url = this.getClass().getResource("/style.css");

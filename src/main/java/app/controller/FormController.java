@@ -92,7 +92,6 @@ public class FormController  implements Initializable {
         this.id = order.getId();
         loadOrderDetails(order);
 
-
     }
 
 
@@ -110,9 +109,9 @@ public class FormController  implements Initializable {
             e.printStackTrace();
         }
 
-        initializeOrderDetailsTable();
-        initializeForm();
 
+        initializeForm();
+        initializeOrderDetailsTable();
     }
 
 
@@ -245,19 +244,24 @@ public class FormController  implements Initializable {
     private void initializeOrderDetailsTable(){
 
 
-        ObservableList<OrderDetails> orders = FXCollections.observableArrayList();
-
         //TODO pakesti  query y protean kad trauktu orderiu detales jeigu PO yra nustatytas
-        final TreeItem<OrderDetails> root = new RecursiveTreeItem<>(orders, RecursiveTreeObject::getChildren);
+
 
 
         orderDetailsTable.columnResizePolicyProperty();
-        orderDetailsTable.setRoot(root);
+
         orderDetailsTable.setShowRoot(false);
         orderDetailsTable.setEditable(false);
         OrderDetailsColumns columns = new OrderDetailsColumns(orderDetailsTable);
         orderDetailsTable.getColumns().setAll(columns.mCodeCol(), columns.descCol(),
                 columns.expectedCol(), columns.bookedCol());
+        //TODO uncomment to load have functionality to see PO details
+
+//        if(poField.getText() != null){
+//            final TreeItem<OrderDetails> root = new RecursiveTreeItem<>(getOrderDetails(), RecursiveTreeObject::getChildren);
+//            orderDetailsTable.setRoot(root);
+//        }
+
 
 
 //        Label size = new Label();
@@ -269,12 +273,12 @@ public class FormController  implements Initializable {
 
 
     //Load order data to table view if it is has an PO number
-    private ObservableList<OrderDetails> getOrderDetails(String poNumber){
-
+    private ObservableList<OrderDetails> getOrderDetails(){
+        //TODO change logic so it queries database if po number exists
         ObservableList<OrderDetails> orders = FXCollections.observableArrayList();
+        String poNumber = poField.getText().isEmpty()? "" : poField.getText();
 
-
-        ResultSet rs = SQLDatabase.querySQL("Select * from suppliers where ExpectRcptDocNum='"+ poNumber +"'");
+        ResultSet rs = ProteanDBConnection.querySQL("Select * from INEXPECTRECEIPT where ExpectRcptDocNum='"+ poNumber +"'");
 
         try {
             while (rs.next()){
@@ -308,11 +312,11 @@ public class FormController  implements Initializable {
 
         }
         rs.close();
-        gethaulierAutocomplete();
+        getHaulierAutocomplete();
     }
 
 
-    private void gethaulierAutocomplete(){
+    private void getHaulierAutocomplete(){
 
         List<String> list = new ArrayList<>();
 
@@ -407,13 +411,13 @@ public class FormController  implements Initializable {
         commentsBox.setText(order.getComments());
 
         if(order.getPallets().getValue() > 0){
-            palletsField.setText(valueOf(order.getPallets()));
+            palletsField.setText(valueOf(order.getPallets().getValue()));
         }else{
             palletsField.setText(null);
         }
 
         if(order.getUnloadingTime().getValue() > 0){
-            approxUnloadField.setText(valueOf(order.getUnloadingTime()));
+            approxUnloadField.setText(valueOf(order.getUnloadingTime().getValue()));
         }else{
             approxUnloadField.setText(null);
         }

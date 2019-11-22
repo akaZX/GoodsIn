@@ -41,6 +41,7 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
     private final ObjectProperty<LocalDateTime> booked = new SimpleObjectProperty<>();
 
 
+    public PurchaseOrder(){}
 
     // used to create object from protean and insert it to access database
     public PurchaseOrder(String orderNumber, Date expectedDate, String supplierName, String supplierID) {

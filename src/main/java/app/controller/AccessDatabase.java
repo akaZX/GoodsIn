@@ -1,25 +1,23 @@
 package app.controller;
 
 
-
-import app.model.Haulier;
 import app.model.PurchaseOrder;
 import app.model.Supplier;
-
 import java.sql.*;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccessDatabase {
 
-        static String msAccDB = "C:\\Users\\Asus\\OneDrive\\Desktop\\testDB.mdb";
+    private static String msAccDB = "C:\\Users\\Asus\\OneDrive\\Desktop\\testDB.mdb";
 //    static String msAccDB = "S:\\Factory\\Goods In\\testDB.mdb";
-    static String dbURL = "jdbc:ucanaccess://"
+    private static String dbURL = "jdbc:ucanaccess://"
             + msAccDB;
 
     // variables
-    static Connection connection = null;
-    static  Statement statement = null;
-    static ResultSet resultSet = null;
+    private static Connection connection = null;
+    private static  Statement statement = null;
+    private static ResultSet resultSet = null;
 
 
     public static ResultSet accessConnectionSelect(String query){
@@ -59,7 +57,7 @@ public class AccessDatabase {
     }
 
 
-    public static void accessConectionInsert(String query){
+    public static void insert(String query){
 
         try {
 
@@ -98,7 +96,7 @@ public class AccessDatabase {
     public static void insertOrder(PurchaseOrder order){
 
         final String checkQuery =
-                "SELECT * from ORDERS WHERE PO_NUMBER ='"
+                "SELECT * FROM ORDERS WHERE PO_NUMBER ='"
                         + order.getOrderNumber() + "' AND PROTEAN_ENTRY = 1;";
 
         String insert =
@@ -110,7 +108,7 @@ public class AccessDatabase {
         try {
 
             if(!existingOrder.next()){
-                accessConectionInsert(insert);
+                insert(insert);
             }
 
         } catch (SQLException e) {
@@ -132,7 +130,7 @@ public class AccessDatabase {
         try {
 
             if(!existingSupplier.next()){
-                accessConectionInsert(insertSupplier);
+                insert(insertSupplier);
             }
 
         } catch (SQLException e) {
@@ -155,7 +153,7 @@ public class AccessDatabase {
         try {
 
             if(!existingSupplier.next()){
-                accessConectionInsert(insertSupplier);
+                insert(insertSupplier);
             }
 
         } catch (SQLException e) {
@@ -336,6 +334,32 @@ public class AccessDatabase {
             }
         }
 
+    }
+
+    public static List<PurchaseOrder> getOrdersFromDB(String query){
+
+        ResultSet rs = AccessDatabase.accessConnectionSelect(query);
+        List<PurchaseOrder> orders= new ArrayList<>();
+
+        try {
+            while (rs.next()){
+
+                PurchaseOrder temp = new PurchaseOrder(
+                        rs.getInt("ID"), rs.getString("PO_NUMBER"),
+                        rs.getString("SUPPLIER"),  rs.getString("SUPPLIER_ID"),
+                        rs.getString("HAULIER"), rs.getInt("PALLETS"),
+                        rs.getInt("UNLOADING_TIME"), rs.getDate("PO_DATE"),
+                        rs.getTimestamp("EXPECTED_ETA"), rs.getTimestamp("ARRIVED"),
+                        rs.getTimestamp("DEPARTED"), rs.getTimestamp("BOOKED_IN"),
+                        rs.getString("BAY"), rs.getString("COMMENTS"),
+                        rs.getString("TRAILER_NO"));
+                orders.add(temp);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
     }
 
 }

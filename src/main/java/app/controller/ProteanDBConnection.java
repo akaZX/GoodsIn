@@ -5,9 +5,9 @@ package app.controller;
 import java.sql.*;
 
 
-public class SQLDatabase {
+public class ProteanDBConnection {
 
-    final private static String connectionUrl = "jdbc:sqlserver://UKH1-PNSQLC01;database=ERP_STD_BOURNE;user=Userapps_BO;password=h1Ghness;";
+    final private static String connectionUrl = "jdbc:sqlserver://PN-DB-BO;database=ERP_STD_BOURNE;user=Userapps_BO;password=h1Ghness;";
     private static ResultSet resultSet = null;
 
     public static ResultSet querySQL(String query) {

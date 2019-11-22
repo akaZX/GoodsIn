@@ -39,7 +39,7 @@ public class GoodsInController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //adds calendar tab to tabpane
-//        mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
+        mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
 
 
         mainTabPane.getTabs().add(loadTab(new FXMLLoader(getClass().getClassLoader().getResource("deliveryForm.fxml")), form));

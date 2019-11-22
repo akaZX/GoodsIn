@@ -11,9 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -103,10 +103,11 @@ public class POTableTab{
 
 
         table.columnResizePolicyProperty();
-        table.getColumns().addAll(tableColumns.idCol(), tableColumns.supplierCol(), tableColumns.poCol(),
+        table.getColumns().addAll(tableColumns.supplierCol(), tableColumns.poCol(),
                 tableColumns.haulierCol(), tableColumns.expectedETACol(), tableColumns.bayCol(),
-                tableColumns.unloadingTimeCol(), tableColumns.palletsCol(), tableColumns.arrivedCol(),
-                tableColumns.departedCol(), tableColumns.bookedInCol());
+                tableColumns.unloadingTimeCol(), tableColumns.palletsCol(),tableColumns.registrationCol(),
+                tableColumns.commentsCol(), tableColumns.arrivedCol(), tableColumns.departedCol(),
+                tableColumns.bookedInCol());
 
 
         table.setShowRoot(false);
@@ -131,10 +132,11 @@ public class POTableTab{
 
         });
 
+
+
         table.setRowFactory( tr -> {
-            TreeTableRow<PurchaseOrder> row = new TreeTableRow<>();
 
-
+            JFXTreeTableRow<PurchaseOrder> row = new JFXTreeTableRow<>();
 
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 1 && (!row.isEmpty()) ) {
@@ -145,10 +147,17 @@ public class POTableTab{
                     PurchaseOrder order = table.getSelectionModel().getSelectedItem().getValue();
                     loadOrderForm(order);
                 }
+              //TODO add right click functionality after main buttuns will be sorted
+                if (event.getButton() == MouseButton.SECONDARY && !row.isEmpty()){
+                    System.out.println("Right button clicked");
+                }
             });
             return row ;
         });
+
     }
+
+
 
     //loads delivery form with order details
     private void loadOrderForm(PurchaseOrder order) {
@@ -187,31 +196,14 @@ public class POTableTab{
         return root;
     }
 
+
     private  ObservableList<PurchaseOrder> getOrdersFromAccessDB(){
 
         ObservableList<PurchaseOrder> orders =
                 FXCollections.observableArrayList();
 
         String query = "SELECT * FROM ORDERS WHERE PO_DATE = #" + dateField.getValue()+ "# AND VISIBLE = 1 ORDER BY SUPPLIER;";
-        ResultSet rs = AccessDatabase.accessConnectionSelect(query);
-
-        try {
-            while (rs.next()){
-
-                PurchaseOrder temp = new PurchaseOrder(
-                        rs.getInt("ID"), rs.getString("PO_NUMBER"),
-                        rs.getString("SUPPLIER"),  rs.getString("SUPPLIER_ID"),
-                        rs.getString("HAULIER"), rs.getInt("PALLETS"),
-                        rs.getInt("UNLOADING_TIME"), rs.getDate("PO_DATE"),
-                        rs.getTimestamp("EXPECTED_ETA"), rs.getTimestamp("ARRIVED"),
-                        rs.getTimestamp("DEPARTED"), rs.getTimestamp("BOOKED_IN"),
-                        rs.getString("BAY"), rs.getString("COMMENTS"),
-                        rs.getString("TRAILER_NO"));
-                orders.add(temp);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        orders.addAll(AccessDatabase.getOrdersFromDB(query));
 
         return orders;
 
@@ -231,7 +223,7 @@ public class POTableTab{
                         "WHERE EXPECTRCPTDOCNUM LIKE 'B%' AND  EXPARRIVALDATE>='" + date1 + "' AND EXPARRIVALDATE<='" + date2
                         + "' GROUP BY EXPECTRCPTDOCNUM, CONTACT ORDER BY CONTACT";
 
-        ResultSet rs = SQLDatabase.querySQL(proteanQuery);
+        ResultSet rs = ProteanDBConnection.querySQL(proteanQuery);
         try{
             while(rs.next()){
 //   removes all '  from supplier names as it might break Access insert query and inconsistent results might appear

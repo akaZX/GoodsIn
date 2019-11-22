@@ -4,7 +4,6 @@ package app.model;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -15,12 +14,9 @@ import java.time.format.DateTimeFormatter;
 
 public  class PoTableColumns {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private final double dateColConstraints = 0.09;
-
-
 
     private  JFXTreeTableView<PurchaseOrder> table;
 
@@ -29,25 +25,10 @@ public  class PoTableColumns {
         this.table = table;
     }
 
-    public  JFXTreeTableColumn<PurchaseOrder, Integer> idCol(){
-
-        JFXTreeTableColumn<PurchaseOrder, Integer> idCol = new JFXTreeTableColumn<>();
-        setColumnTooltip(idCol, "ID", "ID used in DB");
-        idCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, Integer> param) ->{
-            if(idCol.validateValue(param)) {
-                int id = param.getValue().getValue().getId();
-                return new SimpleIntegerProperty(id).asObject();
-            } else return idCol.getComputedValue(param);
-        });
-
-        columnSizeConstraints(idCol, 0.03, 0.03);
-        return idCol;
-    }
-
     public  JFXTreeTableColumn<PurchaseOrder, String> supplierCol(){
 
         JFXTreeTableColumn<PurchaseOrder, String> supplierCol = new JFXTreeTableColumn<>();
-        setColumnTooltip(supplierCol, "Supplier","Supplier name");
+        setColumnTooltip(supplierCol, "SUPPLIER","Supplier name");
         supplierCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
             if(supplierCol.validateValue(param)) {
                 String supplier = param.getValue().getValue().getSupplierName();
@@ -63,21 +44,23 @@ public  class PoTableColumns {
 
     public  JFXTreeTableColumn<PurchaseOrder, String> poCol(){
 
-        JFXTreeTableColumn<PurchaseOrder, String> poCol = new JFXTreeTableColumn<>("PO Number");
+        JFXTreeTableColumn<PurchaseOrder, String> poCol = new JFXTreeTableColumn<>();
+        setColumnTooltip(poCol, "PO NUMBER","Purchase order number");
         poCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
             if(poCol.validateValue(param)) {
                 String poNumber = param.getValue().getValue().getOrderNumber();
                 return new SimpleStringProperty(poNumber);
             } else return poCol.getComputedValue(param);
         });
-        columnSizeConstraints(poCol, 0.08, 0.08);
+        columnSizeConstraints(poCol, 0.03, 0.08);
 
         return poCol;
     }
 
     public  JFXTreeTableColumn<PurchaseOrder, String> haulierCol(){
 
-        JFXTreeTableColumn<PurchaseOrder, String> haulierCol = new JFXTreeTableColumn<>("Haulier");
+        JFXTreeTableColumn<PurchaseOrder, String> haulierCol = new JFXTreeTableColumn<>();
+        setColumnTooltip(haulierCol,"HAULIER" , "Haulage company delivering materials for order");
         haulierCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
             if(haulierCol.validateValue(param)) {
                 String haulier = param.getValue().getValue().getHaulier();
@@ -91,7 +74,8 @@ public  class PoTableColumns {
 
     public  JFXTreeTableColumn<PurchaseOrder, String> bayCol(){
 
-        JFXTreeTableColumn<PurchaseOrder, String> bayCol = new JFXTreeTableColumn<>("Bay");
+        JFXTreeTableColumn<PurchaseOrder, String> bayCol = new JFXTreeTableColumn<>();
+        setColumnTooltip(bayCol, "BAY", "Assigned bay for delivery");
         bayCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
             if(bayCol.validateValue(param)) {
                 String bay = param.getValue().getValue().getBay();
@@ -105,7 +89,8 @@ public  class PoTableColumns {
 
     public  JFXTreeTableColumn<PurchaseOrder, Integer> palletsCol(){
 
-        JFXTreeTableColumn<PurchaseOrder, Integer> palletsCol = new JFXTreeTableColumn<>("Pallets");
+        JFXTreeTableColumn<PurchaseOrder, Integer> palletsCol = new JFXTreeTableColumn<>();
+        setColumnTooltip(palletsCol, "PALLETS", "Pallets expected to arrive");
         palletsCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getPallets());
         formatIntColumns(palletsCol);
 
@@ -117,7 +102,7 @@ public  class PoTableColumns {
     public  JFXTreeTableColumn<PurchaseOrder, Integer> unloadingTimeCol(){
 
         JFXTreeTableColumn<PurchaseOrder, Integer> unloadingTimeCol = new JFXTreeTableColumn<>();
-        setColumnTooltip(unloadingTimeCol, "Unloading", "Expected unloading time");
+        setColumnTooltip(unloadingTimeCol, "UNLOADING \nTIME", "Expected time for lorry to be unloaded");
         unloadingTimeCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getUnloadingTime());
         formatIntColumns(unloadingTimeCol);
         columnSizeConstraints(unloadingTimeCol, 0.06, 0.06);
@@ -166,7 +151,8 @@ public  class PoTableColumns {
     public  JFXTreeTableColumn<PurchaseOrder, LocalDateTime> bookedInCol(){
 
 
-        JFXTreeTableColumn<PurchaseOrder, LocalDateTime> bookedInCol = new JFXTreeTableColumn<>("Booked In");
+        JFXTreeTableColumn<PurchaseOrder, LocalDateTime> bookedInCol = new JFXTreeTableColumn<>();
+        setColumnTooltip(bookedInCol, "BOOKED IN", "Time when raw materials delivered was booked in");
         bookedInCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getBooked());
 
         columnSizeConstraints(bookedInCol, dateColConstraints,dateColConstraints);
@@ -175,6 +161,38 @@ public  class PoTableColumns {
         return bookedInCol;
 
     }
+
+    public  JFXTreeTableColumn<PurchaseOrder, String> commentsCol(){
+
+        JFXTreeTableColumn<PurchaseOrder, String> commentsCol = new JFXTreeTableColumn<>();
+        setColumnTooltip(commentsCol, "COMMENTS","Additional information");
+        commentsCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
+            if(commentsCol.validateValue(param)) {
+                String comments = param.getValue().getValue().getComments();
+                return new SimpleStringProperty(comments);
+            } else return commentsCol.getComputedValue(param);
+        });
+        columnSizeConstraints(commentsCol, 0.08, 0.07);
+
+        return commentsCol;
+    }
+
+    public  JFXTreeTableColumn<PurchaseOrder, String> registrationCol(){
+
+        JFXTreeTableColumn<PurchaseOrder, String> regCol = new JFXTreeTableColumn<>();
+        setColumnTooltip(regCol, "TRAILER/CONTAINER \nNUMBER","Trailer registration or container number");
+        regCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<PurchaseOrder, String> param) ->{
+            if(regCol.validateValue(param)) {
+                String trailerNo = param.getValue().getValue().getTrailerNo();
+                return new SimpleStringProperty(trailerNo);
+            } else return regCol.getComputedValue(param);
+        });
+        columnSizeConstraints(regCol, 0.08, 0.08);
+
+        return regCol;
+    }
+
+
 
     // removes 'T' from LocalDateTime so it can be easily read
     private void formatDateCells(JFXTreeTableColumn<PurchaseOrder, LocalDateTime> column){
@@ -187,7 +205,7 @@ public  class PoTableColumns {
                 if (item == null)
                     setText(null);
                 else
-                    setText(item.format(formatter));
+                    setText(item.format(dateTimeFormatter));
             }
         });
     }

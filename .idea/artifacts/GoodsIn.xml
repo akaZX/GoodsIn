@@ -39,6 +39,7 @@
         <element id="library" level="project" name="Maven: org.controlsfx:controlsfx:8.40.13" />
         <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-core:11.3.4" />
         <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-fontawesome-pack:11.3.4" />
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/OracleWallet" />
       </element>
     </root>
   </artifact>

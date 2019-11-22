@@ -2,6 +2,7 @@ package app.model;
 
 
 
+import app.controller.CalendarViewController;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.view.CalendarView;
@@ -26,17 +27,7 @@ public  class LoadCalendar {
         dirk.setShortName("Bay02");
         philip.setShortName("Bay03");
         jule.setShortName("Bay04");
-        katja.setStyle(Calendar.Style.STYLE1);
-        dirk.setStyle(Calendar.Style.STYLE2);
-        philip.setStyle(Calendar.Style.STYLE3);
-        jule.setStyle(Calendar.Style.STYLE4);
-        CalendarSource familyCalendarSource = new CalendarSource("Goods In");
-        familyCalendarSource.getCalendars().addAll(katja, dirk, philip, jule);
-        calendarView.getCalendarSources().setAll(familyCalendarSource);
-        calendarView.setRequestedTime(LocalTime.now());
-
-        calendarPane.getChildren().addAll(calendarView);
-        calendarTab.setContent(calendarPane);
+        CalendarViewController.initializeCalendars(calendarView, katja, dirk, philip, jule, calendarPane, calendarTab);
 
         Thread updateTimeThread = new Thread("Calendar: Update Time Thread") {
             public void run() {
