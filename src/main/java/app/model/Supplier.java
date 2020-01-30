@@ -1,11 +1,12 @@
 package app.model;
 
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
-public class Supplier {
+public class Supplier extends RecursiveTreeObject<Supplier> {
 
-    private String name;
-    private String supplierId;
+    private final String name;
+    private final String supplierId;
     private int ID;
 
     public Supplier( int ID,  String name, String supplierId) {
@@ -25,5 +26,11 @@ public class Supplier {
 
     public String getSupplierId() {
         return supplierId;
+    }
+
+
+    public int getID() {
+
+        return ID;
     }
 }

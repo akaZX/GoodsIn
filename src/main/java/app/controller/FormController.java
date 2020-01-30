@@ -1,19 +1,25 @@
 package app.controller;
 
 
-
-import app.CustomGUI.DateTimeInput;
-import app.model.*;
+import app.view.custom_nodes.DateTimeInput;
+import app.model.Haulier;
+import app.model.OrderDetails;
+import app.model.PurchaseOrder;
+import app.model.Supplier;
+import app.view.table_columns.OrderDetailsColumns;
 import com.jfoenix.controls.*;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+
 import java.net.URL;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -25,8 +31,6 @@ import static java.lang.String.valueOf;
 
 public class FormController  implements Initializable {
 
-    private HashMap<Integer, Haulier> hauliers = new HashMap<>();
-    private HashMap<Integer, Supplier> suppliers = new HashMap<>();
     private  int id = 0;
 
     @FXML private GridPane gridPane;
@@ -34,50 +38,86 @@ public class FormController  implements Initializable {
     private final ObservableList<String> BAY_NAMES = FXCollections.observableArrayList("BAY01", "BAY02", "BAY03", "BAY04");
 
     //form labels
-    private Label dPoint = new Label("Delivery point:"), supplier = new Label("Supplier:"),
-            poNumber = new Label("Order Number::"), haulier = new Label("Haulier:"),
-            pallets = new Label("Pallets:"), expectedArrivalTime = new Label("Expected ETA:"),
-            unloadingTime = new Label("Unloading Time:"), poDetails = new Label("PO Details:"),
-            trailerNo = new Label("Trailer registration:"), comments = new Label("Comments:"),
-            arrived = new Label("Arrived:"), departed = new Label("Departed:"),
-            bookedIn = new Label("Booked In:"), poDetailsLabel = new Label();
+    private final Label dPoint = new Label("Delivery point:");
 
-    private TextArea commentsBox = new TextArea();
+    private final Label supplier = new Label("Supplier:");
 
-    private JFXTextField supplierField = new JFXTextField(), poField = new JFXTextField(),
-            haulierField = new JFXTextField(), palletsField = new JFXTextField(),
-            approxUnloadField = new JFXTextField(), trailerNoField = new JFXTextField();
+    private final Label poNumber = new Label("Order Number::");
+
+    private final Label haulier = new Label("Haulier:");
+
+    private final Label pallets = new Label("Pallets:");
+
+    private final Label expectedArrivalTime = new Label("Expected ETA:");
+
+    private final Label unloadingTime = new Label("Unloading Time:");
+
+    private final Label poDetails = new Label("PO Details:");
+
+    private final Label trailerNo = new Label("Trailer registration:");
+
+    private final Label comments = new Label("Comments:");
+
+    private final Label arrived = new Label("Arrived:");
+
+    private final Label departed = new Label("Departed:");
+
+    private final Label bookedIn = new Label("Booked In:");
+
+    private final Label poDetailsLabel = new Label();
+
+    private final TextArea commentsBox = new TextArea();
+
+    private final JFXTextField supplierField = new JFXTextField();
+
+    private final JFXTextField poField = new JFXTextField();
+
+    private final JFXTextField haulierField = new JFXTextField();
+
+    private final JFXTextField palletsField = new JFXTextField();
+
+    private final JFXTextField approxUnloadField = new JFXTextField();
+
+    private final JFXTextField trailerNoField = new JFXTextField();
 
 
-    private JFXComboBox<String> bays = new JFXComboBox<>();
+    private final JFXComboBox<String> bays = new JFXComboBox<>();
 
 
-    private DateTimeInput expectedETA = new DateTimeInput(), arrivedDate = new DateTimeInput(),
-            departedDate = new DateTimeInput(), bookedInDate = new DateTimeInput();
+    private final DateTimeInput expectedETA = new DateTimeInput();
 
-    private JFXTreeTableView<OrderDetails> orderDetailsTable = new JFXTreeTableView<>();
+    private final DateTimeInput arrivedDate = new DateTimeInput();
 
+    private final DateTimeInput departedDate = new DateTimeInput();
 
+    private final DateTimeInput bookedInDate = new DateTimeInput();
 
-    private JFXButton getArrivedTime = new JFXButton("Get Arrival Time"),
-            getDepartedTime = new JFXButton("Get departure Time"),
-            getBookedInTime = new JFXButton("Get booked in Time"),
-            submitForm = new JFXButton("Submit");
+    private final JFXTreeTableView<OrderDetails> orderDetailsTable = new JFXTreeTableView<>();
 
 
-    private Node [] leftLeftList = {
+
+    private final JFXButton getArrivedTime = new JFXButton("Get Arrival Time");
+
+    private final JFXButton getDepartedTime = new JFXButton("Get departure Time");
+
+    private final JFXButton getBookedInTime = new JFXButton("Get booked in Time");
+
+    private final JFXButton submitForm = new JFXButton("Submit");
+
+
+    private final Node [] leftLeftList = {
             dPoint, poNumber, supplier, haulier, pallets, unloadingTime,
             expectedArrivalTime, poDetails};
 
-    private Node[] leftRightList = {
+    private final Node[] leftRightList = {
             bays, poField, supplierField, haulierField, palletsField, approxUnloadField,
             expectedETA};
 
-    private Node[] rightLeftList = {
+    private final Node[] rightLeftList = {
             trailerNo,comments,new Label(),new Label(),arrived,arrivedDate,
             departed,departedDate,bookedIn,bookedInDate};
 
-    private Node [] rightRightList = {
+    private final Node [] rightRightList = {
             trailerNoField, commentsBox,new Label(),new Label(), new Label(), getArrivedTime, new Label(),
             getDepartedTime,new Label(), getBookedInTime};
 
@@ -102,9 +142,10 @@ public class FormController  implements Initializable {
 
 
         try {
-//            querryAccessDB("hauliersList", hauliers);
-            getSuppliersList("suppliers", suppliers);
-            getHauliersList("hauliers", hauliers);
+         //adds autocomplete for fields
+            addDataToAutocompleteField("HAULIERS", "DESC", haulierField);
+            addDataToAutocompleteField("SUPPLIERS", "DESC", supplierField);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -113,6 +154,54 @@ public class FormController  implements Initializable {
         initializeForm();
         initializeOrderDetailsTable();
     }
+
+    public void addDataToAutocompleteField(String table, String nameField, JFXTextField field) throws SQLException{
+
+
+        List<String> list = new ArrayList<>();
+
+        String    query = "SELECT * FROM " + table + " ORDER BY DESC";
+        ResultSet rs    = AccessDatabase.selectQuery(query);
+
+        while (rs.next()){
+            list.add(rs.getString(nameField));
+        }
+
+        Collections.sort(list);
+
+        addAutocomplete(field, list);
+
+    }
+
+
+    private void addAutocomplete(JFXTextField field, List<String> list) {
+
+
+        JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
+
+        autoCompletePopup.getSuggestions().addAll(list);
+
+        autoCompletePopup.setSelectionHandler(event -> {
+            field.setText(event.getObject());
+
+
+        });
+
+        // filtering options
+        field.textProperty().addListener(observable -> {
+
+            autoCompletePopup.filter(string -> string.toUpperCase().contains(field.getText().toUpperCase()));
+            if (autoCompletePopup.getFilteredSuggestions().isEmpty() || field.getText().isEmpty()) {
+                autoCompletePopup.hide();
+
+            }
+            else {
+                autoCompletePopup.show(field);
+            }
+        });
+    }
+
+
 
 
     private void initializeForm(){
@@ -157,9 +246,6 @@ public class FormController  implements Initializable {
 
     }
 
-
-
-
 //adds event handler for buttons
     private void addActionsForButtons(){
 
@@ -198,11 +284,11 @@ public class FormController  implements Initializable {
             errorMessage += "\n Unloading time field is blank";
             error = true;
         }
-        if (haulierField.getText() == null) {
+        if (haulierField.getText().isEmpty()) {
             errorMessage += "\n Haulier field is blank";
             error = true;
         }else{
-            AccessDatabase.insertHaulier(haulierField.getText());
+            AccessDatabase.insertHaulier(haulierField.getText().toUpperCase());
         }
         if (expectedETA.getLocalDateTime() == null) {
             errorMessage += "\n Expected ETA  field is blank";
@@ -214,7 +300,7 @@ public class FormController  implements Initializable {
         if(!error){
 
 
-            if(id == 0){
+            if(id <= 0){
                 AccessDatabase.insertNewOrderFromForm(generatePurchaseOrder());
             }else{
                 System.out.println("updating order");
@@ -234,18 +320,12 @@ public class FormController  implements Initializable {
 
     }
 
-
     private void addBaysToChoiceBox(){
         bays.setItems(BAY_NAMES);
         bays.getSelectionModel().selectFirst();
     }
 
-
     private void initializeOrderDetailsTable(){
-
-
-        //TODO pakesti  query y protean kad trauktu orderiu detales jeigu PO yra nustatytas
-
 
 
         orderDetailsTable.columnResizePolicyProperty();
@@ -255,28 +335,21 @@ public class FormController  implements Initializable {
         OrderDetailsColumns columns = new OrderDetailsColumns(orderDetailsTable);
         orderDetailsTable.getColumns().setAll(columns.mCodeCol(), columns.descCol(),
                 columns.expectedCol(), columns.bookedCol());
-        //TODO uncomment to load have functionality to see PO details
 
-//        if(poField.getText() != null){
-//            final TreeItem<OrderDetails> root = new RecursiveTreeItem<>(getOrderDetails(), RecursiveTreeObject::getChildren);
-//            orderDetailsTable.setRoot(root);
-//        }
+        //TODO needs testing inside Bakkavor
 
-
-
-//        Label size = new Label();
-//        size.textProperty().bind(Bindings.createStringBinding(()->orderDetailsTable.getCurrentItemsCount()+"",
-//                orderDetailsTable.currentItemsCountProperty()));
-
+//        if(!poField.getText().isEmpty()){
+////            final TreeItem<OrderDetails> root = new RecursiveTreeItem<>(getOrderDetails(), RecursiveTreeObject::getChildren);
+////            orderDetailsTable.setRoot(root);
+////        }
 
     }
 
-
     //Load order data to table view if it is has an PO number
     private ObservableList<OrderDetails> getOrderDetails(){
-        //TODO change logic so it queries database if po number exists
-        ObservableList<OrderDetails> orders = FXCollections.observableArrayList();
-        String poNumber = poField.getText().isEmpty()? "" : poField.getText();
+
+        ObservableList<OrderDetails> orders   = FXCollections.observableArrayList();
+        String                       poNumber = poField.getText().isEmpty() ? "" : poField.getText();
 
         ResultSet rs = ProteanDBConnection.querySQL("Select * from INEXPECTRECEIPT where ExpectRcptDocNum='"+ poNumber +"'");
 
@@ -293,54 +366,6 @@ public class FormController  implements Initializable {
 
         return orders;
     }
-
-    private void getSuppliersList(String table, HashMap<Integer, Supplier> suppliers) throws SQLException{
-        String querry = "SELECT * FROM " + table + " ORDER BY Desc";
-        ResultSet rs = AccessDatabase.accessConnectionSelect(querry);
-        while(rs.next()){
-            suppliers.put(rs.getInt(1), new Supplier(rs.getInt(1), rs.getString(2), rs.getString(3)));
-        }
-        rs.close();
-        getSupplierAutocomplete();
-    }
-
-    private void getHauliersList(String table, HashMap<Integer, Haulier> hauliers) throws SQLException{
-        String query = "SELECT * FROM " + table + " ORDER BY Desc";
-        ResultSet rs = AccessDatabase.accessConnectionSelect(query);
-        while(rs.next()){
-            hauliers.put(rs.getInt(1), new Haulier( rs.getString(2), rs.getInt(1)));
-
-        }
-        rs.close();
-        getHaulierAutocomplete();
-    }
-
-
-    private void getHaulierAutocomplete(){
-
-        List<String> list = new ArrayList<>();
-
-        for (Haulier value : hauliers.values()) {
-            list.add(value.getName());
-        }
-        Collections.sort(list);
-
-        addAutocomplete(haulierField, list);
-    }
-
-
-    private void getSupplierAutocomplete(){
-
-        List<String> list = new ArrayList<>();
-
-        for (Supplier value : suppliers.values()) {
-            list.add(value.getName());
-        }
-        Collections.sort(list);
-
-        addAutocomplete(supplierField, list);
-    }
-
     //add number formatting for textfield
     private void addNumberFormatt(JFXTextField field){
 
@@ -351,56 +376,51 @@ public class FormController  implements Initializable {
 
     }
 
-    private void addAutocomplete(TextField field, List<String> listas) {
+    private PurchaseOrder generatePurchaseOrder(){
+        return new PurchaseOrder(
+                poField.getText(), supplierField.getText(), haulierField.getText().toUpperCase(),
+                bays.getValue(), commentsBox.getText(), trailerNoField.getText(),
+                Integer.parseInt(palletsField.getText()), Integer.parseInt(approxUnloadField.getText()),
+                Date.valueOf(expectedETA.getLocalDate()), expectedETA.getLocalDateTime(),arrivedDate.getLocalDateTime(),
+                departedDate.getLocalDateTime(), bookedInDate.getLocalDateTime());
 
-
-        JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
-
-        autoCompletePopup.getSuggestions().addAll(listas);
-
-        autoCompletePopup.setSelectionHandler(event -> {
-            field.setText(event.getObject());
-
-            // you can do other actions here when text completed
-        });
-
-        // filtering options
-        field.textProperty().addListener(observable -> {
-
-            autoCompletePopup.filter(string -> string.toUpperCase().contains(field.getText().toUpperCase()));
-            if (autoCompletePopup.getFilteredSuggestions().isEmpty() || field.getText().isEmpty()) {
-                autoCompletePopup.hide();
-                // if you remove textField.getText.isEmpty() when text field is empty it suggests all options
-                // so you can choose
-            } else {
-                autoCompletePopup.show(field);
-            }
-        });
     }
 
-    private void loadOrderDetails(PurchaseOrder order){
+    private void addCssClassNamesForNodes(Node node) {
 
-        String odersDetailsLabel = order.getSupplierName()+ "      " + order.getOrderNumber();
+        if (node instanceof JFXButton) {
+            node.getStyleClass().add("form-button");
+        }
+        if (node instanceof Label) {
+            node.getStyleClass().add("form-label");
+        }
+
+    }
+
+    private void loadOrderDetails(PurchaseOrder order) {
+
+        String odersDetailsLabel = order.getSupplierName() + "      " + order.getOrderNumber();
 
         poDetailsLabel.setText(odersDetailsLabel);
 
-        if(order.getExpectedEta().getValue() == null){
+        if (order.getExpectedEta().getValue() == null) {
             expectedETA.setDate(order.getPoDate().toLocalDate());
-        }else{
+        }
+        else {
             expectedETA.setLocalDateTime(order.getExpectedEta().getValue());
         }
-        if(order.getBooked().getValue() != null){
+        if (order.getBooked().getValue() != null) {
             bookedInDate.setLocalDateTime(order.getBooked().getValue());
         }
-        if(order.getArrived().getValue() != null){
+        if (order.getArrived().getValue() != null) {
             arrivedDate.setLocalDateTime(order.getArrived().getValue());
         }
-        if(order.getDeparted().getValue() != null){
+        if (order.getDeparted().getValue() != null) {
             departedDate.setLocalDateTime(order.getDeparted().getValue());
         }
 
         poField.setText(order.getOrderNumber());
-        if(!order.getOrderNumber().isEmpty()){
+        if (! order.getOrderNumber().isEmpty()) {
 //            TODO remove comment to get order details
             System.out.println("Order details is loading...");
 //            getOrderDetails(order.getOrderNumber());
@@ -410,51 +430,30 @@ public class FormController  implements Initializable {
         trailerNoField.setText(order.getTrailerNo());
         commentsBox.setText(order.getComments());
 
-        if(order.getPallets().getValue() > 0){
+        if (order.getPallets().getValue() > 0) {
             palletsField.setText(valueOf(order.getPallets().getValue()));
-        }else{
+        }
+        else {
             palletsField.setText(null);
         }
 
-        if(order.getUnloadingTime().getValue() > 0){
+        if (order.getUnloadingTime().getValue() > 0) {
             approxUnloadField.setText(valueOf(order.getUnloadingTime().getValue()));
-        }else{
+        }
+        else {
             approxUnloadField.setText(null);
         }
 
 
-       if(order.getBay() != null){
-           bays.setValue(order.getBay());
-           bays.getSelectionModel().select(order.getBay());
-       }else{
-           bays.getSelectionModel().selectFirst();
-       }
-
-
-
-    }
-
-    private void addCssClassNamesForNodes(Node node){
-
-        if(node instanceof JFXButton){
-            node.getStyleClass().add("form-button");
+        if (order.getBay() != null) {
+            bays.setValue(order.getBay());
+            bays.getSelectionModel().select(order.getBay());
         }
-        if(node instanceof Label){
-            node.getStyleClass().add("form-label");
+        else {
+            bays.getSelectionModel().selectFirst();
         }
 
-    }
-
-    private PurchaseOrder generatePurchaseOrder(){
-        return new PurchaseOrder(
-                poField.getText(), supplierField.getText(), haulierField.getText(),
-                bays.getValue(), commentsBox.getText(), trailerNoField.getText(),
-                Integer.parseInt(palletsField.getText()), Integer.parseInt(approxUnloadField.getText()),
-                Date.valueOf(expectedETA.getLocalDate()), expectedETA.getLocalDateTime(),arrivedDate.getLocalDateTime(),
-                departedDate.getLocalDateTime(), bookedInDate.getLocalDateTime());
 
     }
-
-
 
 }

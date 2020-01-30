@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.StackPane;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -22,13 +21,13 @@ import static java.lang.Thread.sleep;
 public class CalendarViewController {
 
     @FXML
-    private  static Tab calendarViewTab = new Tab("Calendar");
-    private  static StackPane calendarViewPane = new StackPane();
-    private  static Calendar bayOne = new Calendar("BAY 1");
-    private static Calendar bayTwo = new Calendar("BAY 2");
-    private static Calendar bayThree = new Calendar("BAY 3");
-    private static Calendar bayFour = new Calendar("BAY 4");
-    private static HashMap<PurchaseOrder, Entry<?>> orderEntryHashMap = new HashMap<>();
+    private  static final Tab calendarViewTab = new Tab("Calendar");
+    private  static final StackPane calendarViewPane = new StackPane();
+    private  static final Calendar bayOne = new Calendar("BAY 1");
+    private static final Calendar bayTwo = new Calendar("BAY 2");
+    private static final Calendar bayThree = new Calendar("BAY 3");
+    private static final Calendar bayFour = new Calendar("BAY 4");
+    private static final HashMap<PurchaseOrder, Entry<?>> orderEntryHashMap = new HashMap<>();
 
 
     static Tab loadCalendar() {
@@ -58,7 +57,7 @@ public class CalendarViewController {
                     try {
                         removeEntriesFromCalendars();
                         loadCalendarEntries();
-                        sleep(5000L);
+                        sleep(100000L);
 
 
 
@@ -75,11 +74,10 @@ public class CalendarViewController {
 
     }
 
-
     private static void loadCalendarEntries() throws InterruptedException {
 
         List<PurchaseOrder> orders = getAllOrders();
-        sleep(100);
+//        sleep(100);
         orders.forEach(listItem -> orderEntryHashMap.put(listItem, generateCalendarEntry(listItem)));
         selectCalendar(orderEntryHashMap);
 
@@ -95,7 +93,6 @@ public class CalendarViewController {
 
     }
 
-
     private static void selectCalendar(HashMap<PurchaseOrder, Entry<?>> map){
 
         map.forEach((k,v)-> {
@@ -108,6 +105,7 @@ public class CalendarViewController {
                         break;
                     case "BAY02":
                         v.setCalendar(bayTwo);
+
                         break;
                     case "BAY03":
                         v.setCalendar(bayThree);
@@ -125,12 +123,22 @@ public class CalendarViewController {
 
     private static Entry generateCalendarEntry(PurchaseOrder order) {
 
-        Interval interval = new Interval(order.getExpectedEta().getValue(), order.getExpectedEta().getValue().plusMinutes(order.getUnloadingTime().getValue()));
+        String pallets = order.getPallets().getValue() + (order.getPallets().getValue() > 1 ? " pallets"
+                : " pallet");
+        String comments            = order.getComments() == null ? "" : (" | " + order.getComments());
+        String trailerRegistration = order.getTrailerNo() == null ? "" : (" | " + order.getTrailerNo());
+        String entryTitle          =
+                order.getSupplierName() + " | " + order.getOrderNumber() + " | " + order.getHaulier();
 
-        Entry entry = new Entry(order.getSupplierName() + "   " + order.getOrderNumber() + "   " + order.getHaulier(), interval);
+        Interval interval = new Interval(order.getExpectedEta().getValue(),
+                order.getExpectedEta().getValue().plusMinutes(order.getUnloadingTime().getValue()));
 
-        entry.setLocation(order.getPallets().getValue() + (order.getPallets().getValue() > 1 ? " pallets " : " pallet") + (order.getComments() == null ? "" : order.getComments()) + "  " + order.getTrailerNo());
+
+        Entry entry = new Entry(entryTitle, interval);
+
+        entry.setLocation(pallets + comments + trailerRegistration);
         entry.setId(String.valueOf(order.getId()));
+
         return entry;
     }
 

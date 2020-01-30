@@ -1,24 +1,28 @@
 package app.controller;
 
 
-import app.model.PoTableColumns;
 import app.model.PurchaseOrder;
 import app.model.Supplier;
+import app.pojos.SupplierOrders;
+import app.pojos.Suppliers;
+import app.view.table_columns.PoTableColumns;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.ToolBar;
+import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -34,31 +38,21 @@ public class POTableTab{
 
     }
 
-    @FXML
-    JFXTabPane mainTabPane;
+    private final Tab tab = new Tab("Orders List");
 
-    private  Tab tab = new Tab("Orders List");
-
-    private JFXTreeTableView<PurchaseOrder> table = new JFXTreeTableView<>();
-
-    private  StackPane pane = new StackPane();
-    private  BorderPane bPane = new BorderPane();
-
-    private  JFXButton importOrders = new JFXButton("Import Orders");
-    private  JFXButton listOrders = new JFXButton("List");
-    private  JFXButton deleteOrder = new JFXButton("Delete");
-    private  JFXButton duplicateOrder = new JFXButton("Duplicate");
-
-    private  JFXDatePicker dateField = new JFXDatePicker();
-
-    private Label selectedDateLabel = new Label();
-
-    private ToolBar toolBar = new ToolBar();
+    private final JFXTreeTableView<PurchaseOrder> table = new JFXTreeTableView<>();
+    private final StackPane pane = new StackPane();
+    private final BorderPane bPane = new BorderPane();
+    private final JFXButton importOrders = new JFXButton("Import Orders");
+    private final JFXButton listOrders = new JFXButton("List");
+    private final JFXButton deleteOrder = new JFXButton("Delete");
+    private final JFXButton duplicateOrder = new JFXButton("Duplicate");
+    private final JFXDatePicker dateField = new JFXDatePicker();
+    private final Label selectedDateLabel = new Label();
+    private final ToolBar toolBar = new ToolBar();
 
 
-
-
-    public  Tab createTable(){
+    Tab createTable() {
 
         final Pane leftSpacer = new Pane();
         HBox.setHgrow(
@@ -89,7 +83,7 @@ public class POTableTab{
         tab.setContent(pane);
 
         addColumnsToTable();
-        tableViewActionListeners();
+        tableListeners();
 
         return tab;
     }
@@ -99,8 +93,6 @@ public class POTableTab{
     private void addColumnsToTable(){
 
         PoTableColumns tableColumns = new PoTableColumns(table);
-
-
 
         table.columnResizePolicyProperty();
         table.getColumns().addAll(tableColumns.supplierCol(), tableColumns.poCol(),
@@ -116,7 +108,7 @@ public class POTableTab{
 
 
 //    adds action listeners for buttons and table rows
-    private  void tableViewActionListeners(){
+    private  void tableListeners(){
 
         //TODO prideti likusias knopkes
 
@@ -128,10 +120,15 @@ public class POTableTab{
 
         importOrders.setOnAction(event -> {
             getOrderFromProtean();
-            table.setRoot(populateTreeItems());
+//            table.setRoot(populateTreeItems());
 
         });
 
+        deleteOrder.setOnAction(event -> {
+
+            deleteOrder();
+            table.setRoot(populateTreeItems());
+        });
 
 
         table.setRowFactory( tr -> {
@@ -147,7 +144,7 @@ public class POTableTab{
                     PurchaseOrder order = table.getSelectionModel().getSelectedItem().getValue();
                     loadOrderForm(order);
                 }
-              //TODO add right click functionality after main buttuns will be sorted
+              //TODO add right click functionality after main buttons will be sorted
                 if (event.getButton() == MouseButton.SECONDARY && !row.isEmpty()){
                     System.out.println("Right button clicked");
                 }
@@ -191,9 +188,18 @@ public class POTableTab{
 
     private TreeItem<PurchaseOrder> populateTreeItems(){
 
-        final TreeItem<PurchaseOrder> root = new RecursiveTreeItem<>(getOrdersFromAccessDB(), RecursiveTreeObject::getChildren);
+        return new RecursiveTreeItem<>(getOrdersFromAccessDB(), RecursiveTreeObject::getChildren);
+    }
 
-        return root;
+
+    private void deleteOrder() {
+
+        table.getSelectionModel().getSelectedItem().getValue();
+
+        System.out.println(table.getSelectionModel().getSelectedItem().getValue().getId());
+        String query = "UPDATE orders SET visible = 0 WHERE id = " +
+                       table.getSelectionModel().getSelectedItem().getValue().getId() + ";";
+        AccessDatabase.insert(query);
     }
 
 
@@ -202,43 +208,49 @@ public class POTableTab{
         ObservableList<PurchaseOrder> orders =
                 FXCollections.observableArrayList();
 
-        String query = "SELECT * FROM ORDERS WHERE PO_DATE = #" + dateField.getValue()+ "# AND VISIBLE = 1 ORDER BY SUPPLIER;";
-        orders.addAll(AccessDatabase.getOrdersFromDB(query));
+        String query = "SELECT * FROM ORDERS WHERE PO_DATE = " + dateField.getValue()+ " ORDER BY SUPPLIER;";
+//        orders.addAll(SQLiteJDBC.getOrdersFromDB(query));
 
         return orders;
 
     }
 
 
-
+//originally it should get data from Protean SQL database
     private  void getOrderFromProtean(){
 
-        Timestamp date1 = Timestamp.valueOf(LocalDateTime.of(dateField.getValue(), LocalTime.of(0, 0, 0)));
-        Timestamp date2 = Timestamp.valueOf(LocalDateTime.of(dateField.getValue(), LocalTime.of(23, 59, 59)));
+        LocalDate date1 = dateField.getValue();
+        System.out.println(date1.toString());
+
 
 
         final String proteanQuery =
-                "SELECT MAX(CONTACT) AS CONTACT , EXPECTRCPTDOCNUM, MAX(EXPARRIVALDATE) AS DATE," +
-                        " MAX(SUPCUSTNAME) AS SUPPLIER,MAX(SUPCUSTID) AS SUPPID FROM INEXPECTRECEIPT " +
-                        "WHERE EXPECTRCPTDOCNUM LIKE 'B%' AND  EXPARRIVALDATE>='" + date1 + "' AND EXPARRIVALDATE<='" + date2
-                        + "' GROUP BY EXPECTRCPTDOCNUM, CONTACT ORDER BY CONTACT";
+                "SELECT DISTINCT PO, DATE, SUPP_NAME, SUPP_CODE FROM PROTEAN WHERE PO LIKE 'B%' AND  DATE ='"+ date1 +"' AND m_code LIKE 'M%' GROUP BY PO order by supp_name";
 
-        ResultSet rs = ProteanDBConnection.querySQL(proteanQuery);
+        ResultSet rs = SQLiteProteanClone.query(proteanQuery);
         try{
+            assert rs != null;
             while(rs.next()){
 //   removes all '  from supplier names as it might break Access insert query and inconsistent results might appear
-                String supplierName = rs.getString("SUPPLIER").replaceAll("'", "");
+                String supplierName = rs.getString("SUPP_NAME").replaceAll("'", " ");
 
-                PurchaseOrder temp = new PurchaseOrder(
-                        rs.getString("EXPECTRCPTDOCNUM"),
-                        rs.getDate("DATE"),
-                        supplierName,
-                        rs.getString("SUPPID"));
 
-                AccessDatabase.insertOrder(temp);
+                SupplierOrders temp = new SupplierOrders();
+//                temp.setOrderDate(rs.getString("date"));
+//                temp.setPoNumber(rs.getString("po"));
+//                temp.setSuppCode(rs.getString("supp_code"));
+//                SQLiteJDBC.insertOrder(temp);
 
-                AccessDatabase.insertSupplier(new Supplier(temp.getSupplierName(), temp.getSupplierID()));
+                Suppliers tempSupp = new Suppliers();
+                tempSupp.setSupplierCode(rs.getString("supp_code"));
+                tempSupp.setSupplierName(supplierName);
+
+                System.out.println(tempSupp.getSupplierName() + "   " + tempSupp.getSupplierCode());
+
+               SQLiteJDBC.insertSupplier(tempSupp);
+
             }
+            System.out.println("baigta !!!");
         }catch(SQLException e){
 
             e.printStackTrace();

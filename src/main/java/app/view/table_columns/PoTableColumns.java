@@ -1,6 +1,7 @@
-package app.model;
+package app.view.table_columns;
 
 
+import app.model.PurchaseOrder;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
@@ -18,7 +19,7 @@ public  class PoTableColumns {
 
     private final double dateColConstraints = 0.09;
 
-    private  JFXTreeTableView<PurchaseOrder> table;
+    private final JFXTreeTableView<PurchaseOrder> table;
 
     public PoTableColumns(JFXTreeTableView<PurchaseOrder> table) {
 
@@ -193,8 +194,7 @@ public  class PoTableColumns {
     }
 
 
-
-    // removes 'T' from LocalDateTime so it can be easily read
+    // removes 'T' from LocalDateTime
     private void formatDateCells(JFXTreeTableColumn<PurchaseOrder, LocalDateTime> column){
 
         column.setCellFactory(col -> new JFXTreeTableCell<PurchaseOrder, LocalDateTime>() {

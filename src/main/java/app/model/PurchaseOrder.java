@@ -1,18 +1,12 @@
 package app.model;
 
 
-
-
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.util.converter.TimeStringConverter;
-
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
@@ -31,8 +25,8 @@ public class PurchaseOrder extends RecursiveTreeObject<PurchaseOrder> {
     private String haulierID;
     private int visible;
     private int fromProtean;
-    private ObjectProperty<Integer> pallets = new SimpleObjectProperty<>();
-    private ObjectProperty<Integer> unloadingTime = new SimpleObjectProperty<>();
+    private final ObjectProperty<Integer> pallets = new SimpleObjectProperty<>();
+    private final ObjectProperty<Integer> unloadingTime = new SimpleObjectProperty<>();
 
     private Date poDate;
     private final ObjectProperty<LocalDateTime> expectedEta = new SimpleObjectProperty<>();

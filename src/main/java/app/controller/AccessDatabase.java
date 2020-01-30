@@ -3,16 +3,17 @@ package app.controller;
 
 import app.model.PurchaseOrder;
 import app.model.Supplier;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class AccessDatabase {
 
-    private static String msAccDB = "C:\\Users\\Asus\\OneDrive\\Desktop\\testDB.mdb";
+    private static final String msAccDB = "C:\\Users\\Asus\\OneDrive\\Desktop\\testDB.mdb";
 //    static String msAccDB = "S:\\Factory\\Goods In\\testDB.mdb";
-    private static String dbURL = "jdbc:ucanaccess://"
-            + msAccDB;
+    private static final String dbURL = "jdbc:ucanaccess://"
+                                        + msAccDB;
 
     // variables
     private static Connection connection = null;
@@ -20,7 +21,8 @@ public class AccessDatabase {
     private static ResultSet resultSet = null;
 
 
-    public static ResultSet accessConnectionSelect(String query){
+
+    public static ResultSet selectQuery(String query){
 
         try {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
@@ -56,8 +58,7 @@ public class AccessDatabase {
         return resultSet;
     }
 
-
-    public static void insert(String query){
+    static void insert(String query) {
 
         try {
 
@@ -93,50 +94,7 @@ public class AccessDatabase {
         }
     }
 
-    public static void insertOrder(PurchaseOrder order){
 
-        final String checkQuery =
-                "SELECT * FROM ORDERS WHERE PO_NUMBER ='"
-                        + order.getOrderNumber() + "' AND PROTEAN_ENTRY = 1;";
-
-        String insert =
-                "INSERT INTO ORDERS([SUPPLIER],[SUPPLIER_ID],[PO_DATE],[PO_NUMBER]) VALUES('"
-                        + order.getSupplierName().toUpperCase() + "','" + order.getSupplierID() + "',#"
-                        + order.getPoDate() + "#,'" + order.getOrderNumber() + "')";
-        ResultSet existingOrder = accessConnectionSelect(checkQuery);
-
-        try {
-
-            if(!existingOrder.next()){
-                insert(insert);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void insertSupplier(Supplier supplier){
-
-        final String checkQuery =
-                "SELECT * FROM SUPPLIERS WHERE DESC ='"+ supplier.getName().toUpperCase() + "';";
-
-        String insertSupplier =
-                "INSERT INTO SUPPLIERS([DESC], [SUPPLIER_ID]) VALUES('"
-                        + supplier.getName().toUpperCase() + "','" + supplier.getSupplierId() + "')";
-
-        ResultSet existingSupplier = accessConnectionSelect(checkQuery);
-        try {
-
-            if(!existingSupplier.next()){
-                insert(insertSupplier);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void insertHaulier(String haulier){
 
@@ -149,7 +107,7 @@ public class AccessDatabase {
                 "INSERT INTO HAULIERS([DESC]) VALUES('"
                         + trimmedHaulier.toUpperCase() + "')";
 
-        ResultSet existingSupplier = accessConnectionSelect(checkQuery);
+        ResultSet existingSupplier = selectQuery(checkQuery);
         try {
 
             if(!existingSupplier.next()){
@@ -336,10 +294,10 @@ public class AccessDatabase {
 
     }
 
-    public static List<PurchaseOrder> getOrdersFromDB(String query){
+    public static ObservableList<PurchaseOrder> getOrdersFromDB(String query){
 
-        ResultSet rs = AccessDatabase.accessConnectionSelect(query);
-        List<PurchaseOrder> orders= new ArrayList<>();
+        ResultSet rs = AccessDatabase.selectQuery(query);
+        ObservableList<PurchaseOrder> orders= FXCollections.observableArrayList();
 
         try {
             while (rs.next()){
@@ -361,5 +319,6 @@ public class AccessDatabase {
 
         return orders;
     }
+
 
 }

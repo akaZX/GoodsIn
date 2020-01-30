@@ -12,6 +12,7 @@ public class ProteanDBConnection {
 
     public static ResultSet querySQL(String query) {
 
+
         try {
             Connection connection = DriverManager.getConnection(connectionUrl);
             Statement statement = connection.createStatement();

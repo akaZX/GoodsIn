@@ -1,13 +1,11 @@
 package app;
 
-
 import app.controller.GoodsInController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 
 import java.net.URL;
 
@@ -41,9 +39,8 @@ public class Main extends Application {
         primaryStage.getScene().getStylesheets().add(css);
 
 
-
-        primaryStage.setMinHeight(700);
-        primaryStage.setMinWidth(950);
+        primaryStage.setMinHeight(750);
+        primaryStage.setMinWidth(1000);
         primaryStage.show();
     }
 

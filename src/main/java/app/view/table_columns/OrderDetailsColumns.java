@@ -1,12 +1,13 @@
-package app.model;
+package app.view.table_columns;
 
+import app.model.OrderDetails;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import javafx.scene.control.TreeTableColumn;
 
 public class OrderDetailsColumns {
 
-    JFXTreeTableView<OrderDetails> orderDetailsTable;
+    final JFXTreeTableView<OrderDetails> orderDetailsTable;
 
     public OrderDetailsColumns(JFXTreeTableView<OrderDetails> orderDetailsTable) {
         this.orderDetailsTable = orderDetailsTable;
@@ -18,7 +19,9 @@ public class OrderDetailsColumns {
         mCodeColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
         mCodeColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
         mCodeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
-            if(mCodeColumn.validateValue(param)) return param.getValue().getValue().mCode;
+            if (mCodeColumn.validateValue(param)) {
+                return param.getValue().getValue().mCodeProperty();
+            }
             else return mCodeColumn.getComputedValue(param);
         });
 
@@ -31,7 +34,9 @@ public class OrderDetailsColumns {
         descColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.4));
         descColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.39));
         descColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
-            if(descColumn.validateValue(param)) return param.getValue().getValue().description;
+            if (descColumn.validateValue(param)) {
+                return param.getValue().getValue().descriptionProperty();
+            }
             else return descColumn.getComputedValue(param);
         });
         return descColumn;
@@ -43,7 +48,9 @@ public class OrderDetailsColumns {
         expectedColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
         expectedColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
         expectedColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
-            if(expectedColumn.validateValue(param)) return param.getValue().getValue().expected;
+            if (expectedColumn.validateValue(param)) {
+                return param.getValue().getValue().expectedProperty();
+            }
             else return expectedColumn.getComputedValue(param);
         });
         return expectedColumn;
@@ -56,7 +63,9 @@ public class OrderDetailsColumns {
                 bookedColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.19));
                 bookedColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.19));
                 bookedColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
-                    if(bookedColumn.validateValue(param)) return param.getValue().getValue().bookedIn;
+                    if (bookedColumn.validateValue(param)) {
+                        return param.getValue().getValue().bookedInProperty();
+                    }
                     else return bookedColumn.getComputedValue(param);
                 });
         return bookedColumn;

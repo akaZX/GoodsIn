@@ -1,22 +1,18 @@
-package app.CustomGUI;
-
+package app.view.custom_nodes;
 
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 
 
 public class DateTimeInput extends HBox {
@@ -24,7 +20,6 @@ public class DateTimeInput extends HBox {
 @FXML private JFXDatePicker date;
 @FXML private JFXTextField hours;
 @FXML private JFXTextField minutes;
-
 
 
     public DateTimeInput() {
@@ -72,6 +67,7 @@ public class DateTimeInput extends HBox {
                             } catch (AWTException e) {
                                 e.printStackTrace();
                             }
+                            assert robot != null;
                             robot.keyPress(KeyEvent.VK_TAB);
                             robot.keyRelease(KeyEvent.VK_TAB);
                         }
@@ -84,15 +80,9 @@ public class DateTimeInput extends HBox {
         });
 
         //for validating input and leaving it in two digit format
-        field.focusedProperty().addListener(new ChangeListener<Boolean>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
-            {
-                if (!newPropertyValue)
-                {
-                    System.out.println("out of focus");
-                }
+        field.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (! newPropertyValue) {
+                System.out.println("out of focus");
             }
         });
 
@@ -140,8 +130,8 @@ public class DateTimeInput extends HBox {
     }
 
     public int getHours(){
-        int hour = Integer.parseInt(hours.getText());
-        return hour;
+
+        return Integer.parseInt(hours.getText());
     }
 
     public int getMinutes(){
