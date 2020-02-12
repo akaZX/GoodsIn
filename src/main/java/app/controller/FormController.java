@@ -2,10 +2,8 @@ package app.controller;
 
 
 import app.view.custom_nodes.DateTimeInput;
-import app.model.Haulier;
 import app.model.OrderDetails;
-import app.model.PurchaseOrder;
-import app.model.Supplier;
+import app.model.PoScheduleEntry;
 import app.view.table_columns.OrderDetailsColumns;
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
@@ -17,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -127,10 +124,11 @@ public class FormController  implements Initializable {
 
     }
 
-    public FormController(PurchaseOrder order) {
+    public FormController(PoScheduleEntry order) {
         this();
-        this.id = order.getId();
-        loadOrderDetails(order);
+        //TODO fix this shit
+//        this.id = order.getId();
+//        loadOrderDetails(order);
 
     }
 
@@ -143,8 +141,8 @@ public class FormController  implements Initializable {
 
         try {
          //adds autocomplete for fields
-            addDataToAutocompleteField("HAULIERS", "DESC", haulierField);
-            addDataToAutocompleteField("SUPPLIERS", "DESC", supplierField);
+            addDataToAutocompleteField("HAULIERS", "NAME", haulierField);
+            addDataToAutocompleteField("SUPPLIERS", "NAME", supplierField);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,7 +159,7 @@ public class FormController  implements Initializable {
         List<String> list = new ArrayList<>();
 
         String    query = "SELECT * FROM " + table + " ORDER BY DESC";
-        ResultSet rs    = AccessDatabase.selectQuery(query);
+        ResultSet rs    = SQLiteJDBC.query(query);
 
         while (rs.next()){
             list.add(rs.getString(nameField));
@@ -288,7 +286,7 @@ public class FormController  implements Initializable {
             errorMessage += "\n Haulier field is blank";
             error = true;
         }else{
-            AccessDatabase.insertHaulier(haulierField.getText().toUpperCase());
+            //TODO add code snippet to add ne haulier
         }
         if (expectedETA.getLocalDateTime() == null) {
             errorMessage += "\n Expected ETA  field is blank";
@@ -301,10 +299,10 @@ public class FormController  implements Initializable {
 
 
             if(id <= 0){
-                AccessDatabase.insertNewOrderFromForm(generatePurchaseOrder());
+
             }else{
                 System.out.println("updating order");
-                AccessDatabase.updateOrder(generatePurchaseOrder(), id);
+              //TODO add code to update order
                 ((Node)(event.getSource())).getScene().getWindow().hide();
 
             }
@@ -376,15 +374,6 @@ public class FormController  implements Initializable {
 
     }
 
-    private PurchaseOrder generatePurchaseOrder(){
-        return new PurchaseOrder(
-                poField.getText(), supplierField.getText(), haulierField.getText().toUpperCase(),
-                bays.getValue(), commentsBox.getText(), trailerNoField.getText(),
-                Integer.parseInt(palletsField.getText()), Integer.parseInt(approxUnloadField.getText()),
-                Date.valueOf(expectedETA.getLocalDate()), expectedETA.getLocalDateTime(),arrivedDate.getLocalDateTime(),
-                departedDate.getLocalDateTime(), bookedInDate.getLocalDateTime());
-
-    }
 
     private void addCssClassNamesForNodes(Node node) {
 
@@ -397,63 +386,5 @@ public class FormController  implements Initializable {
 
     }
 
-    private void loadOrderDetails(PurchaseOrder order) {
-
-        String odersDetailsLabel = order.getSupplierName() + "      " + order.getOrderNumber();
-
-        poDetailsLabel.setText(odersDetailsLabel);
-
-        if (order.getExpectedEta().getValue() == null) {
-            expectedETA.setDate(order.getPoDate().toLocalDate());
-        }
-        else {
-            expectedETA.setLocalDateTime(order.getExpectedEta().getValue());
-        }
-        if (order.getBooked().getValue() != null) {
-            bookedInDate.setLocalDateTime(order.getBooked().getValue());
-        }
-        if (order.getArrived().getValue() != null) {
-            arrivedDate.setLocalDateTime(order.getArrived().getValue());
-        }
-        if (order.getDeparted().getValue() != null) {
-            departedDate.setLocalDateTime(order.getDeparted().getValue());
-        }
-
-        poField.setText(order.getOrderNumber());
-        if (! order.getOrderNumber().isEmpty()) {
-//            TODO remove comment to get order details
-            System.out.println("Order details is loading...");
-//            getOrderDetails(order.getOrderNumber());
-        }
-        supplierField.setText(order.getSupplierName());
-        haulierField.setText(order.getHaulier());
-        trailerNoField.setText(order.getTrailerNo());
-        commentsBox.setText(order.getComments());
-
-        if (order.getPallets().getValue() > 0) {
-            palletsField.setText(valueOf(order.getPallets().getValue()));
-        }
-        else {
-            palletsField.setText(null);
-        }
-
-        if (order.getUnloadingTime().getValue() > 0) {
-            approxUnloadField.setText(valueOf(order.getUnloadingTime().getValue()));
-        }
-        else {
-            approxUnloadField.setText(null);
-        }
-
-
-        if (order.getBay() != null) {
-            bays.setValue(order.getBay());
-            bays.getSelectionModel().select(order.getBay());
-        }
-        else {
-            bays.getSelectionModel().selectFirst();
-        }
-
-
-    }
 
 }

@@ -1,24 +1,19 @@
 package app.pojos;
 
+import java.time.LocalDate;
+
 public class PoMaterials {
 
-  private String supplierCode;
+
   private String poNumber;
   private String mCode;
   private String lineNo;
-  private java.sql.Timestamp expectedDate;
+  private LocalDate expectedDate;
   private double expectedQuantity;
   private double arrivedQuantity;
-  private long proteanEntry;
+  private int proteanEntry;
 
 
-  public String getSupplierCode() {
-    return supplierCode;
-  }
-
-  public void setSupplierCode(String supplierCode) {
-    this.supplierCode = supplierCode;
-  }
 
 
   public String getPoNumber() {
@@ -48,11 +43,11 @@ public class PoMaterials {
   }
 
 
-  public java.sql.Timestamp getExpectedDate() {
+  public LocalDate getExpectedDate() {
     return expectedDate;
   }
 
-  public void setExpectedDate(java.sql.Timestamp expectedDate) {
+  public void setExpectedDate(LocalDate expectedDate) {
     this.expectedDate = expectedDate;
   }
 
@@ -75,11 +70,11 @@ public class PoMaterials {
   }
 
 
-  public long getProteanEntry() {
+  public int getProteanEntry() {
     return proteanEntry;
   }
 
-  public void setProteanEntry(long proteanEntry) {
+  public void setProteanEntry(int proteanEntry) {
     this.proteanEntry = proteanEntry;
   }
 

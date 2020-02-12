@@ -1,7 +1,6 @@
 package app.view.table_columns;
 
 
-import app.model.Supplier;
 import app.pojos.Suppliers;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;

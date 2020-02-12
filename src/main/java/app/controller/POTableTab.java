@@ -1,8 +1,8 @@
 package app.controller;
 
 
-import app.model.PurchaseOrder;
-import app.model.Supplier;
+import app.model.PoScheduleEntry;
+import app.pojos.PoMaterials;
 import app.pojos.SupplierOrders;
 import app.pojos.Suppliers;
 import app.view.table_columns.PoTableColumns;
@@ -22,13 +22,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 
 public class POTableTab{
@@ -40,7 +36,7 @@ public class POTableTab{
 
     private final Tab tab = new Tab("Orders List");
 
-    private final JFXTreeTableView<PurchaseOrder> table = new JFXTreeTableView<>();
+    private final JFXTreeTableView<PoScheduleEntry> table = new JFXTreeTableView<>();
     private final StackPane pane = new StackPane();
     private final BorderPane bPane = new BorderPane();
     private final JFXButton importOrders = new JFXButton("Import Orders");
@@ -77,7 +73,7 @@ public class POTableTab{
         bPane.setTop(toolBar);
         bPane.setCenter(table);
 
-        dateField.setValue(LocalDate.now());
+        dateField.setValue(LocalDate.of(2020,1,24));
 
         pane.getChildren().addAll(bPane);
         tab.setContent(pane);
@@ -119,7 +115,7 @@ public class POTableTab{
         });
 
         importOrders.setOnAction(event -> {
-            getOrderFromProtean();
+            getOrderDetailsFromProtean();
 //            table.setRoot(populateTreeItems());
 
         });
@@ -133,15 +129,15 @@ public class POTableTab{
 
         table.setRowFactory( tr -> {
 
-            JFXTreeTableRow<PurchaseOrder> row = new JFXTreeTableRow<>();
+            JFXTreeTableRow<PoScheduleEntry> row = new JFXTreeTableRow<>();
 
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 1 && (!row.isEmpty()) ) {
-                    PurchaseOrder order = table.getSelectionModel().getSelectedItem().getValue();
-                    selectedDateLabel.setText(dateField.getValue().toString() + "  " + order.getSupplierName());
+                    PoScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
+                    selectedDateLabel.setText(dateField.getValue().toString() + "  " + order.getSupplier());
                 }
                 if (event.getClickCount() == 2 && (!row.isEmpty()) ) {
-                    PurchaseOrder order = table.getSelectionModel().getSelectedItem().getValue();
+                    PoScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
                     loadOrderForm(order);
                 }
               //TODO add right click functionality after main buttons will be sorted
@@ -157,7 +153,7 @@ public class POTableTab{
 
 
     //loads delivery form with order details
-    private void loadOrderForm(PurchaseOrder order) {
+    private void loadOrderForm(PoScheduleEntry order) {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/deliveryForm.fxml"));
         FormController contr = new FormController(order);
@@ -186,7 +182,7 @@ public class POTableTab{
 
     }
 
-    private TreeItem<PurchaseOrder> populateTreeItems(){
+    private TreeItem<PoScheduleEntry> populateTreeItems(){
 
         return new RecursiveTreeItem<>(getOrdersFromAccessDB(), RecursiveTreeObject::getChildren);
     }
@@ -196,61 +192,78 @@ public class POTableTab{
 
         table.getSelectionModel().getSelectedItem().getValue();
 
-        System.out.println(table.getSelectionModel().getSelectedItem().getValue().getId());
-        String query = "UPDATE orders SET visible = 0 WHERE id = " +
-                       table.getSelectionModel().getSelectedItem().getValue().getId() + ";";
-        AccessDatabase.insert(query);
+        System.out.println(table.getSelectionModel().getSelectedItem().getValue().getRowId());
+        String query = "UPDATE PO_SCHEDULE_DETAILS SET visible = 0 WHERE rowid = " +
+                       table.getSelectionModel().getSelectedItem().getValue().getRowId() + ";";
+//        AccessDatabase.insert(query);
     }
 
 
-    private  ObservableList<PurchaseOrder> getOrdersFromAccessDB(){
+    private  ObservableList<PoScheduleEntry> getOrdersFromAccessDB(){
 
-        ObservableList<PurchaseOrder> orders =
+        ObservableList<PoScheduleEntry> orders =
                 FXCollections.observableArrayList();
 
-        String query = "SELECT * FROM ORDERS WHERE PO_DATE = " + dateField.getValue()+ " ORDER BY SUPPLIER;";
-//        orders.addAll(SQLiteJDBC.getOrdersFromDB(query));
+      String query = "SELECT sp.supp_name, so.rowid AS rowid, " +
+                     "so.po, so.supp_code, so.order_date " +
+                     "FROM SUPPLIER_ORDERS so " +
+                     "INNER JOIN SUPPLIERS sp ON sp.supp_code = so.supp_code " +
+                     "where so.ORDER_DATE ='" + dateField.getValue().toString()+ "'";
+
+
+
+        ResultSet rs = SQLiteJDBC.query(query);
+        System.out.println(dateField.getValue().toString());
+
+        try {
+
+            while (rs.next()) {
+                PoScheduleEntry temp = new PoScheduleEntry(
+                        rs.getInt("rowid"), rs.getString("supp_name"), rs.getString("supp_code"),
+                        rs.getString("po"), rs.getString("order_date"));
+                temp.setScheduleDetails(SQLiteJDBC.getDeliveryDetails(temp.getRowId()));
+                orders.addAll(temp);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
         return orders;
 
     }
+    private ObservableList<?> getScheduleRows(){
+        ObservableList<PoScheduleEntry> orders =
+                FXCollections.observableArrayList();
+        String query = "Select * from ";
+        return  orders;
+    }
 
-
-//originally it should get data from Protean SQL database
-    private  void getOrderFromProtean(){
+//  Originally it should get data from Protean SQL database as it is located in company's VPN
+//  some data was stored in separate SQLite database for demonstration purposes
+    private  void getOrderDetailsFromProtean(){
 
         LocalDate date1 = dateField.getValue();
-        System.out.println(date1.toString());
-
 
 
         final String proteanQuery =
-                "SELECT DISTINCT PO, DATE, SUPP_NAME, SUPP_CODE FROM PROTEAN WHERE PO LIKE 'B%' AND  DATE ='"+ date1 +"' AND m_code LIKE 'M%' GROUP BY PO order by supp_name";
+                "SELECT Distinct PO, date(DATE) as date, SUPP_NAME, SUPP_CODE FROM PROTEAN WHERE PO LIKE 'B%' AND  DATE ='"+ date1 +"' AND M_CODE LIKE 'M%' GROUP BY PO ORDER BY SUPP_NAME";
 
         ResultSet rs = SQLiteProteanClone.query(proteanQuery);
         try{
             assert rs != null;
             while(rs.next()){
-//   removes all '  from supplier names as it might break Access insert query and inconsistent results might appear
-                String supplierName = rs.getString("SUPP_NAME").replaceAll("'", " ");
-
-
-                SupplierOrders temp = new SupplierOrders();
-//                temp.setOrderDate(rs.getString("date"));
-//                temp.setPoNumber(rs.getString("po"));
-//                temp.setSuppCode(rs.getString("supp_code"));
-//                SQLiteJDBC.insertOrder(temp);
-
-                Suppliers tempSupp = new Suppliers();
-                tempSupp.setSupplierCode(rs.getString("supp_code"));
-                tempSupp.setSupplierName(supplierName);
-
-                System.out.println(tempSupp.getSupplierName() + "   " + tempSupp.getSupplierCode());
-
-               SQLiteJDBC.insertSupplier(tempSupp);
+                String po = rs.getString("po");
+                insertSuppliers(rs);
+                insertOrders(rs);
+                insertNewMaterials(po);
+                insertNewSupplierMaterials(po);
+                insertNewPoMaterials(po);
 
             }
-            System.out.println("baigta !!!");
+
         }catch(SQLException e){
 
             e.printStackTrace();
@@ -258,9 +271,98 @@ public class POTableTab{
 
     }
 
+    private void insertSuppliers(ResultSet rs){
 
+        try {
+            String supplierName = rs.getString("SUPP_NAME").replaceAll("'", " ");
 
+            Suppliers tempSupp = new Suppliers();
+            tempSupp.setSupplierCode(rs.getString("supp_code"));
+            tempSupp.setSupplierName(supplierName);
 
+            System.out.println(tempSupp.getSupplierName() + "   " + tempSupp.getSupplierCode());
 
+            SQLiteJDBC.insertSupplier(tempSupp);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void insertOrders(ResultSet rs) {
+
+        try {
+            SupplierOrders temp = new SupplierOrders();
+            temp.setOrderDate(LocalDate.parse(rs.getString("date")));
+            temp.setPoNumber(rs.getString("po"));
+            temp.setSuppCode(rs.getString("supp_code"));
+
+            SQLiteJDBC.insertOrder(temp);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void insertNewMaterials(String po){
+
+        String query = "select m_code, material_name from protean where po ='" + po + "';";
+        ResultSet rs = SQLiteProteanClone.query(query);
+        String insert = "Insert into materials (m_code, name) values(?,?)";
+        try {
+            assert rs != null;
+            while (rs.next()) {
+
+                SQLiteJDBC.updateTwoColumns(insert,rs.getString("m_code"), rs.getString("material_name"));
+
+            }
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void insertNewSupplierMaterials(String po){
+        String query = "select m_code, supp_code from protean where po ='" + po + "';";
+        ResultSet rs = SQLiteProteanClone.query(query);
+
+        String insert = "insert into SUPPLIER_MATERIALS (m_code, supp_code) values(?,?)";
+
+        try {
+            assert rs != null;
+            while (rs.next()) {
+                SQLiteJDBC.updateTwoColumns(insert, rs.getString("m_code"), rs.getString("supp_code"));
+            }
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void insertNewPoMaterials(String po){
+        PoMaterials temp = new PoMaterials();
+        String query = "select po, m_code, date, Round(expected_quantity, 2) as expected_quantity, round(booked_in, 2) as booked_in from protean where po ='" + po + "';";
+        ResultSet rs = SQLiteProteanClone.query(query);
+        String insert = "insert into PO_MATERIALS" +
+                        "(po, m_code, expected_date, expected_quantity, arrived_quantity)" +
+                        " values(?, ?, ?, ?, ?)";
+        try {
+            while (rs.next()) {
+                temp.setPoNumber(rs.getString("po"));
+                temp.setMCode(rs.getString("m_code"));
+                temp.setArrivedQuantity(rs.getDouble("booked_in"));
+                temp.setExpectedQuantity(rs.getDouble("expected_quantity"));
+                temp.setExpectedDate(LocalDate.parse(rs.getString("date")));
+                SQLiteJDBC.insertPoMaterials(insert, temp);
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Klaida: ");
+            e.printStackTrace();
+        }
+    }
 
 }

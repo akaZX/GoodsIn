@@ -1,6 +1,7 @@
 package app.controller;
 
-import app.model.PurchaseOrder;
+import app.model.PoScheduleEntry;
+import app.pojos.PoScheduleDetails;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
@@ -11,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.StackPane;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -27,7 +30,7 @@ public class CalendarViewController {
     private static final Calendar bayTwo = new Calendar("BAY 2");
     private static final Calendar bayThree = new Calendar("BAY 3");
     private static final Calendar bayFour = new Calendar("BAY 4");
-    private static final HashMap<PurchaseOrder, Entry<?>> orderEntryHashMap = new HashMap<>();
+    private static final HashMap<PoScheduleEntry, Entry<?>> orderEntryHashMap = new HashMap<>();
 
 
     static Tab loadCalendar() {
@@ -76,7 +79,20 @@ public class CalendarViewController {
 
     private static void loadCalendarEntries() throws InterruptedException {
 
-        List<PurchaseOrder> orders = getAllOrders();
+        List<PoScheduleEntry> orders = null;
+        ResultSet rs = getSupplierOrders();
+        try {
+            while (rs.next()) {
+              PoScheduleEntry temp = new PoScheduleEntry(
+                       rs.getInt("rowid"), rs.getString("supp_name"), rs.getString("supp_code"),
+                       rs.getString("po"), rs.getString("order_date"));
+            temp.setScheduleDetails(getOrderDetails(temp.getRowId()));
+                orders.add(temp);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
 //        sleep(100);
         orders.forEach(listItem -> orderEntryHashMap.put(listItem, generateCalendarEntry(listItem)));
         selectCalendar(orderEntryHashMap);
@@ -93,12 +109,12 @@ public class CalendarViewController {
 
     }
 
-    private static void selectCalendar(HashMap<PurchaseOrder, Entry<?>> map){
+    private static void selectCalendar(HashMap<PoScheduleEntry, Entry<?>> map){
 
         map.forEach((k,v)-> {
 
-            if(k.getBay() != null){
-                switch (k.getBay()) {
+            if(k.getScheduleDetails().getBay() != null){
+                switch (k.getScheduleDetails().getBay()) {
 
                     case "BAY01":
                         v.setCalendar(bayOne);
@@ -121,31 +137,34 @@ public class CalendarViewController {
         });
     }
 
-    private static Entry generateCalendarEntry(PurchaseOrder order) {
+    private static Entry<?> generateCalendarEntry(PoScheduleEntry order) {
 
-        String pallets = order.getPallets().getValue() + (order.getPallets().getValue() > 1 ? " pallets"
+        String pallets = order.getScheduleDetails().getPallets() + (order.getScheduleDetails().getPallets() > 1 ? " pallets"
                 : " pallet");
-        String comments            = order.getComments() == null ? "" : (" | " + order.getComments());
-        String trailerRegistration = order.getTrailerNo() == null ? "" : (" | " + order.getTrailerNo());
+        String comments            = order.getScheduleDetails().getComments() == null ? "" : (" | " + order.getScheduleDetails().getComments());
+        String trailerRegistration = order.getScheduleDetails().getRegistrationNo() == null ? "" : (" | " + order.getScheduleDetails().getRegistrationNo());
         String entryTitle          =
-                order.getSupplierName() + " | " + order.getOrderNumber() + " | " + order.getHaulier();
+                order.getSupplier() + " | " + order.getScheduleDetails().getPo() + " | " + order.getScheduleDetails().getHaulier();
 
-        Interval interval = new Interval(order.getExpectedEta().getValue(),
-                order.getExpectedEta().getValue().plusMinutes(order.getUnloadingTime().getValue()));
+        Interval interval = new Interval(order.getScheduleDetails().getEta(),
+                order.getScheduleDetails().getEta().plusMinutes(order.getScheduleDetails().getDuration()));
 
 
-        Entry entry = new Entry(entryTitle, interval);
+        Entry<?> entry = new Entry<>(entryTitle, interval);
 
         entry.setLocation(pallets + comments + trailerRegistration);
-        entry.setId(String.valueOf(order.getId()));
+        entry.setId(String.valueOf(order.getRowId()));
 
         return entry;
     }
 
-    private static List<PurchaseOrder> getAllOrders(){
+    private static ResultSet getSupplierOrders(){
+        String query = "SELECT * FROM V_ORDERS ORDER BY SUPPLIER;";
+        return SQLiteJDBC.query(query);
+    }
 
-        String query = "SELECT * FROM ORDERS WHERE EXPECTED_ETA IS NOT NULL AND VISIBLE = 1 ORDER BY SUPPLIER;";
-        return AccessDatabase.getOrdersFromDB(query);
+    private static PoScheduleDetails getOrderDetails(int rowid){
+        return SQLiteJDBC.getDeliveryDetails(rowid);
     }
 
     public static void initializeCalendars(CalendarView calendarView, Calendar bayOne, Calendar bayTwo, Calendar bayThree, Calendar bayFour, StackPane calendarViewPane, Tab calendarViewTab) {
