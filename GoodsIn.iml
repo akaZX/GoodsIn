@@ -11,9 +11,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:8.0.8" level="project" />
+    <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:8.0.9" level="project" />
     <orderEntry type="library" name="Maven: com.calendarfx:view:8.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.calendarfx:recurrence:8.5.0" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.1" level="project" />
@@ -30,7 +31,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-params:5.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains:annotations:18.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations:19.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.8.11.2" level="project" />
   </component>

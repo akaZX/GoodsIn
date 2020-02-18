@@ -6,7 +6,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import java.time.LocalDate;
 
 
-public class PoScheduleEntry extends RecursiveTreeObject<PoScheduleEntry> {
+public class ScheduleEntry extends RecursiveTreeObject<ScheduleEntry> {
 
     private int rowId ;
     public String supplier;
@@ -16,7 +16,7 @@ public class PoScheduleEntry extends RecursiveTreeObject<PoScheduleEntry> {
     private PoScheduleDetails scheduleDetails = null;
 
 
-    public PoScheduleEntry(String supplier, String suppCode, String po, String orderDate) {
+    public ScheduleEntry(String supplier, String suppCode, String po, String orderDate) {
 
         this.supplier = supplier;
         this.suppCode = suppCode;
@@ -25,7 +25,7 @@ public class PoScheduleEntry extends RecursiveTreeObject<PoScheduleEntry> {
     }
 
 
-    public PoScheduleEntry(
+    public ScheduleEntry(
             int rowId, String supplier, String suppCode, String po, String orderDate) {
 
         this.rowId = rowId;

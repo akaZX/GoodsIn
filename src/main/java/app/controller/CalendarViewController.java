@@ -1,6 +1,7 @@
 package app.controller;
 
-import app.model.PoScheduleEntry;
+import app.controller.sql.SQLiteJDBC;
+import app.model.ScheduleEntry;
 import app.pojos.PoScheduleDetails;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
@@ -11,7 +12,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.StackPane;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ public class CalendarViewController {
     private static final Calendar bayTwo = new Calendar("BAY 2");
     private static final Calendar bayThree = new Calendar("BAY 3");
     private static final Calendar bayFour = new Calendar("BAY 4");
-    private static final HashMap<PoScheduleEntry, Entry<?>> orderEntryHashMap = new HashMap<>();
+    private static final HashMap<ScheduleEntry, Entry<?>> orderEntryHashMap = new HashMap<>();
 
 
     static Tab loadCalendar() {
@@ -79,11 +79,11 @@ public class CalendarViewController {
 
     private static void loadCalendarEntries() throws InterruptedException {
 
-        List<PoScheduleEntry> orders = null;
-        ResultSet rs = getSupplierOrders();
+        List<ScheduleEntry> orders = null;
+        ResultSet           rs     = getSupplierOrders();
         try {
             while (rs.next()) {
-              PoScheduleEntry temp = new PoScheduleEntry(
+              ScheduleEntry temp = new ScheduleEntry(
                        rs.getInt("rowid"), rs.getString("supp_name"), rs.getString("supp_code"),
                        rs.getString("po"), rs.getString("order_date"));
             temp.setScheduleDetails(getOrderDetails(temp.getRowId()));
@@ -109,7 +109,7 @@ public class CalendarViewController {
 
     }
 
-    private static void selectCalendar(HashMap<PoScheduleEntry, Entry<?>> map){
+    private static void selectCalendar(HashMap<ScheduleEntry, Entry<?>> map){
 
         map.forEach((k,v)-> {
 
@@ -137,14 +137,14 @@ public class CalendarViewController {
         });
     }
 
-    private static Entry<?> generateCalendarEntry(PoScheduleEntry order) {
+    private static Entry<?> generateCalendarEntry(ScheduleEntry order) {
 
         String pallets = order.getScheduleDetails().getPallets() + (order.getScheduleDetails().getPallets() > 1 ? " pallets"
                 : " pallet");
         String comments            = order.getScheduleDetails().getComments() == null ? "" : (" | " + order.getScheduleDetails().getComments());
         String trailerRegistration = order.getScheduleDetails().getRegistrationNo() == null ? "" : (" | " + order.getScheduleDetails().getRegistrationNo());
         String entryTitle          =
-                order.getSupplier() + " | " + order.getScheduleDetails().getPo() + " | " + order.getScheduleDetails().getHaulier();
+                order.getSupplier() + " | " + order.getPo() + " | " + order.getScheduleDetails().getHaulier();
 
         Interval interval = new Interval(order.getScheduleDetails().getEta(),
                 order.getScheduleDetails().getEta().plusMinutes(order.getScheduleDetails().getDuration()));

@@ -1,11 +1,15 @@
 package app.controller;
 
 
+import app.controller.sql.SQLiteJDBC;
+import app.pojos.PoMaterials;
 import app.view.custom_nodes.DateTimeInput;
-import app.model.OrderDetails;
-import app.model.PoScheduleEntry;
+import app.model.ScheduleEntry;
 import app.view.table_columns.OrderDetailsColumns;
 import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.jfoenix.validation.RequiredFieldValidator;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,10 +19,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.GridPane;
-
 import java.net.URL;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -28,7 +31,7 @@ import static java.lang.String.valueOf;
 
 public class FormController  implements Initializable {
 
-    private  int id = 0;
+    private ScheduleEntry scheduleEntry;
 
     @FXML private GridPane gridPane;
 
@@ -36,69 +39,40 @@ public class FormController  implements Initializable {
 
     //form labels
     private final Label dPoint = new Label("Delivery point:");
-
     private final Label supplier = new Label("Supplier:");
-
     private final Label poNumber = new Label("Order Number::");
-
     private final Label haulier = new Label("Haulier:");
-
     private final Label pallets = new Label("Pallets:");
-
     private final Label expectedArrivalTime = new Label("Expected ETA:");
-
     private final Label unloadingTime = new Label("Unloading Time:");
-
     private final Label poDetails = new Label("PO Details:");
-
     private final Label trailerNo = new Label("Trailer registration:");
-
     private final Label comments = new Label("Comments:");
-
     private final Label arrived = new Label("Arrived:");
-
     private final Label departed = new Label("Departed:");
-
     private final Label bookedIn = new Label("Booked In:");
-
     private final Label poDetailsLabel = new Label();
 
+
     private final TextArea commentsBox = new TextArea();
-
     private final JFXTextField supplierField = new JFXTextField();
-
     private final JFXTextField poField = new JFXTextField();
-
     private final JFXTextField haulierField = new JFXTextField();
-
     private final JFXTextField palletsField = new JFXTextField();
-
     private final JFXTextField approxUnloadField = new JFXTextField();
-
     private final JFXTextField trailerNoField = new JFXTextField();
-
-
     private final JFXComboBox<String> bays = new JFXComboBox<>();
-
-
     private final DateTimeInput expectedETA = new DateTimeInput();
-
     private final DateTimeInput arrivedDate = new DateTimeInput();
-
     private final DateTimeInput departedDate = new DateTimeInput();
-
     private final DateTimeInput bookedInDate = new DateTimeInput();
 
-    private final JFXTreeTableView<OrderDetails> orderDetailsTable = new JFXTreeTableView<>();
-
+    private final JFXTreeTableView<PoMaterials> orderDetailsTable = new JFXTreeTableView<>();
 
 
     private final JFXButton getArrivedTime = new JFXButton("Get Arrival Time");
-
     private final JFXButton getDepartedTime = new JFXButton("Get departure Time");
-
     private final JFXButton getBookedInTime = new JFXButton("Get booked in Time");
-
     private final JFXButton submitForm = new JFXButton("Submit");
 
 
@@ -124,45 +98,78 @@ public class FormController  implements Initializable {
 
     }
 
-    public FormController(PoScheduleEntry order) {
+    public FormController(ScheduleEntry scheduleEntry) {
         this();
-        //TODO fix this shit
-//        this.id = order.getId();
-//        loadOrderDetails(order);
+        this.scheduleEntry = scheduleEntry;
+        loadOrderDetails(scheduleEntry);
 
     }
 
 
+    private void loadOrderDetails(ScheduleEntry order) {
+
+        poField.setText(order.getPo());
+        supplierField.setText(order.getSupplier());
+        bays.setValue(order.getScheduleDetails().getBay());
+        haulierField.setText(order.getScheduleDetails().getHaulier());
+
+        if (order.getScheduleDetails().getPallets() > 0) {
+            palletsField.setText(String.valueOf(order.getScheduleDetails().getPallets()));
+        }
+
+        if (order.getScheduleDetails().getDuration() > 0) {
+            approxUnloadField.setText(String.valueOf(order.getScheduleDetails().getDuration()));
+        }
+
+        trailerNoField.setText(order.getScheduleDetails().getRegistrationNo());
+
+        commentsBox.setText(order.getScheduleDetails().getComments());
+
+        if (order.getScheduleDetails().getArrived() != null) {
+            arrivedDate.setLocalDateTime(order.getScheduleDetails().getArrived());
+        }
+        if (order.getScheduleDetails().getEta() != null) {
+            expectedETA.setLocalDateTime(order.getScheduleDetails().getEta());
+        }
+        if (order.getScheduleDetails().getDeparted() != null) {
+            arrivedDate.setLocalDateTime(order.getScheduleDetails().getDeparted());
+        }
+        if (order.getScheduleDetails().getBookedIn() != null) {
+            arrivedDate.setLocalDateTime(order.getScheduleDetails().getBookedIn());
+        }
+    }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        addTextfieldValidation(haulierField, "missing Haulier");
+        addComboBoxValidation(bays);
 
-        try {
+
          //adds autocomplete for fields
-            addDataToAutocompleteField("HAULIERS", "NAME", haulierField);
-            addDataToAutocompleteField("SUPPLIERS", "NAME", supplierField);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        addDataToAutocompleteField("HAULIERS", "name", haulierField);
+        addDataToAutocompleteField("SUPPLIERS", "supp_name", supplierField);
 
         initializeForm();
         initializeOrderDetailsTable();
+
+        Platform.runLater(() -> bays.requestFocus());
     }
 
-    public void addDataToAutocompleteField(String table, String nameField, JFXTextField field) throws SQLException{
-
+    public void addDataToAutocompleteField(String table, String nameField, JFXTextField field) {
 
         List<String> list = new ArrayList<>();
-
-        String    query = "SELECT * FROM " + table + " ORDER BY DESC";
+        String    query = "SELECT * FROM " + table + " ORDER BY " + nameField + " DESC;";
         ResultSet rs    = SQLiteJDBC.query(query);
 
-        while (rs.next()){
-            list.add(rs.getString(nameField));
+        try {
+            while (rs.next()){
+                list.add(rs.getString(nameField));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
 
         Collections.sort(list);
@@ -181,8 +188,6 @@ public class FormController  implements Initializable {
 
         autoCompletePopup.setSelectionHandler(event -> {
             field.setText(event.getObject());
-
-
         });
 
         // filtering options
@@ -191,7 +196,6 @@ public class FormController  implements Initializable {
             autoCompletePopup.filter(string -> string.toUpperCase().contains(field.getText().toUpperCase()));
             if (autoCompletePopup.getFilteredSuggestions().isEmpty() || field.getText().isEmpty()) {
                 autoCompletePopup.hide();
-
             }
             else {
                 autoCompletePopup.show(field);
@@ -200,13 +204,10 @@ public class FormController  implements Initializable {
     }
 
 
-
-
     private void initializeForm(){
 
 
         gridPane.add(poDetailsLabel, 1, 0,5,1);
-        gridPane.add(orderDetailsTable, 1, 9,2,5);
 
         for(int i = 0; i < leftLeftList.length; i++){
             gridPane.add(leftLeftList[i], 1, i+1 );
@@ -216,11 +217,7 @@ public class FormController  implements Initializable {
             gridPane.add(leftRightList[i], 2, i+1 );
             addCssClassNamesForNodes(leftRightList[i]);
         }
-        for(int i = 0; i < rightLeftList.length; i++){
 
-            gridPane.add(rightLeftList[i], 4, i+1 );
-            addCssClassNamesForNodes(rightLeftList[i]);
-        }
         for(int i = 0; i < rightRightList.length; i++){
             if(i+1 == 2){
                 gridPane.add(rightRightList[i], 5, i+1,1,3);
@@ -231,9 +228,17 @@ public class FormController  implements Initializable {
             gridPane.add(rightRightList[i], 5, i+1 );
             addCssClassNamesForNodes(rightRightList[i]);
         }
+        for(int i = 0; i < rightLeftList.length; i++){
+
+            gridPane.add(rightLeftList[i], 4, i+1 );
+            addCssClassNamesForNodes(rightLeftList[i]);
+        }
+
 
 
         gridPane.add(submitForm, 5, 13);
+        gridPane.add(orderDetailsTable, 1, 9,2,5);
+
 //        submitForm.minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.4));
 //        leftLeftList[6].minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.2));
         addNumberFormatt(palletsField);
@@ -266,6 +271,12 @@ public class FormController  implements Initializable {
         boolean error = false;
         String errorMessage = "";
 
+        if (bays.getSelectionModel().getSelectedItem() == null) {
+            errorMessage += "\n Please select Bay";
+            error = true;
+            bays.validate();
+        }
+
        if(palletsField.getText() == null){
            errorMessage += "\n Pallets field is empty ";
            error = true;
@@ -275,18 +286,23 @@ public class FormController  implements Initializable {
            error = true;
        }
         if (supplierField.getText() == null) {
+
             errorMessage += "\n Supplier field is blank";
             error = true;
         }
         if (approxUnloadField.getText() == null) {
             errorMessage += "\n Unloading time field is blank";
+
+
+
             error = true;
         }
-        if (haulierField.getText().isEmpty()) {
+        if (haulierField.getText() == null) {
             errorMessage += "\n Haulier field is blank";
+            haulierField.validate();
             error = true;
         }else{
-            //TODO add code snippet to add ne haulier
+            //TODO add code snippet to add new haulier
         }
         if (expectedETA.getLocalDateTime() == null) {
             errorMessage += "\n Expected ETA  field is blank";
@@ -298,7 +314,7 @@ public class FormController  implements Initializable {
         if(!error){
 
 
-            if(id <= 0){
+            if(scheduleEntry.getScheduleDetails().getRowid() > 0){
 
             }else{
                 System.out.println("updating order");
@@ -331,30 +347,34 @@ public class FormController  implements Initializable {
         orderDetailsTable.setShowRoot(false);
         orderDetailsTable.setEditable(false);
         OrderDetailsColumns columns = new OrderDetailsColumns(orderDetailsTable);
+        //noinspection unchecked
         orderDetailsTable.getColumns().setAll(columns.mCodeCol(), columns.descCol(),
                 columns.expectedCol(), columns.bookedCol());
 
         //TODO needs testing inside Bakkavor
 
-//        if(!poField.getText().isEmpty()){
-////            final TreeItem<OrderDetails> root = new RecursiveTreeItem<>(getOrderDetails(), RecursiveTreeObject::getChildren);
-////            orderDetailsTable.setRoot(root);
-////        }
+        if((scheduleEntry.getPo() != null) || ! scheduleEntry.getPo().equals("")){
+            final TreeItem<PoMaterials> root = new RecursiveTreeItem<>(getOrderDetails(), RecursiveTreeObject::getChildren);
+            orderDetailsTable.setRoot(root);
+        }
 
     }
 
     //Load order data to table view if it is has an PO number
-    private ObservableList<OrderDetails> getOrderDetails(){
+    private ObservableList<PoMaterials> getOrderDetails(){
 
-        ObservableList<OrderDetails> orders   = FXCollections.observableArrayList();
+        ObservableList<PoMaterials> orders   = FXCollections.observableArrayList();
         String                       poNumber = poField.getText().isEmpty() ? "" : poField.getText();
 
-        ResultSet rs = ProteanDBConnection.querySQL("Select * from INEXPECTRECEIPT where ExpectRcptDocNum='"+ poNumber +"'");
+        ResultSet rs = SQLiteJDBC.query("Select * from  PO_MATERIALS where po='"+ poNumber +"'");
 
         try {
             while (rs.next()){
-                orders.add(new OrderDetails(rs.getString(5), rs.getString(38),
-                        rs.getString(48), rs.getString(39)));
+                orders.add(
+                        new PoMaterials(
+                                rs.getString("po") , rs.getString("m_code"),
+                                rs.getInt("line_no"),
+                                rs.getDouble("expected_quantity"), rs.getDouble("arrived_quantity")));
 
             }
         } catch (SQLException e) {
@@ -374,7 +394,6 @@ public class FormController  implements Initializable {
 
     }
 
-
     private void addCssClassNamesForNodes(Node node) {
 
         if (node instanceof JFXButton) {
@@ -384,6 +403,33 @@ public class FormController  implements Initializable {
             node.getStyleClass().add("form-label");
         }
 
+    }
+
+    private void addComboBoxValidation(JFXComboBox<?> node){
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage("Please select Bay");
+        bays.getValidators().add(validator);
+
+
+        bays.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue){
+                bays.validate();
+            }
+        });
+    }
+
+    private void addTextfieldValidation(JFXTextField node, String message){
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage(message);
+        node.getValidators().add(validator);
+
+
+        node.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue){
+                node.validate();
+            }
+
+        });
     }
 
 

@@ -19,8 +19,8 @@ public class GoodsInController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //adds calendar tab to tabpane
-       //mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
+//        adds calendar tab to tabpane
+//       mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
 
 
 
@@ -35,8 +35,8 @@ public class GoodsInController implements Initializable {
 
     private Tab loadTab(FXMLLoader loader, Tab tab) {
 
-       // FormController contr = new FormController();
-       // loader.setController(contr);
+//        FormController contr = new FormController();
+//        loader.setController(contr);
         try {
             tab.setContent(loader.load());
         } catch (IOException e) {

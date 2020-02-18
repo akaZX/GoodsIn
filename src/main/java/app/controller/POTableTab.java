@@ -1,8 +1,11 @@
 package app.controller;
 
 
-import app.model.PoScheduleEntry;
+import app.controller.sql.SQLiteJDBC;
+import app.controller.sql.SQLiteProteanClone;
+import app.model.ScheduleEntry;
 import app.pojos.PoMaterials;
+import app.pojos.PoScheduleDetails;
 import app.pojos.SupplierOrders;
 import app.pojos.Suppliers;
 import app.view.table_columns.PoTableColumns;
@@ -10,16 +13,15 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.ToolBar;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.intellij.lang.annotations.Language;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -36,7 +38,7 @@ public class POTableTab{
 
     private final Tab tab = new Tab("Orders List");
 
-    private final JFXTreeTableView<PoScheduleEntry> table = new JFXTreeTableView<>();
+    private final JFXTreeTableView<ScheduleEntry> table = new JFXTreeTableView<>();
     private final StackPane pane = new StackPane();
     private final BorderPane bPane = new BorderPane();
     private final JFXButton importOrders = new JFXButton("Import Orders");
@@ -94,7 +96,7 @@ public class POTableTab{
         table.getColumns().addAll(tableColumns.supplierCol(), tableColumns.poCol(),
                 tableColumns.haulierCol(), tableColumns.expectedETACol(), tableColumns.bayCol(),
                 tableColumns.unloadingTimeCol(), tableColumns.palletsCol(),tableColumns.registrationCol(),
-                tableColumns.commentsCol(), tableColumns.arrivedCol(), tableColumns.departedCol(),
+                 tableColumns.arrivedCol(), tableColumns.departedCol(),
                 tableColumns.bookedInCol());
 
 
@@ -115,29 +117,30 @@ public class POTableTab{
         });
 
         importOrders.setOnAction(event -> {
+
             getOrderDetailsFromProtean();
-//            table.setRoot(populateTreeItems());
+            table.setRoot(populateTreeItems());
 
         });
 
         deleteOrder.setOnAction(event -> {
 
-            deleteOrder();
+            deleteEntry();
             table.setRoot(populateTreeItems());
         });
 
 
         table.setRowFactory( tr -> {
 
-            JFXTreeTableRow<PoScheduleEntry> row = new JFXTreeTableRow<>();
+            JFXTreeTableRow<ScheduleEntry> row = new JFXTreeTableRow<>();
 
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 1 && (!row.isEmpty()) ) {
-                    PoScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
+                    ScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
                     selectedDateLabel.setText(dateField.getValue().toString() + "  " + order.getSupplier());
                 }
                 if (event.getClickCount() == 2 && (!row.isEmpty()) ) {
-                    PoScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
+                    ScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
                     loadOrderForm(order);
                 }
               //TODO add right click functionality after main buttons will be sorted
@@ -153,7 +156,7 @@ public class POTableTab{
 
 
     //loads delivery form with order details
-    private void loadOrderForm(PoScheduleEntry order) {
+    private void loadOrderForm(ScheduleEntry order) {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/deliveryForm.fxml"));
         FormController contr = new FormController(order);
@@ -182,64 +185,87 @@ public class POTableTab{
 
     }
 
-    private TreeItem<PoScheduleEntry> populateTreeItems(){
+    private TreeItem<ScheduleEntry> populateTreeItems(){
 
-        return new RecursiveTreeItem<>(getOrdersFromAccessDB(), RecursiveTreeObject::getChildren);
+        return new RecursiveTreeItem<>(getDeliveriesFromDb(), RecursiveTreeObject::getChildren);
     }
 
 
-    private void deleteOrder() {
+    private void deleteEntry() {
+        int poId = table.getSelectionModel().getSelectedItem().getValue().getRowId();
+        int schedId = table.getSelectionModel().getSelectedItem().getValue().getScheduleDetails().getRowid();
+        String query;
 
-        table.getSelectionModel().getSelectedItem().getValue();
+        if (schedId > 0) {
+            query = "UPDATE SCHEDULE_ENTRY SET visible = 0 WHERE rowid = " + schedId + ";";
+        }else{
+            query = "UPDATE SUPPLIER_ORDERS SET visible = 0 WHERE rowid = " + poId + ";";
+        }
+        SQLiteJDBC.update(query);
 
-        System.out.println(table.getSelectionModel().getSelectedItem().getValue().getRowId());
-        String query = "UPDATE PO_SCHEDULE_DETAILS SET visible = 0 WHERE rowid = " +
-                       table.getSelectionModel().getSelectedItem().getValue().getRowId() + ";";
-//        AccessDatabase.insert(query);
     }
 
 
-    private  ObservableList<PoScheduleEntry> getOrdersFromAccessDB(){
+    private  ObservableList<ScheduleEntry> getDeliveriesFromDb(){
 
-        ObservableList<PoScheduleEntry> orders =
+        ObservableList<ScheduleEntry> orders =
                 FXCollections.observableArrayList();
 
-      String query = "SELECT sp.supp_name, so.rowid AS rowid, " +
-                     "so.po, so.supp_code, so.order_date " +
+      String query = "SELECT " +
+                     " so.rowid," +
+                     " so.po," +
+                     " sp.supp_name," +
+                     " so.supp_code, " +
+                     " so.order_date, " +
+                     " se.rowid as sched_rowid," +
+                     " se.bay," +
+                     " se.pallets," +
+                     " se.duration," +
+                     " se.haulier ," +
+                     " se.comments ," +
+                     " se.reg_no ," +
+                     " se.eta ," +
+                     " se.arrived ," +
+                     " se.departed ," +
+                     " se.booked_in " +
                      "FROM SUPPLIER_ORDERS so " +
-                     "INNER JOIN SUPPLIERS sp ON sp.supp_code = so.supp_code " +
-                     "where so.ORDER_DATE ='" + dateField.getValue().toString()+ "'";
-
-
+                     "INNER JOIN SUPPLIERS sp  using(supp_code) " +
+                     "Left join SCHEDULE_ENTRY se ON  so.rowid = se.order_rowid " +
+                     "where  (so.order_date ='"+ dateField.getValue().toString() + "' " +
+                     "AND so.visible = 1 AND se.visible = 1) OR (so.order_date ='"+ dateField.getValue().toString() + "' " +
+                     "AND so.visible = 1 AND se.visible is null)";
 
         ResultSet rs = SQLiteJDBC.query(query);
-        System.out.println(dateField.getValue().toString());
 
         try {
 
             while (rs.next()) {
-                PoScheduleEntry temp = new PoScheduleEntry(
+                ScheduleEntry temp = new ScheduleEntry(
                         rs.getInt("rowid"), rs.getString("supp_name"), rs.getString("supp_code"),
                         rs.getString("po"), rs.getString("order_date"));
-                temp.setScheduleDetails(SQLiteJDBC.getDeliveryDetails(temp.getRowId()));
+
+                PoScheduleDetails temp2 = new PoScheduleDetails(
+                        rs.getInt("sched_rowid"),
+                        rs.getString("bay"),
+                        rs.getInt("pallets"),
+                        rs.getInt("duration"),
+                        rs.getString("haulier"),
+                        rs.getString("comments"),
+                        rs.getString("reg_no"),
+                        rs.getString("eta"),
+                        rs.getString("arrived"),
+                        rs.getString("departed"),
+                        rs.getString("booked_in"));
+                temp.setScheduleDetails(temp2);
                 orders.addAll(temp);
             }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
         return orders;
+    }
 
-    }
-    private ObservableList<?> getScheduleRows(){
-        ObservableList<PoScheduleEntry> orders =
-                FXCollections.observableArrayList();
-        String query = "Select * from ";
-        return  orders;
-    }
 
 //  Originally it should get data from Protean SQL database as it is located in company's VPN
 //  some data was stored in separate SQLite database for demonstration purposes
@@ -264,7 +290,7 @@ public class POTableTab{
 
             }
 
-        }catch(SQLException e){
+        }catch(Exception e){
 
             e.printStackTrace();
         }
@@ -279,8 +305,6 @@ public class POTableTab{
             Suppliers tempSupp = new Suppliers();
             tempSupp.setSupplierCode(rs.getString("supp_code"));
             tempSupp.setSupplierName(supplierName);
-
-            System.out.println(tempSupp.getSupplierName() + "   " + tempSupp.getSupplierCode());
 
             SQLiteJDBC.insertSupplier(tempSupp);
         }
@@ -344,12 +368,20 @@ public class POTableTab{
 
     private void insertNewPoMaterials(String po){
         PoMaterials temp = new PoMaterials();
+        @Language("SQLite")
+        String delete = "Delete from PO_MATERIALS Where po ='"+ po + "'";
+        SQLiteJDBC.update(delete);
+
+
+        @Language("SQLite")
         String query = "select po, m_code, date, Round(expected_quantity, 2) as expected_quantity, round(booked_in, 2) as booked_in from protean where po ='" + po + "';";
         ResultSet rs = SQLiteProteanClone.query(query);
+
         String insert = "insert into PO_MATERIALS" +
                         "(po, m_code, expected_date, expected_quantity, arrived_quantity)" +
                         " values(?, ?, ?, ?, ?)";
         try {
+            assert rs != null;
             while (rs.next()) {
                 temp.setPoNumber(rs.getString("po"));
                 temp.setMCode(rs.getString("m_code"));
@@ -359,8 +391,7 @@ public class POTableTab{
                 SQLiteJDBC.insertPoMaterials(insert, temp);
             }
         }
-        catch (SQLException e) {
-            System.out.println("Klaida: ");
+        catch (Exception e) {
             e.printStackTrace();
         }
     }

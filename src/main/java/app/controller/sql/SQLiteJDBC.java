@@ -1,4 +1,4 @@
-package app.controller;
+package app.controller.sql;
 
 import app.pojos.PoMaterials;
 import app.pojos.PoScheduleDetails;
@@ -6,8 +6,11 @@ import app.pojos.SupplierOrders;
 import app.pojos.Suppliers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.intellij.lang.annotations.Language;
+
 import java.sql.*;
-import java.time.LocalDateTime;
+
+
 
 public class SQLiteJDBC {
 
@@ -15,8 +18,6 @@ public class SQLiteJDBC {
 
 
     public static ObservableList<Suppliers> getSuppliers(){
-
-
 
         ObservableList<Suppliers> suppliers = FXCollections.observableArrayList();
 
@@ -32,8 +33,6 @@ public class SQLiteJDBC {
                     temp.setSupplierCode("supp_code");
                     suppliers.add(temp);
                 }
-            }else{
-                System.out.println("tuscias rs supplier");
             }
         }
         catch (SQLException e) {
@@ -44,28 +43,29 @@ public class SQLiteJDBC {
         return suppliers;
     }
 
-    public static boolean insertOrder(SupplierOrders order) {
+    public static void insertOrder(SupplierOrders order) {
         final String checkQuery =
-                "SELECT * FROM SUPPLIER_ORDERS WHERE PO_NUMBER ='"
-                + order.getPoNumber() + "' AND order_date = '"
+                "SELECT rowid,* FROM SUPPLIER_ORDERS WHERE PO ='"
+                + order.getPoNumber() + "' AND ORDER_DATE = '"
                 + order.getOrderDate().toString() + "';";
 
-        String insert =
-                "INSERT INTO SUPPLIER_ORDERS(supp_code, po_number, order_date) VALUES('"
+        String insertNewOrder =
+                "INSERT INTO SUPPLIER_ORDERS(supp_code, po, order_date) VALUES('"
                 + order.getSuppCode() + "','" + order.getPoNumber() + "','"
                 + order.getOrderDate() + "')";
+
+
         ResultSet existingOrder = query(checkQuery);
 
         try {
 
             if(!existingOrder.next()){
-                update(insert);
+                update(insertNewOrder);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     public static void insertSupplier(Suppliers supplier){
@@ -106,21 +106,14 @@ public class SQLiteJDBC {
     }
 
     public static void update(String query) {
-        Connection c = null;
         Statement st = null;
-
         try {
             c = getConnection();
             st = c.createStatement();
             st.executeUpdate(query);
 
-
-
-
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
-        }finally {
-            close(null,null, st, c);
         }
     }
 
@@ -138,24 +131,18 @@ public class SQLiteJDBC {
         }
     }
 
-
     public static ResultSet query(String query){
 
         Statement st ;
-
         try {
             Connection c = getConnection();
 
             st = c.createStatement();
 
-
-            System.out.println("viduje query: " + st.toString());
-
             return st.executeQuery(query);
 
-
-        } catch (SQLException e) {
-            System.out.println("grazina nuly");
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -174,53 +161,30 @@ public class SQLiteJDBC {
             st.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("Nepavyko ideti naujo po materialo");
             e.printStackTrace();
         }
     }
 
-    private static void close(ResultSet rs, PreparedStatement pstmt, Statement st, Connection conn){
-
-        try {
-            if(st != null){
-                st.close();
-            }
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-                pstmt.close();
-            }
-
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e3) {
-            System.out.println(e3.getMessage());
-        }
-    }
-
-
     public static PoScheduleDetails getDeliveryDetails(int rowid) {
-        String query = "SELECT rowid, * FROM PO_SCHEDULE_DETAILS WHERE s_o_rowid = "+ rowid + ";";
+        String query = "SELECT rowid, * FROM PO_SCHEDULE_DETAILS WHERE so_rowid = "+ rowid + ";";
 
         ResultSet rs = query(query);
         try {
             while (rs.next()) {
-                PoScheduleDetails temp = new PoScheduleDetails(
-                        rs.getInt("rowid"),
-                        rs.getString("po"),
-                        rs.getString("bay"),
-                        rs.getInt("pallets"),
-                        rs.getInt("duration"),
-                        rs.getString("haulier"),
-                        rs.getString("comments"),
-                        rs.getString("registration_no"),
-                        LocalDateTime.parse(rs.getString("eta")),
-                        LocalDateTime.parse(rs.getString("arrived")),
-                        LocalDateTime.parse(rs.getString("departed")),
-                        LocalDateTime.parse(rs.getString("booked_in")));
-                return temp;
+//                PoScheduleDetails temp = new PoScheduleDetails(
+//                        rs.getInt("rowid"),
+//                        rs.getString("po"),
+//                        rs.getString("bay"),
+//                        rs.getInt("pallets"),
+//                        rs.getInt("duration"),
+//                        rs.getString("haulier"),
+//                        rs.getString("comments"),
+//                        rs.getString("registration_no"),
+//                        LocalDateTime.parse(rs.getString("eta")),
+//                        LocalDateTime.parse(rs.getString("arrived")),
+//                        LocalDateTime.parse(rs.getString("departed")),
+//                        LocalDateTime.parse(rs.getString("booked_in")));
+//                return temp;
 
             }
         }

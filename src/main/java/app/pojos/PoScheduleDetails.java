@@ -5,12 +5,17 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class PoScheduleDetails {
 
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
   private int rowid;
-  private String po;
   private String bay;
   private int pallets;
   private int duration;
@@ -26,9 +31,12 @@ public class PoScheduleDetails {
 
 
 
-  public PoScheduleDetails(int rowid, String po,String bay, int pallets, int duration, String haulier, String comments, String registrationNo, LocalDateTime eta, LocalDateTime arrived, LocalDateTime departed, LocalDateTime bookedIn) {
+  public PoScheduleDetails(
+          int rowid, String bay, int pallets, int duration,
+          String haulier, String comments, String registrationNo,
+          String eta, String arrived, String departed,
+          String bookedIn) {
     this.rowid = rowid;
-    this.po = po;
     this.bay = bay;
     this.pallets = pallets;
     this.duration = duration;
@@ -38,17 +46,18 @@ public class PoScheduleDetails {
 
 
     if(eta != null){
-      this.eta = eta;
+      this.eta = LocalDateTime.parse(eta, formatter);
     }
-    if (arrived != null) {
-      this.arrived = arrived;
+    if(arrived != null){
+      this.arrived = LocalDateTime.parse(arrived, formatter);
     }
-    if (departed != null) {
-      this.departed = departed;
+    if(departed != null){
+      this.departed = LocalDateTime.parse(departed, formatter);
     }
-    if (bookedIn != null) {
-      this.bookedIn = bookedIn;
+    if(bookedIn != null){
+      this.bookedIn = LocalDateTime.parse(bookedIn, formatter);
     }
+
   }
 
 
@@ -58,13 +67,6 @@ public class PoScheduleDetails {
   }
 
 
-  public String getPo() {
-    return po;
-  }
-
-  public void setPo(String po) {
-    this.po = po;
-  }
 
   public String getBay() {
 

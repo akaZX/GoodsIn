@@ -1,26 +1,29 @@
 package app.view.table_columns;
 
 import app.model.OrderDetails;
+import app.pojos.PoMaterials;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TreeTableColumn;
 
 public class OrderDetailsColumns {
 
-    final JFXTreeTableView<OrderDetails> orderDetailsTable;
+    final JFXTreeTableView<PoMaterials> orderDetailsTable;
 
-    public OrderDetailsColumns(JFXTreeTableView<OrderDetails> orderDetailsTable) {
+    public OrderDetailsColumns(JFXTreeTableView<PoMaterials> orderDetailsTable) {
         this.orderDetailsTable = orderDetailsTable;
     }
 
-    public JFXTreeTableColumn<OrderDetails, String> mCodeCol(){
+    public JFXTreeTableColumn<PoMaterials, String> mCodeCol(){
 
-        JFXTreeTableColumn<OrderDetails, String> mCodeColumn = new JFXTreeTableColumn<>("M Code");
+        JFXTreeTableColumn<PoMaterials, String> mCodeColumn = new JFXTreeTableColumn<>("M Code");
         mCodeColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
         mCodeColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
-        mCodeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
+        mCodeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<PoMaterials, String> param) ->{
             if (mCodeColumn.validateValue(param)) {
-                return param.getValue().getValue().mCodeProperty();
+                String mCode = param.getValue().getValue().getMCode();
+                return new SimpleStringProperty(mCode);
             }
             else return mCodeColumn.getComputedValue(param);
         });
@@ -28,43 +31,46 @@ public class OrderDetailsColumns {
         return mCodeColumn;
     }
 
-    public JFXTreeTableColumn<OrderDetails, String> descCol(){
+    public JFXTreeTableColumn<PoMaterials, String> descCol(){
 
-        JFXTreeTableColumn<OrderDetails, String> descColumn = new JFXTreeTableColumn<>("Description");
+        JFXTreeTableColumn<PoMaterials, String> descColumn = new JFXTreeTableColumn<>("Description");
         descColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.4));
         descColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.39));
-        descColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
+        descColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<PoMaterials, String> param) ->{
             if (descColumn.validateValue(param)) {
-                return param.getValue().getValue().descriptionProperty();
+                String s = param.getValue().getValue().getPoNumber();
+                return new SimpleStringProperty(s);
             }
             else return descColumn.getComputedValue(param);
         });
         return descColumn;
     }
 
-    public JFXTreeTableColumn<OrderDetails, String> expectedCol(){
+    public JFXTreeTableColumn<PoMaterials, String> expectedCol(){
 
-        JFXTreeTableColumn<OrderDetails, String> expectedColumn = new JFXTreeTableColumn<>("Expected");
+        JFXTreeTableColumn<PoMaterials, String> expectedColumn = new JFXTreeTableColumn<>("Expected");
         expectedColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
         expectedColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.2));
-        expectedColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
+        expectedColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<PoMaterials, String> param) ->{
             if (expectedColumn.validateValue(param)) {
-                return param.getValue().getValue().expectedProperty();
+                String expectedQuantity = String.valueOf(param.getValue().getValue().getExpectedQuantity());
+                return new SimpleStringProperty(expectedQuantity);
             }
             else return expectedColumn.getComputedValue(param);
         });
         return expectedColumn;
     }
 
-    public JFXTreeTableColumn<OrderDetails, String> bookedCol(){
+    public JFXTreeTableColumn<PoMaterials, String> bookedCol(){
 
 
-                JFXTreeTableColumn<OrderDetails, String> bookedColumn = new JFXTreeTableColumn<>("Booked");
+                JFXTreeTableColumn<PoMaterials, String> bookedColumn = new JFXTreeTableColumn<>("Booked");
                 bookedColumn.prefWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.19));
                 bookedColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.19));
-                bookedColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<OrderDetails, String> param) ->{
+                bookedColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<PoMaterials, String> param) ->{
                     if (bookedColumn.validateValue(param)) {
-                        return param.getValue().getValue().bookedInProperty();
+                        String expectedQuantity = String.valueOf(param.getValue().getValue().getArrivedQuantity());
+                        return new SimpleStringProperty(expectedQuantity);
                     }
                     else return bookedColumn.getComputedValue(param);
                 });

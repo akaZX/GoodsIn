@@ -1,19 +1,35 @@
 package app.pojos;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
 import java.time.LocalDate;
 
-public class PoMaterials {
+public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
 
 
   private String poNumber;
   private String mCode;
-  private String lineNo;
+  private int lineNo;
   private LocalDate expectedDate;
   private double expectedQuantity;
   private double arrivedQuantity;
   private int proteanEntry;
 
 
+  public PoMaterials() {
+
+  }
+
+
+  public PoMaterials(String poNumber, String mCode, int lineNo, double expectedQuantity, double arrivedQuantity) {
+
+    this.poNumber = poNumber;
+    this.mCode = mCode;
+    this.lineNo = lineNo;
+    this.expectedDate = expectedDate;
+    this.expectedQuantity = expectedQuantity;
+    this.arrivedQuantity = arrivedQuantity;
+  }
 
 
   public String getPoNumber() {
@@ -34,11 +50,11 @@ public class PoMaterials {
   }
 
 
-  public String getLineNo() {
+  public int getLineNo() {
     return lineNo;
   }
 
-  public void setLineNo(String lineNo) {
+  public void setLineNo(int lineNo) {
     this.lineNo = lineNo;
   }
 
