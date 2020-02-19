@@ -3,6 +3,7 @@ package app.controller;
 
 import app.controller.sql.SQLiteJDBC;
 import app.controller.sql.SQLiteProteanClone;
+import app.controller.sql.dao.SuppliersDAO;
 import app.model.ScheduleEntry;
 import app.pojos.PoMaterials;
 import app.pojos.PoScheduleDetails;
@@ -13,7 +14,6 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -98,7 +98,6 @@ public class POTableTab{
                 tableColumns.unloadingTimeCol(), tableColumns.palletsCol(),tableColumns.registrationCol(),
                  tableColumns.arrivedCol(), tableColumns.departedCol(),
                 tableColumns.bookedInCol());
-
 
         table.setShowRoot(false);
         table.setEditable(false);
@@ -235,7 +234,7 @@ public class POTableTab{
                      "AND so.visible = 1 AND se.visible = 1) OR (so.order_date ='"+ dateField.getValue().toString() + "' " +
                      "AND so.visible = 1 AND se.visible is null)";
 
-        ResultSet rs = SQLiteJDBC.query(query);
+        ResultSet rs = SQLiteJDBC.selectQuery(query);
 
         try {
 
@@ -306,7 +305,8 @@ public class POTableTab{
             tempSupp.setSupplierCode(rs.getString("supp_code"));
             tempSupp.setSupplierName(supplierName);
 
-            SQLiteJDBC.insertSupplier(tempSupp);
+            new SuppliersDAO().save(tempSupp);
+
         }
         catch (SQLException e) {
             e.printStackTrace();

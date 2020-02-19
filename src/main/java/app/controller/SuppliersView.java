@@ -1,10 +1,12 @@
 package app.controller;
 
 import app.controller.sql.SQLiteJDBC;
+import app.controller.sql.dao.SuppliersDAO;
 import app.pojos.Suppliers;
 import app.view.table_columns.SuppliersTableColumns;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -72,7 +74,7 @@ class SuppliersView implements Initializable {
     private void addSuppliersToTable() {
         table.getColumns().addAll(SuppliersTableColumns.getNameCol(table));
 
-        final TreeItem<Suppliers> root = new RecursiveTreeItem<>(SQLiteJDBC.getSuppliers(), RecursiveTreeObject::getChildren);
+        final TreeItem<Suppliers> root = new RecursiveTreeItem<>(FXCollections.observableArrayList(new SuppliersDAO().getAll()), RecursiveTreeObject::getChildren);
         table.setRoot(root);
         table.setShowRoot(false);
         table.setEditable(true);

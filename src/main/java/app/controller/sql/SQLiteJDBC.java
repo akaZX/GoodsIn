@@ -4,8 +4,6 @@ import app.pojos.PoMaterials;
 import app.pojos.PoScheduleDetails;
 import app.pojos.SupplierOrders;
 import app.pojos.Suppliers;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.*;
@@ -17,64 +15,10 @@ public class SQLiteJDBC {
     static Connection c = null;
 
 
-    public static ObservableList<Suppliers> getSuppliers(){
-
-        ObservableList<Suppliers> suppliers = FXCollections.observableArrayList();
-
-        String    query = "SELECT rowid, * FROM SUPPLIERS order by supp_name";
-        ResultSet rs    = query(query);
-
-        try {
-            if (rs != null) {
-                while (rs.next()) {
-                    Suppliers temp = new Suppliers();
-                    temp.setRowID(rs.getInt("rowid"));
-                    temp.setSupplierName(rs.getString("supp_name"));
-                    temp.setSupplierCode("supp_code");
-                    suppliers.add(temp);
-                }
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-        return suppliers;
-    }
-
-    public static void insertOrder(SupplierOrders order) {
-        final String checkQuery =
-                "SELECT rowid,* FROM SUPPLIER_ORDERS WHERE PO ='"
-                + order.getPoNumber() + "' AND ORDER_DATE = '"
-                + order.getOrderDate().toString() + "';";
-
-        String insertNewOrder =
-                "INSERT INTO SUPPLIER_ORDERS(supp_code, po, order_date) VALUES('"
-                + order.getSuppCode() + "','" + order.getPoNumber() + "','"
-                + order.getOrderDate() + "')";
-
-
-        ResultSet existingOrder = query(checkQuery);
-
-        try {
-
-            if(!existingOrder.next()){
-                update(insertNewOrder);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void insertSupplier(Suppliers supplier){
-
-        String pstmt =
-                "INSERT INTO SUPPLIERS (supp_name, supp_code) VALUES(?, ?)";
-                updateTwoColumns(pstmt, supplier.getSupplierName(), supplier.getSupplierCode());
+    public SQLiteJDBC() {
 
     }
+
 
     private static Connection getConnection(){
         final String DB = "C:\\Users\\Asus\\OneDrive\\Desktop\\SQLite Bakkavor Database\\GI_RMT.db";
@@ -105,17 +49,85 @@ public class SQLiteJDBC {
         return c;
     }
 
-    public static void update(String query) {
-        Statement st = null;
+
+    public static boolean update(String query) {
+        Statement st;
         try {
             c = getConnection();
             st = c.createStatement();
             st.executeUpdate(query);
+            return true;
 
-        } catch (java.sql.SQLException e) {
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    public static ResultSet selectQuery(String query){
+
+        Statement st ;
+        try {
+            Connection c = getConnection();
+            st = c.createStatement();
+
+            return st.executeQuery(query);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static <T> void delete(String tab, String field, T id){
+        @Language("SQLite")
+        String query = "Delete from " + tab + " WHERE " + field + "= ?";
+
+        try (Connection con = getConnection(); PreparedStatement preparedStatement = con.prepareStatement(query)){
+            if( id instanceof Integer){
+                preparedStatement.setInt(1, (Integer) id);
+            }else{
+                preparedStatement.setString(1, (String)id);
+            }
+
+            preparedStatement.executeUpdate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+
+
+
+    public static void insertOrder(SupplierOrders order) {
+        final String checkQuery =
+                "SELECT rowid,* FROM SUPPLIER_ORDERS WHERE PO ='"
+                + order.getPoNumber() + "' AND ORDER_DATE = '"
+                + order.getOrderDate().toString() + "';";
+
+        String insertNewOrder =
+                "INSERT INTO SUPPLIER_ORDERS(supp_code, po, order_date) VALUES('"
+                + order.getSuppCode() + "','" + order.getPoNumber() + "','"
+                + order.getOrderDate() + "')";
+
+
+        ResultSet existingOrder = selectQuery(checkQuery);
+
+        try {
+
+            if(!existingOrder.next()){
+                update(insertNewOrder);
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public static void updateTwoColumns(String query, String s1, String s2) {
         PreparedStatement st = null;
@@ -131,21 +143,6 @@ public class SQLiteJDBC {
         }
     }
 
-    public static ResultSet query(String query){
-
-        Statement st ;
-        try {
-            Connection c = getConnection();
-
-            st = c.createStatement();
-
-            return st.executeQuery(query);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public static void insertPoMaterials(String query, PoMaterials material){
         PreparedStatement st = null;
@@ -168,7 +165,7 @@ public class SQLiteJDBC {
     public static PoScheduleDetails getDeliveryDetails(int rowid) {
         String query = "SELECT rowid, * FROM PO_SCHEDULE_DETAILS WHERE so_rowid = "+ rowid + ";";
 
-        ResultSet rs = query(query);
+        ResultSet rs = selectQuery(query);
         try {
             while (rs.next()) {
 //                PoScheduleDetails temp = new PoScheduleDetails(

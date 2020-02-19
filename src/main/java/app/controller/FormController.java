@@ -2,7 +2,9 @@ package app.controller;
 
 
 import app.controller.sql.SQLiteJDBC;
+import app.controller.sql.dao.SuppliersDAO;
 import app.pojos.PoMaterials;
+import app.pojos.Suppliers;
 import app.view.custom_nodes.DateTimeInput;
 import app.model.ScheduleEntry;
 import app.view.table_columns.OrderDetailsColumns;
@@ -149,7 +151,9 @@ public class FormController  implements Initializable {
 
          //adds autocomplete for fields
         addDataToAutocompleteField("HAULIERS", "name", haulierField);
-        addDataToAutocompleteField("SUPPLIERS", "supp_name", supplierField);
+
+
+        addDataToSupp(supplierField);
 
         initializeForm();
         initializeOrderDetailsTable();
@@ -157,11 +161,30 @@ public class FormController  implements Initializable {
         Platform.runLater(() -> bays.requestFocus());
     }
 
+
+
+    public void addDataToSupp(JFXTextField field) {
+
+        List<Suppliers> list = new SuppliersDAO().getAll();
+        List<String> names = new ArrayList<>();
+
+        System.out.println("printina " + list);
+
+        for (Suppliers supp : list) {
+            names.add(supp.getSupplierName());
+        }
+
+        Collections.sort(names);
+
+        addAutocomplete(field, names);
+
+    }
+
     public void addDataToAutocompleteField(String table, String nameField, JFXTextField field) {
 
         List<String> list = new ArrayList<>();
         String    query = "SELECT * FROM " + table + " ORDER BY " + nameField + " DESC;";
-        ResultSet rs    = SQLiteJDBC.query(query);
+        ResultSet rs    = SQLiteJDBC.selectQuery(query);
 
         try {
             while (rs.next()){
@@ -177,6 +200,10 @@ public class FormController  implements Initializable {
         addAutocomplete(field, list);
 
     }
+
+
+
+
 
 
     private void addAutocomplete(JFXTextField field, List<String> list) {
@@ -366,7 +393,7 @@ public class FormController  implements Initializable {
         ObservableList<PoMaterials> orders   = FXCollections.observableArrayList();
         String                       poNumber = poField.getText().isEmpty() ? "" : poField.getText();
 
-        ResultSet rs = SQLiteJDBC.query("Select * from  PO_MATERIALS where po='"+ poNumber +"'");
+        ResultSet rs = SQLiteJDBC.selectQuery("Select * from  PO_MATERIALS where po ='" + poNumber + "'");
 
         try {
             while (rs.next()){
