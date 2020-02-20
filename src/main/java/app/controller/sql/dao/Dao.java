@@ -15,5 +15,4 @@ public interface Dao<T> {
 
     void delete(T t);
 
-    void close ();
 }

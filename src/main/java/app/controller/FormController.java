@@ -168,7 +168,6 @@ public class FormController  implements Initializable {
         List<Suppliers> list = new SuppliersDAO().getAll();
         List<String> names = new ArrayList<>();
 
-        System.out.println("printina " + list);
 
         for (Suppliers supp : list) {
             names.add(supp.getSupplierName());
@@ -391,7 +390,7 @@ public class FormController  implements Initializable {
     private ObservableList<PoMaterials> getOrderDetails(){
 
         ObservableList<PoMaterials> orders   = FXCollections.observableArrayList();
-        String                       poNumber = poField.getText().isEmpty() ? "" : poField.getText();
+        String                      poNumber = poField.getText().isEmpty() ? "" : poField.getText();
 
         ResultSet rs = SQLiteJDBC.selectQuery("Select * from  PO_MATERIALS where po ='" + poNumber + "'");
 
@@ -400,8 +399,8 @@ public class FormController  implements Initializable {
                 orders.add(
                         new PoMaterials(
                                 rs.getString("po") , rs.getString("m_code"),
-                                rs.getInt("line_no"),
-                                rs.getDouble("expected_quantity"), rs.getDouble("arrived_quantity")));
+                                rs.getDouble("expected_quantity"),
+                                 rs.getDouble("arrived_quantity")));
 
             }
         } catch (SQLException e) {

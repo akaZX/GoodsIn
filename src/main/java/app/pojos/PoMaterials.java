@@ -1,19 +1,21 @@
 package app.pojos;
 
+
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import java.time.LocalDate;
 
 public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
 
-
-  private String poNumber;
+  private long rowid;
+  private String po;
   private String mCode;
-  private int lineNo;
+  private long lineNo;
+  private long deliveryNo;
   private LocalDate expectedDate;
   private double expectedQuantity;
   private double arrivedQuantity;
-  private int proteanEntry;
+  private long proteanEntry;
 
 
   public PoMaterials() {
@@ -21,23 +23,43 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
   }
 
 
-  public PoMaterials(String poNumber, String mCode, int lineNo, double expectedQuantity, double arrivedQuantity) {
+  public PoMaterials(long rowid, String po, String mCode, long lineNo, long deliveryNo, LocalDate expectedDate, double expectedQuantity, double arrivedQuantity) {
 
-    this.poNumber = poNumber;
+    this.rowid = rowid;
+    this.po = po;
     this.mCode = mCode;
     this.lineNo = lineNo;
+    this.deliveryNo = deliveryNo;
     this.expectedDate = expectedDate;
     this.expectedQuantity = expectedQuantity;
     this.arrivedQuantity = arrivedQuantity;
   }
 
 
-  public String getPoNumber() {
-    return poNumber;
+  public PoMaterials(String po, String mCode, double expectedQuantity, double arrivedQuantity) {
+
+    this.po = po;
+    this.mCode = mCode;
+    this.expectedQuantity = expectedQuantity;
+    this.arrivedQuantity = arrivedQuantity;
   }
 
-  public void setPoNumber(String poNumber) {
-    this.poNumber = poNumber;
+
+  public long getRowid() {
+    return rowid;
+  }
+
+  public void setRowid(long rowid) {
+    this.rowid = rowid;
+  }
+
+
+  public String getPo() {
+    return po;
+  }
+
+  public void setPo(String po) {
+    this.po = po;
   }
 
 
@@ -50,12 +72,21 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
   }
 
 
-  public int getLineNo() {
+  public long getLineNo() {
     return lineNo;
   }
 
-  public void setLineNo(int lineNo) {
+  public void setLineNo(long lineNo) {
     this.lineNo = lineNo;
+  }
+
+
+  public long getDeliveryNo() {
+    return deliveryNo;
+  }
+
+  public void setDeliveryNo(long deliveryNo) {
+    this.deliveryNo = deliveryNo;
   }
 
 
@@ -64,6 +95,7 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
   }
 
   public void setExpectedDate(LocalDate expectedDate) {
+
     this.expectedDate = expectedDate;
   }
 
@@ -86,11 +118,11 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
   }
 
 
-  public int getProteanEntry() {
+  public long getProteanEntry() {
     return proteanEntry;
   }
 
-  public void setProteanEntry(int proteanEntry) {
+  public void setProteanEntry(long proteanEntry) {
     this.proteanEntry = proteanEntry;
   }
 

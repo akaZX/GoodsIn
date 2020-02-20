@@ -1,6 +1,5 @@
 package app.view.table_columns;
 
-import app.model.OrderDetails;
 import app.pojos.PoMaterials;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
@@ -38,7 +37,7 @@ public class OrderDetailsColumns {
         descColumn.minWidthProperty().bind(orderDetailsTable.widthProperty().multiply(0.39));
         descColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<PoMaterials, String> param) ->{
             if (descColumn.validateValue(param)) {
-                String s = param.getValue().getValue().getPoNumber();
+                String s = param.getValue().getValue().getPo();
                 return new SimpleStringProperty(s);
             }
             else return descColumn.getComputedValue(param);

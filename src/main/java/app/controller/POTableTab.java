@@ -3,12 +3,11 @@ package app.controller;
 
 import app.controller.sql.SQLiteJDBC;
 import app.controller.sql.SQLiteProteanClone;
+import app.controller.sql.dao.PoMaterialsDAO;
+import app.controller.sql.dao.SupplierMaterialsDAO;
 import app.controller.sql.dao.SuppliersDAO;
 import app.model.ScheduleEntry;
-import app.pojos.PoMaterials;
-import app.pojos.PoScheduleDetails;
-import app.pojos.SupplierOrders;
-import app.pojos.Suppliers;
+import app.pojos.*;
 import app.view.table_columns.PoTableColumns;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -349,17 +348,20 @@ public class POTableTab{
     }
 
     private void insertNewSupplierMaterials(String po){
+
+        SupplierMaterials material = new SupplierMaterials();
+        @Language("SQLite")
         String query = "select m_code, supp_code from protean where po ='" + po + "';";
         ResultSet rs = SQLiteProteanClone.query(query);
-
-        String insert = "insert into SUPPLIER_MATERIALS (m_code, supp_code) values(?,?)";
 
         try {
             assert rs != null;
             while (rs.next()) {
-                SQLiteJDBC.updateTwoColumns(insert, rs.getString("m_code"), rs.getString("supp_code"));
-            }
 
+                material.setmCode(rs.getString("m_code"));
+                material.setSuppCode(rs.getString("supp_code"));
+                new SupplierMaterialsDAO().save(material);
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -368,32 +370,33 @@ public class POTableTab{
 
     private void insertNewPoMaterials(String po){
         PoMaterials temp = new PoMaterials();
-        @Language("SQLite")
-        String delete = "Delete from PO_MATERIALS Where po ='"+ po + "'";
-        SQLiteJDBC.update(delete);
 
 
         @Language("SQLite")
-        String query = "select po, m_code, date, Round(expected_quantity, 2) as expected_quantity, round(booked_in, 2) as booked_in from protean where po ='" + po + "';";
+        String query = "select po, m_code, date, Round(expected_quantity, 2) as expected_quantity, round(booked_in, 2) as booked_in, line, delivery_no from protean where po ='" + po + "';";
         ResultSet rs = SQLiteProteanClone.query(query);
 
-        String insert = "insert into PO_MATERIALS" +
-                        "(po, m_code, expected_date, expected_quantity, arrived_quantity)" +
-                        " values(?, ?, ?, ?, ?)";
         try {
             assert rs != null;
             while (rs.next()) {
-                temp.setPoNumber(rs.getString("po"));
+
+                temp.setPo(rs.getString("po"));
                 temp.setMCode(rs.getString("m_code"));
                 temp.setArrivedQuantity(rs.getDouble("booked_in"));
                 temp.setExpectedQuantity(rs.getDouble("expected_quantity"));
                 temp.setExpectedDate(LocalDate.parse(rs.getString("date")));
-                SQLiteJDBC.insertPoMaterials(insert, temp);
+                temp.setDeliveryNo(rs.getInt("delivery_no"));
+                temp.setLineNo(rs.getInt("line"));
+
+                new PoMaterialsDAO().save(temp);
+
             }
+            rs.close();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 }

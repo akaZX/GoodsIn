@@ -3,7 +3,6 @@ package app.controller.sql;
 import app.pojos.PoMaterials;
 import app.pojos.PoScheduleDetails;
 import app.pojos.SupplierOrders;
-import app.pojos.Suppliers;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.*;
@@ -15,34 +14,23 @@ public class SQLiteJDBC {
     static Connection c = null;
 
 
-    public SQLiteJDBC() {
-
-    }
-
-
     private static Connection getConnection(){
-        final String DB = "C:\\Users\\Asus\\OneDrive\\Desktop\\SQLite Bakkavor Database\\GI_RMT.db";
 
         if (c == null) {
 
             try {
-                Class.forName("org.sqlite.JDBC");
-                c = DriverManager.getConnection("jdbc:sqlite:" + DB);
+              c = ApacheConnPool.getConnection();
 
             } catch ( Exception e ) {
                 System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-
             }
         }else{
 
             try {
                 c.close();
-                Class.forName("org.sqlite.JDBC");
-                c = DriverManager.getConnection("jdbc:sqlite:" + DB);
-
+                c = ApacheConnPool.getConnection();
             } catch ( Exception e ) {
                 System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-
             }
         }
 
@@ -51,9 +39,10 @@ public class SQLiteJDBC {
 
 
     public static boolean update(String query) {
-        Statement st;
+        Statement st = null;
         try {
             c = getConnection();
+
             st = c.createStatement();
             st.executeUpdate(query);
             return true;
@@ -66,9 +55,10 @@ public class SQLiteJDBC {
 
     public static ResultSet selectQuery(String query){
 
-        Statement st ;
+        Statement st = null;
         try {
-            Connection c = getConnection();
+            c = getConnection();
+
             st = c.createStatement();
 
             return st.executeQuery(query);
@@ -82,8 +72,10 @@ public class SQLiteJDBC {
     public static <T> void delete(String tab, String field, T id){
         @Language("SQLite")
         String query = "Delete from " + tab + " WHERE " + field + "= ?";
-
-        try (Connection con = getConnection(); PreparedStatement preparedStatement = con.prepareStatement(query)){
+        PreparedStatement preparedStatement = null;
+        try{
+            c = getConnection();
+            preparedStatement = c.prepareStatement(query);
             if( id instanceof Integer){
                 preparedStatement.setInt(1, (Integer) id);
             }else{
@@ -130,10 +122,11 @@ public class SQLiteJDBC {
 
 
     public static void updateTwoColumns(String query, String s1, String s2) {
-        PreparedStatement st = null;
+        PreparedStatement st;
 
         try {
             c = getConnection();
+
             st = c.prepareStatement(query);
             st.setString(1, s1);
             st.setString(2, s2);
@@ -144,23 +137,6 @@ public class SQLiteJDBC {
     }
 
 
-    public static void insertPoMaterials(String query, PoMaterials material){
-        PreparedStatement st = null;
-
-        try {
-            c = getConnection();
-            st = c.prepareStatement(query);
-            st.setString(1, material.getPoNumber());
-            st.setString(2, material.getMCode());
-            st.setString(3, material.getExpectedDate().toString());
-            st.setDouble(4, material.getExpectedQuantity());
-            st.setDouble(5, material.getArrivedQuantity());
-            st.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public static PoScheduleDetails getDeliveryDetails(int rowid) {
         String query = "SELECT rowid, * FROM PO_SCHEDULE_DETAILS WHERE so_rowid = "+ rowid + ";";

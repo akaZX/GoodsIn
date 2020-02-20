@@ -28,6 +28,7 @@ public class SuppliersDAO implements Dao<Suppliers> {
                 supp.setSupplierName(rs.getString("supp_name"));
 
             }
+            rs.close();
         }catch (NullPointerException | SQLException e){
             e.printStackTrace();
         }
@@ -39,7 +40,7 @@ public class SuppliersDAO implements Dao<Suppliers> {
     @Override
     public List<Suppliers> getAll() {
         List<Suppliers> list = new ArrayList<>();
-        Suppliers temp = null;
+        Suppliers temp;
 
         @Language("SQLite")
         String    query = "SELECT rowid, * FROM suppliers ORDER BY supp_name";
@@ -55,6 +56,7 @@ public class SuppliersDAO implements Dao<Suppliers> {
                 list.add(temp);
 
             }
+            rs.close();
         }
         catch (SQLException | NullPointerException e) {
             e.printStackTrace();
@@ -94,8 +96,5 @@ public class SuppliersDAO implements Dao<Suppliers> {
     }
 
 
-    @Override
-    public void close() {
 
-    }
 }
