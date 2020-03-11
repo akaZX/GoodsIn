@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root maxHeight="447.0" maxWidth="331.0" prefHeight="447.0" prefWidth="331.0" type="StackPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="258.0">
+         <children>
+            <Label fx:id="title" maxHeight="31.0" maxWidth="1.7976931348623157E308" minHeight="31.0" prefHeight="31.0" prefWidth="258.0" text="Label" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <JFXListView fx:id="listView" maxWidth="1.7976931348623157E308" prefHeight="254.0" prefWidth="258.0" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin></JFXListView>
+            <HBox fx:id="addBox" alignment="CENTER_LEFT" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="258.0">
+               <children>
+                  <JFXTextField fx:id="newEntry" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="185.0" HBox.hgrow="SOMETIMES">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin></JFXTextField>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="92.0" HBox.hgrow="NEVER">
+                     <children>
+                        <JFXButton fx:id="addBtn" text="Save">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin></JFXButton>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox fx:id="removeBox" alignment="CENTER_LEFT" layoutX="10.0" layoutY="311.0" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="258.0">
+               <children>
+                  <Label fx:id="selectedLabel" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="186.0" HBox.hgrow="SOMETIMES">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin></Label>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="92.0" HBox.hgrow="NEVER">
+                     <children>
+                        <JFXButton fx:id="removeBtn" disable="true" text="Remove">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin></JFXButton>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</fx:root>

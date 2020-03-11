@@ -1,7 +1,7 @@
 package app.model;
 
 
-import app.pojos.PoScheduleDetails;
+import app.pojos.ScheduleDetails;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import java.time.LocalDate;
 
@@ -13,7 +13,7 @@ public class ScheduleEntry extends RecursiveTreeObject<ScheduleEntry> {
     private String suppCode;
     private String po;
     private LocalDate orderDate;
-    private PoScheduleDetails scheduleDetails = null;
+    private ScheduleDetails scheduleDetails = null;
 
 
     public ScheduleEntry(String supplier, String suppCode, String po, String orderDate) {
@@ -36,13 +36,13 @@ public class ScheduleEntry extends RecursiveTreeObject<ScheduleEntry> {
     }
 
 
-    public PoScheduleDetails getScheduleDetails() {
+    public ScheduleDetails getScheduleDetails() {
 
         return scheduleDetails;
     }
 
 
-    public void setScheduleDetails(PoScheduleDetails scheduleDetails) {
+    public void setScheduleDetails(ScheduleDetails scheduleDetails) {
 
         this.scheduleDetails = scheduleDetails;
     }

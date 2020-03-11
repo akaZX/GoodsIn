@@ -53,4 +53,10 @@ public class Materials {
     this.visible = visible;
   }
 
+
+  @Override
+  public String toString() {
+
+    return getName();
+  }
 }

@@ -243,4 +243,35 @@ public class MaterialSpecs {
     this.maxMinor = maxMinor;
   }
 
+
+  @Override
+  public String toString() {
+
+    return "MaterialSpecs{" +
+           "mCode='" + mCode + '\'' +
+           ", minDensity=" + minDensity +
+           ", maxDensity=" + maxDensity +
+           ", minLorryTem=" + minLorryTem +
+           ", maxLorryTemp=" + maxLorryTemp +
+           ", minMaterialTemp=" + minMaterialTemp +
+           ", maxMaterialTemo=" + maxMaterialTemo +
+           ", minBrix=" + minBrix +
+           ", maxBrix=" + maxBrix +
+           ", minPressure=" + minPressure +
+           ", maxPressure=" + maxPressure +
+           ", minLength=" + minLength +
+           ", maxLength=" + maxLength +
+           ", minWidth=" + minWidth +
+           ", maxWidth=" + maxWidth +
+           ", minColourStage=" + minColourStage +
+           ", maxColourStage=" + maxColourStage +
+           ", minHeadWeight=" + minHeadWeight +
+           ", maxHeadWeight=" + maxHeadWeight +
+           ", minYield=" + minYield +
+           ", maxYield=" + maxYield +
+           ", maxMajor=" + maxMajor +
+           ", maxCritical=" + maxCritical +
+           ", maxMinor=" + maxMinor +
+           '}';
+  }
 }

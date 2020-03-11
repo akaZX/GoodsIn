@@ -3,6 +3,7 @@ package app.view.custom_nodes;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.org.apache.xpath.internal.objects.XNull;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class DateTimeInput extends HBox {
@@ -47,7 +49,7 @@ public class DateTimeInput extends HBox {
             }else{
                 if (newValue.length() == 1){
                     if(newValue.matches("[\\d]")){
-                        if (Integer.parseInt(field.getText()) > limit/10){
+                        if (Integer.parseInt(field.getText()) > limit / 10){
                             field.setText(oldValue);
                         }
                         return;
@@ -144,9 +146,9 @@ public class DateTimeInput extends HBox {
     }
 
     public void setLocalDateTime(LocalDateTime localDateTime){
-        setDate(localDateTime.toLocalDate());
-        hours.setText(String.valueOf(localDateTime.getHour()));
-        minutes.setText(String.valueOf(localDateTime.getMinute()));
+        date.setValue(localDateTime.toLocalDate());
+        hours.setText(((localDateTime.getHour() <10 )? "0"+localDateTime.getHour(): ""+localDateTime.getHour()));
+        minutes.setText(((localDateTime.getMinute() <10 )? "0"+localDateTime.getMinute(): ""+localDateTime.getMinute()));
     }
 
 

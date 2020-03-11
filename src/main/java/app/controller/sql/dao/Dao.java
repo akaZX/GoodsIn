@@ -7,7 +7,11 @@ public interface Dao<T> {
 
     T get(long id);
 
+    T get(String id);
+
     List<T> getAll();
+
+    List<T> getAll(String param);
 
     void save(T t);
 

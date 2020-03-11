@@ -1,29 +1,29 @@
 package app.pojos;
 
 
-public class MaterialVarieties {
+public class MaterialCountries {
 
   private String mCode;
-  private String variety;
+  private String country;
   private int rowid;
 
 
-  public MaterialVarieties() {
+  public MaterialCountries() {
 
   }
 
 
-  public MaterialVarieties(String mCode, String variety) {
+  public MaterialCountries(String mCode, String country) {
 
     this.mCode = mCode;
-    this.variety = variety;
+    this.country = country;
   }
 
 
-  public MaterialVarieties(String mCode, String variety, int rowid) {
+  public MaterialCountries(String mCode, String country, int rowid) {
 
     this.mCode = mCode;
-    this.variety = variety;
+    this.country = country;
     this.rowid = rowid;
   }
 
@@ -37,12 +37,12 @@ public class MaterialVarieties {
   }
 
 
-  public String getVariety() {
-    return variety;
+  public String getCountry() {
+    return country;
   }
 
-  public void setVariety(String variety) {
-    this.variety = variety;
+  public void setCountry(String country) {
+    this.country = country;
   }
 
 
@@ -57,7 +57,6 @@ public class MaterialVarieties {
 
   @Override
   public String toString() {
-
-    return variety;
+    return getCountry();
   }
 }

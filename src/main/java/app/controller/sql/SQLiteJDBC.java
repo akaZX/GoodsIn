@@ -1,9 +1,8 @@
 package app.controller.sql;
 
-import app.pojos.PoMaterials;
-import app.pojos.PoScheduleDetails;
-import app.pojos.SupplierOrders;
+import app.pojos.ScheduleDetails;
 import org.intellij.lang.annotations.Language;
+import sun.management.snmp.jvmmib.JVM_MANAGEMENT_MIBOidTable;
 
 import java.sql.*;
 
@@ -11,134 +10,71 @@ import java.sql.*;
 
 public class SQLiteJDBC {
 
-    static Connection c = null;
-
-
-    private static Connection getConnection(){
-
-        if (c == null) {
-
-            try {
-              c = ApacheConnPool.getConnection();
-
-            } catch ( Exception e ) {
-                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            }
-        }else{
-
-            try {
-                c.close();
-                c = ApacheConnPool.getConnection();
-            } catch ( Exception e ) {
-                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            }
-        }
-
-        return c;
-    }
+    private static Connection connection;
+    private static PreparedStatement statement;
+    private static ResultSet resultSet;
 
 
     public static boolean update(String query) {
-        Statement st = null;
+        close();
         try {
-            c = getConnection();
-
-            st = c.createStatement();
-            st.executeUpdate(query);
+            connection = ApacheConnPool.getConnection();
+            statement = connection.prepareStatement(query);
+            statement.executeUpdate();
             return true;
 
-        } catch (Exception e) {
+        }
+        catch (SQLException | NullPointerException e) {
+            e.printStackTrace();
             return false;
         }
     }
 
 
     public static ResultSet selectQuery(String query){
-
-        Statement st = null;
+        close();
         try {
-            c = getConnection();
+            connection = ApacheConnPool.getConnection();
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
+            return resultSet;
 
-            st = c.createStatement();
-
-            return st.executeQuery(query);
-
-        } catch (Exception e) {
+        }
+        catch (SQLException | NullPointerException e) {
             e.printStackTrace();
             return null;
         }
     }
 
     public static <T> void delete(String tab, String field, T id){
+
+        close();
         @Language("SQLite")
         String query = "Delete from " + tab + " WHERE " + field + "= ?";
-        PreparedStatement preparedStatement = null;
         try{
-            c = getConnection();
-            preparedStatement = c.prepareStatement(query);
+            connection = ApacheConnPool.getConnection();
+            statement = connection.prepareStatement(query);
+
             if( id instanceof Integer){
-                preparedStatement.setInt(1, (Integer) id);
+                statement.setInt(1, (Integer) id);
             }else{
-                preparedStatement.setString(1, (String)id);
+                statement.setString(1, (String)id);
             }
-
-            preparedStatement.executeUpdate();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+            statement.executeUpdate();
 
 
-    }
-
-
-
-
-
-    public static void insertOrder(SupplierOrders order) {
-        final String checkQuery =
-                "SELECT rowid,* FROM SUPPLIER_ORDERS WHERE PO ='"
-                + order.getPoNumber() + "' AND ORDER_DATE = '"
-                + order.getOrderDate().toString() + "';";
-
-        String insertNewOrder =
-                "INSERT INTO SUPPLIER_ORDERS(supp_code, po, order_date) VALUES('"
-                + order.getSuppCode() + "','" + order.getPoNumber() + "','"
-                + order.getOrderDate() + "')";
-
-
-        ResultSet existingOrder = selectQuery(checkQuery);
-
-        try {
-
-            if(!existingOrder.next()){
-                update(insertNewOrder);
-            }
-
-        } catch (Exception e) {
+        }catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         }
     }
 
 
-    public static void updateTwoColumns(String query, String s1, String s2) {
-        PreparedStatement st;
-
-        try {
-            c = getConnection();
-
-            st = c.prepareStatement(query);
-            st.setString(1, s1);
-            st.setString(2, s2);
-            st.executeUpdate();
-
-        } catch (java.sql.SQLException e) {
-        }
-    }
 
 
 
-    public static PoScheduleDetails getDeliveryDetails(int rowid) {
+
+
+    public static ScheduleDetails getDeliveryDetails(int rowid) {
         String query = "SELECT rowid, * FROM PO_SCHEDULE_DETAILS WHERE so_rowid = "+ rowid + ";";
 
         ResultSet rs = selectQuery(query);
@@ -167,5 +103,24 @@ public class SQLiteJDBC {
         return null;
 
     }
+
+    public static void close(){
+
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 

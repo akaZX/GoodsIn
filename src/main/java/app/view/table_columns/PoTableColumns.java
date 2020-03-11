@@ -15,10 +15,10 @@ import java.time.format.DateTimeFormatter;
 
 public  class PoTableColumns {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+//    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
 
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private final double dateColConstraints = 0.09;
 

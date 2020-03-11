@@ -2,7 +2,7 @@ package app.controller;
 
 import app.controller.sql.SQLiteJDBC;
 import app.model.ScheduleEntry;
-import app.pojos.PoScheduleDetails;
+import app.pojos.ScheduleDetails;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
@@ -41,6 +41,7 @@ public class CalendarViewController {
 
 
 
+
         initializeCalendars(calendarView, bayOne, bayTwo, bayThree, bayFour, calendarViewPane, calendarViewTab);
         //removes creating entries with double click
         calendarView.setEntryFactory(param -> null);
@@ -58,8 +59,8 @@ public class CalendarViewController {
                     });
 
                     try {
-                        removeEntriesFromCalendars();
-                        loadCalendarEntries();
+//                        removeEntriesFromCalendars();
+//                        loadCalendarEntries();
                         sleep(100000L);
 
 
@@ -163,7 +164,7 @@ public class CalendarViewController {
         return SQLiteJDBC.selectQuery(query);
     }
 
-    private static PoScheduleDetails getOrderDetails(int rowid){
+    private static ScheduleDetails getOrderDetails(int rowid){
         return SQLiteJDBC.getDeliveryDetails(rowid);
     }
 

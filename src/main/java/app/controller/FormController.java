@@ -2,8 +2,10 @@ package app.controller;
 
 
 import app.controller.sql.SQLiteJDBC;
+import app.controller.sql.dao.ScheduleDetailsDAO;
 import app.controller.sql.dao.SuppliersDAO;
 import app.pojos.PoMaterials;
+import app.pojos.ScheduleDetails;
 import app.pojos.Suppliers;
 import app.view.custom_nodes.DateTimeInput;
 import app.model.ScheduleEntry;
@@ -96,6 +98,7 @@ public class FormController  implements Initializable {
 
 
     public FormController() {
+        SQLiteJDBC.close();
         addBaysToChoiceBox();
 
     }
@@ -134,10 +137,10 @@ public class FormController  implements Initializable {
             expectedETA.setLocalDateTime(order.getScheduleDetails().getEta());
         }
         if (order.getScheduleDetails().getDeparted() != null) {
-            arrivedDate.setLocalDateTime(order.getScheduleDetails().getDeparted());
+            departedDate.setLocalDateTime(order.getScheduleDetails().getDeparted());
         }
         if (order.getScheduleDetails().getBookedIn() != null) {
-            arrivedDate.setLocalDateTime(order.getScheduleDetails().getBookedIn());
+            bookedInDate.setLocalDateTime(order.getScheduleDetails().getBookedIn());
         }
     }
 
@@ -145,8 +148,8 @@ public class FormController  implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        addTextfieldValidation(haulierField, "missing Haulier");
-        addComboBoxValidation(bays);
+        addTextfieldValidation(haulierField, "Select haulier");
+        addComboBoxValidation();
 
 
          //adds autocomplete for fields
@@ -174,7 +177,6 @@ public class FormController  implements Initializable {
         }
 
         Collections.sort(names);
-
         addAutocomplete(field, names);
 
     }
@@ -189,19 +191,18 @@ public class FormController  implements Initializable {
             while (rs.next()){
                 list.add(rs.getString(nameField));
             }
+            rs.close();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+        SQLiteJDBC.close();
 
         Collections.sort(list);
 
         addAutocomplete(field, list);
 
     }
-
-
-
 
 
 
@@ -265,13 +266,13 @@ public class FormController  implements Initializable {
         gridPane.add(submitForm, 5, 13);
         gridPane.add(orderDetailsTable, 1, 9,2,5);
 
+
 //        submitForm.minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.4));
 //        leftLeftList[6].minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.2));
-        addNumberFormatt(palletsField);
-        addNumberFormatt(approxUnloadField);
+        addNumberFormat(palletsField);
+        addNumberFormat(approxUnloadField);
 
         addActionsForButtons();
-
 
     }
 
@@ -319,8 +320,6 @@ public class FormController  implements Initializable {
         if (approxUnloadField.getText() == null) {
             errorMessage += "\n Unloading time field is blank";
 
-
-
             error = true;
         }
         if (haulierField.getText() == null) {
@@ -340,14 +339,16 @@ public class FormController  implements Initializable {
         if(!error){
 
 
-            if(scheduleEntry.getScheduleDetails().getRowid() > 0){
-
+            if(scheduleEntry.getScheduleDetails().getRowid() == 0){
+                System.out.println("saving new entry: \n" + generateScheduleDetails().toString() );
+                new ScheduleDetailsDAO().save(generateScheduleDetails());
             }else{
-                System.out.println("updating order");
-              //TODO add code to update order
-                ((Node)(event.getSource())).getScene().getWindow().hide();
+                System.out.println("updating order: " + generateScheduleDetails().toString());
+
+                new ScheduleDetailsDAO().update(generateScheduleDetails());
 
             }
+            ((Node)(event.getSource())).getScene().getWindow().hide();
 
         }else{
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -373,17 +374,33 @@ public class FormController  implements Initializable {
         orderDetailsTable.setShowRoot(false);
         orderDetailsTable.setEditable(false);
         OrderDetailsColumns columns = new OrderDetailsColumns(orderDetailsTable);
-        //noinspection unchecked
         orderDetailsTable.getColumns().setAll(columns.mCodeCol(), columns.descCol(),
                 columns.expectedCol(), columns.bookedCol());
 
-        //TODO needs testing inside Bakkavor
 
         if((scheduleEntry.getPo() != null) || ! scheduleEntry.getPo().equals("")){
             final TreeItem<PoMaterials> root = new RecursiveTreeItem<>(getOrderDetails(), RecursiveTreeObject::getChildren);
             orderDetailsTable.setRoot(root);
         }
 
+    }
+
+
+    private ScheduleDetails generateScheduleDetails(){
+        ScheduleDetails      details = new ScheduleDetails();
+        details.setEta(expectedETA.getLocalDateTime());
+        details.setArrived(arrivedDate.getLocalDateTime());
+        details.setDeparted(departedDate.getLocalDateTime());
+        details.setBookedIn(bookedInDate.getLocalDateTime());
+        details.setBay(bays.getSelectionModel().getSelectedItem());
+        details.setComments(commentsBox.getText());
+        details.setRegistrationNo(trailerNoField.getText());
+        details.setHaulier(haulierField.getText());
+        details.setOrderRowId(scheduleEntry.getRowId());
+        details.setPallets(Integer.parseInt(palletsField.getText()));
+        details.setDuration(Integer.parseInt(approxUnloadField.getText()));
+        details.setRowid(scheduleEntry.getScheduleDetails().getRowid());
+        return details;
     }
 
     //Load order data to table view if it is has an PO number
@@ -411,7 +428,7 @@ public class FormController  implements Initializable {
         return orders;
     }
     //add number formatting for textfield
-    private void addNumberFormatt(JFXTextField field){
+    private void addNumberFormat(JFXTextField field){
 
         field.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.matches("\\d*")) return;
@@ -431,7 +448,7 @@ public class FormController  implements Initializable {
 
     }
 
-    private void addComboBoxValidation(JFXComboBox<?> node){
+    private void addComboBoxValidation(){
         RequiredFieldValidator validator = new RequiredFieldValidator();
         validator.setMessage("Please select Bay");
         bays.getValidators().add(validator);

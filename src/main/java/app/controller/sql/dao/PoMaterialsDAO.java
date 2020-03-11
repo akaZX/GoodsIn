@@ -2,7 +2,6 @@ package app.controller.sql.dao;
 
 import app.controller.sql.SQLiteJDBC;
 import app.pojos.PoMaterials;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +20,6 @@ public class PoMaterialsDAO implements Dao<PoMaterials> {
         @Language("SQLite")
         String sql = "Select * from PO_MATERIALS where rowid=" + id + " Limit 1";
         ResultSet rs = SQLiteJDBC.selectQuery(sql);
-
         try{
             while (rs.next()) {
 
@@ -36,6 +34,13 @@ public class PoMaterialsDAO implements Dao<PoMaterials> {
 
 
     @Override
+    public PoMaterials get(String id) {
+
+        return null;
+    }
+
+
+    @Override
     public List<PoMaterials> getAll() {
 
         List<PoMaterials> list = new ArrayList<>();
@@ -46,9 +51,15 @@ public class PoMaterialsDAO implements Dao<PoMaterials> {
     }
 
 
+    @Override
+    public List<PoMaterials> getAll(String param) {
+
+        return null;
+    }
+
+
     public List<PoMaterials> getOrderMaterials(String po){
         List<PoMaterials> list = new ArrayList<>();
-        PoMaterials mat;
         @Language("SQLite")
         String sql = "SELECT * from PO_MATERIALS where po = '" + po + "' ORDER BY po";
         return getPoMaterialsList(list, sql);
@@ -128,6 +139,7 @@ public class PoMaterialsDAO implements Dao<PoMaterials> {
 
     @Override
     public void delete(PoMaterials poMaterials) {
+
         SQLiteJDBC.delete("PO_MATERIALS" , "rowid", poMaterials.getRowid());
     }
 

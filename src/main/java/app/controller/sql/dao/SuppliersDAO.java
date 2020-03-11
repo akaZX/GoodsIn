@@ -38,6 +38,13 @@ public class SuppliersDAO implements Dao<Suppliers> {
 
 
     @Override
+    public Suppliers get(String id) {
+
+        return null;
+    }
+
+
+    @Override
     public List<Suppliers> getAll() {
         List<Suppliers> list = new ArrayList<>();
         Suppliers temp;
@@ -67,6 +74,13 @@ public class SuppliersDAO implements Dao<Suppliers> {
 
 
     @Override
+    public List<Suppliers> getAll(String param) {
+
+        return null;
+    }
+
+
+    @Override
     public void save(Suppliers suppliers) {
 
         String values = "" + suppliers.getSupplierName() + "', '" + suppliers.getSupplierCode() +"" ;
@@ -82,6 +96,7 @@ public class SuppliersDAO implements Dao<Suppliers> {
 
     @Override
     public void update(Suppliers suppliers) {
+
         String values = "supp_name = '" + suppliers.getSupplierName() + "'";
         @Language("SQLite")
         String sql = "Update suppliers set " + values + " Where supp_code= '" + suppliers.getSupplierCode()+ "'";

@@ -39,11 +39,18 @@ public class SupplierMaterialsDAO implements Dao<SupplierMaterials> {
 
     }
 
+
+    @Override
+    public SupplierMaterials get(String id) {
+
+        return null;
+    }
+
+
     @Override
     public List<SupplierMaterials> getAll() {
 
         List<SupplierMaterials> list = new ArrayList<>();
-        SupplierMaterials        temp;
 
         @Language("SQLite")
         String    query = "SELECT * FROM SUPPLIER_MATERIALS ORDER BY supp_code";
@@ -51,10 +58,16 @@ public class SupplierMaterialsDAO implements Dao<SupplierMaterials> {
     }
 
 
+    @Override
+    public List<SupplierMaterials> getAll(String param) {
+
+        return null;
+    }
+
+
     public List<SupplierMaterials> getAllSupplierMaterials(String supplierCode){
 
         List<SupplierMaterials> list = new ArrayList<>();
-        SupplierMaterials        temp;
 
         @Language("SQLite")
         String    query = "SELECT * FROM SUPPLIER_MATERIALS WHERE supp_code ='" + supplierCode + "' ORDER BY supp_code";

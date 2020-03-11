@@ -1,4 +1,415 @@
 
+
+/*******************************************************************************
+ *                                                                             *
+ * Scroll Bar			                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.scroll-bar:vertical > .track-background, .scroll-bar:horizontal > .track-background {
+    -fx-background-color: #F1F1F1;
+    -fx-background-insets: 0.0;
+}
+
+.scroll-bar:vertical > .thumb, .scroll-bar:horizontal > .thumb {
+    -fx-background-color: #BCBCBC;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 1.0;
+}
+
+/* Up- and Down-Button Padding */
+.scroll-bar:vertical > .increment-button, .scroll-bar:vertical > .decrement-button {
+    -fx-padding: 5 2 5 2;
+}
+
+/* Left- and Right-Button Padding */
+.scroll-bar:horizontal > .increment-button, .scroll-bar:horizontal > .decrement-button {
+    -fx-padding: 2 5 2 5;
+}
+
+.scroll-bar > .increment-button, .scroll-bar > .decrement-button, .scroll-bar:hover > .increment-button, .scroll-bar:hover > .decrement-button {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .increment-button > .increment-arrow, .scroll-bar > .decrement-button > .decrement-arrow {
+    -fx-background-color: rgb(150.0, 150.0, 150.0);
+}
+
+/* Up Arrow */
+.scroll-bar:vertical > .increment-button > .increment-arrow {
+    -fx-shape: "M298 426h428l-214 214z";
+}
+
+/* Down Arrow */
+.scroll-bar:vertical > .decrement-button > .decrement-arrow {
+    -fx-shape: "M298 598l214-214 214 214h-428z";
+}
+
+/* Right Arrow */
+.scroll-bar:horizontal > .increment-button > .increment-arrow {
+    -fx-shape: "M0 428l0 -428l214 214l-214 214z";
+}
+
+/* Left Arrow */
+.scroll-bar:horizontal > .decrement-button > .decrement-arrow {
+    -fx-shape: "M214 0l0 428l-214 -214l214 -214z";
+}
+
+
+
+
+
+
+
+
+
+.root {
+
+}
+
+/* Burgers Demo */
+
+.jfx-hamburger {
+    -fx-spacing: 5;
+    -fx-cursor: hand;
+}
+
+.jfx-hamburger StackPane {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 7px;
+    -fx-background-color: #D63333;
+    -fx-background-radius: 5px;
+}
+
+/* Input Demo */
+
+.text-field {
+    -fx-max-width: 300;
+}
+
+.jfx-text-field, .jfx-password-field {
+    -fx-background-color: WHITE;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #808080;
+    -fx-indent: 5px;
+    -fx-alignment: bottom-left;
+    -jfx-focus-color: #0026a1;
+    -jfx-unfocus-color: #4d4d4d;
+    -fx-max-width: 300;
+}
+
+.jfx-decorator {
+    -fx-decorator-color: RED;
+}
+
+.jfx-decorator .jfx-decorator-buttons-container {
+    -fx-background-color: -fx-decorator-color;
+}
+
+.jfx-decorator .resize-border {
+    -fx-border-color: -fx-decorator-color;
+    -fx-border-width: 0 4 4 4;
+}
+
+.jfx-text-area, .text-area {
+    -fx-font-weight: BOLD;
+}
+
+.jfx-text-field:error, .jfx-password-field:error, .jfx-text-area:error {
+    -jfx-focus-color: #D34336;
+    -jfx-unfocus-color: #D34336;
+}
+
+.jfx-text-field .error-label, .jfx-password-field .error-label, .jfx-text-area .error-label {
+    -fx-text-fill: #D34336;
+    -fx-font-size: 0.75em;
+}
+
+.jfx-text-field .error-icon, .jfx-password-field .error-icon, .jfx-text-area .error-icon {
+    -fx-text-fill: #D34336;
+
+    -fx-font-size: 1em;
+}
+
+/* Progress Bar Demo */
+
+.progress-bar > .bar {
+    -fx-min-width: 500;
+}
+
+.jfx-progress-bar > .bar {
+    -fx-min-width: 500;
+}
+
+.jfx-progress-bar {
+    -fx-progress-color: #0F9D58;
+    -fx-stroke-width: 3;
+}
+
+/* Icons Demo */
+.icon {
+    -fx-text-fill: #FE774D;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.icons-rippler {
+    -jfx-rippler-fill: BLUE;
+    -jfx-mask-type: CIRCLE;
+}
+
+.icons-rippler:hover {
+    -fx-cursor: hand;
+}
+
+
+
+
+/* Button */
+.button {
+    -fx-font-size: 12px;
+}
+
+.button-raised {
+    -fx-font-size: 12px;
+    -jfx-button-type: RAISED;
+    -fx-background-color: rgb(77, 102, 204);
+    -fx-pref-width: 200;
+    -fx-text-fill: WHITE;
+}
+
+/* The main scrollbar **track** CSS class  */
+.mylistview .scroll-bar:horizontal .track,
+.mylistview .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 2em;
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.mylistview .scroll-bar:horizontal .increment-button,
+.mylistview .scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+
+.mylistview .scroll-bar:vertical .increment-button,
+.mylistview .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+
+}
+
+.mylistview .scroll-bar .increment-arrow,
+.mylistview .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.mylistview .scroll-bar:horizontal .thumb,
+.mylistview .scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black, 90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
+.jfx-list-cell-container {
+    -fx-alignment: center-left;
+}
+
+.jfx-list-cell-container > .label {
+    -fx-text-fill: BLACK;
+}
+
+.jfx-list-cell:odd:selected > .jfx-rippler > StackPane, .jfx-list-cell:even:selected > .jfx-rippler > StackPane {
+    -fx-background-color: rgb(139, 255, 139);
+}
+
+.jfx-list-cell {
+    -fx-background-insets: 0.0;
+    -fx-text-fill: BLACK;
+}
+
+.jfx-list-cell:odd, .jfx-list-cell:even {
+    -fx-background-color: WHITE;
+}
+
+.jfx-list-cell:filled:hover {
+    -fx-text-fill: black;
+}
+
+.jfx-list-cell .jfx-rippler {
+    -jfx-rippler-fill: #9aff84;
+}
+
+
+.jfx-list-view  {
+    -fx-background-insets: 0;
+    -jfx-cell-horizontal-margin: 0.0;
+    -jfx-cell-vertical-margin: 5.0;
+    -jfx-vertical-gap: 10;
+    -jfx-expanded: false;
+}
+
+/*.jfx-list-view .jfx-list-cell{*/
+/*    -fx-background-color: derive(#5ad5df, 0%);*/
+/*}*/
+
+.jfx-toggle-button {
+    -jfx-toggle-color: RED;
+}
+
+.jfx-tool-bar {
+    -fx-font-size: 20;
+    -fx-font-weight: BOLD;
+    -fx-background-color: #5264AE;
+    -fx-pref-width: 100%;
+    -fx-pref-height: 64px;
+}
+
+.jfx-tool-bar HBox {
+    -fx-alignment: center;
+    -fx-spacing: 25;
+    -fx-padding: 0 10;
+}
+
+
+
+.jfx-popup-container {
+    -fx-background-color: WHITE;
+}
+
+.jfx-snackbar-content {
+    -fx-background-color: #323232;
+    -fx-padding: 5;
+    -fx-spacing: 5;
+}
+
+.jfx-snackbar-toast {
+    -fx-text-fill: WHITE;
+}
+
+.jfx-snackbar-action {
+    -fx-text-fill: #ff4081;
+}
+
+.jfx-list-cell-content-container {
+    -fx-alignment: center-left;
+}
+
+.jfx-list-cell-container .label {
+    -fx-text-fill: BLACK;
+}
+
+.jfx-list-view {
+    -fx-background-color:derive(-fx-base, 26.4%);
+}
+
+.combo-box-popup .list-view .jfx-list-cell:odd:selected .jfx-list-cell-container,
+.combo-box-popup .list-view .jfx-list-cell:even:selected .jfx-list-cell-container {
+    -fx-background-color: rgba(0.0, 0.0, 255.0, 0.2);
+}
+
+.combo-box-popup .list-view .jfx-list-cell {
+    -fx-background-insets: 0.0;
+    -fx-text-fill: BLACK;
+}
+
+.combo-box-popup .list-view .jfx-list-cell:odd,
+.combo-box-popup .list-view .jfx-list-cell:even {
+    -fx-background-color: WHITE;
+}
+
+.combo-box-popup .list-view .jfx-list-cell:filled:hover {
+    -fx-text-fill: black;
+}
+
+.combo-box .combo-box-button-container{
+ 	-fx-border-color:BLACK;-fx-border-width: 0 0 1 0;
+}
+.combo-box .combo-box-selected-value-container{
+	-fx-border-color:BLACK;
+}
+
+/*
+ * TREE TABLE CSS
+ */
+
+.tree-table-view {
+    -fx-tree-table-color: #86c74a;
+    -fx-tree-table-rippler-color: rgba(255, 0, 0, 0.4);
+}
+
+.tree-table-view .jfx-text-field{
+    -fx-background-color: transparent;
+}
+
+.animated-option-button {
+    -fx-background-color: #F1F1F1;
+    -fx-background-radius: 50px;
+    -fx-pref-height: 50px;
+    -fx-pref-width: 50px;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-max-height: -fx-pref-height;
+    -jfx-button-type: RAISED;
+}
+.animated-option-button .jfx-rippler{
+    -jfx-rippler-fill: rgb(113, 118, 114);
+}
+.sub-icon{
+    -fx-fill: rgb(113, 118, 114);
+}
+
+.main-button {
+    -fx-pref-width: 60px;
+    -fx-background-color: #86c74a;
+    -fx-background-radius: 60px;
+    -fx-pref-height: 60px;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-max-height: -fx-pref-height;
+    -jfx-button-type: RAISED;
+}
+.main-button .jfx-rippler{
+    -jfx-rippler-fill: rgba(255,255,255, .87);
+}
+.main-icon{
+    -fx-fill: rgba(255,255,255, .87);
+}
+
+
+.animated-option-sub-button {
+    -fx-background-color: #0069a6;
+}
+
+.animated-option-sub-button2 {
+    -fx-background-color: rgb(203, 104, 96);
+}
+
+.tree-table-view .menu-item:focused {
+    -fx-background-color: -fx-tree-table-color;
+
+}
+
+.tree-table-view .menu-item .label {
+    -fx-padding: 5 0 5 0;
+}
+
+
+
+
+
+
+
 .jfx-tree-table-view .tree-table-cell {
 
     -fx-border-width: 1px 1px 1px 1px;
@@ -23,31 +434,25 @@
 }
 
 
-.form-button {
-    -fx-min-width: 110px;
-    -fx-pref-width: 130px;
-    -fx-background-color: #0400e9;
-    -fx-background-radius: 60px;
+.jfx-button {
+    -fx-min-width: 40px;
+    /*-fx-pref-width: 130px;*/
+    -fx-background-color: #003f77;
     -fx-text-fill: WHITE;
-    -fx-font-size: 1.1em;
-
     -jfx-button-type: RAISED;
 }
 
-.form-button:focused {
-    -fx-background-color: #0400e9;
 
-}
 
-.form-button:hover {
+.jfx-button:hover {
 
     -fx-cursor: hand;
-    -fx-fill: black;
-    -fx-background-color: #0400e9;
+    -fx-fill: white;
+    -fx-background-color: #0069a6;
 }
-.form-button .jfx-rippler{
+.jfx-button .jfx-rippler{
 
-    -jfx-rippler-fill: rgb(174, 180, 255);
+    -jfx-rippler-fill: #58b8ff;
 }
 
 
@@ -55,20 +460,26 @@
 /*!*Tabview styling*!*/
 
 .jfx-tab-pane .headers-region {
-    -fx-background-color: #0400e9;
+    -fx-background-color: #0069a6;
+}
+
+.jfx-tab-pane .tab:selected .headers-region {
+    -fx-background-color: red;
 }
 
 .jfx-tab-pane .tab-header-background {
-    -fx-background-color: #0400e9;
+    -fx-background-color: #003f77;
 }
 
 .jfx-tab-pane .tab-selected-line {
+
     -fx-stroke-width: 5px;
+
     -fx-background-color: #ffffff;
 }
 
 .jfx-tab-pane .tab .tab-label {
-    -fx-text-fill: #929292;
+    -fx-text-fill: #b2b2b2;
 }
 
 .jfx-tab-pane .tab:selected .tab-label {
@@ -77,6 +488,31 @@
 
 
 .tab {
-
+    -fx-padding: 10px;
     -fx-pref-width: 150
+}
+
+
+
+.jfx-date-picker{
+    -jfx-default-color: #0069a6;
+}
+
+
+/*Tooltip styles*/
+
+.tooltip {
+    -fx-font-size:13px;
+}
+
+/*Toolbar color*/
+.tool-bar{
+    -fx-background-color: #5297d8;
+}
+
+.jfx-check-box {
+    -fx-font-weight: BOLD;
+    -fx-font-size: 14px;
+    -jfx-checked-color: #0069a6;
+    -jfx-unchecked-color: BLACK;
 }

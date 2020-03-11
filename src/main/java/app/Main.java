@@ -1,6 +1,7 @@
 package app;
 
 import app.controller.GoodsInController;
+import com.jfoenix.controls.JFXDecorator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,10 +23,12 @@ public class Main extends Application {
         System.out.println(loader);
         loader.setController(contr);
         Parent root = loader.load();
+
         Scene scene = new Scene(root);
 
 
         primaryStage.setTitle("GI");
+
 
         primaryStage.setScene(scene);
 
@@ -35,12 +38,13 @@ public class Main extends Application {
             System.out.println("Resource not found. Aborting.");
             System.exit(-1);
         }
-        String css = url.toExternalForm();
+        String       css       = url.toExternalForm();
+
         primaryStage.getScene().getStylesheets().add(css);
 
 
-        primaryStage.setMinHeight(750);
-        primaryStage.setMinWidth(1000);
+        primaryStage.setMinHeight(800);
+        primaryStage.setMinWidth(1025);
         primaryStage.show();
     }
 

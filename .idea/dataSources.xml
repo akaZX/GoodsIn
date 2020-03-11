@@ -1,33 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="GI_RMT" uuid="be7dc34c-97ee-407f-8367-56fc0660743c">
+    <data-source source="LOCAL" name="SQLite - GI_RMT.db" uuid="631ade42-3d1f-451d-8ecc-0fa8d62627dc">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\Asus\OneDrive\Desktop\SQLite Bakkavor Database\GI_RMT.db</jdbc-url>
-      <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/license.txt</url>
-        </library>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/sqlite-jdbc-3.25.1.jar</url>
-        </library>
-      </libraries>
+      <jdbc-url>jdbc:sqlite:C:\Users\akazx\OneDrive\Desktop\SQLite Bakkavor Database\GI_RMT.db</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="protean" uuid="ef97d256-2576-45c3-b951-f56e03db556e">
+    <data-source source="LOCAL" name="protean.db" uuid="7d29bf68-7e49-4c04-8107-5abb1a6afd70">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\Asus\OneDrive\Desktop\SQLite Bakkavor Database\protean.db</jdbc-url>
-      <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/license.txt</url>
-        </library>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/sqlite-jdbc-3.25.1.jar</url>
-        </library>
-      </libraries>
+      <jdbc-url>jdbc:sqlite:C:\Users\akazx\OneDrive\Desktop\SQLite Bakkavor Database\protean.db</jdbc-url>
     </data-source>
   </component>
 </project>

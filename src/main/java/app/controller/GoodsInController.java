@@ -1,6 +1,9 @@
 package app.controller;
 
 
+
+import app.controller.rmt.MaterialProfileController;
+import app.controller.suppliersView.MainSupplierController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,10 +27,16 @@ public class GoodsInController implements Initializable {
 
 
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SupplierView.fxml"));
-        SuppliersView contr = new SuppliersView();
+        FXMLLoader             loader = new FXMLLoader(getClass().getResource("/suppliers/blankStackPane.fxml"));
+        MainSupplierController contr  = new MainSupplierController();
         loader.setController(contr);
-        mainTabPane.getTabs().add(loadTab(loader, new Tab("Suppliers")));
+        mainTabPane.getTabs().add(loadTab(loader, new Tab("Supplier Profiles")));
+
+
+        FXMLLoader                mat         = new FXMLLoader(getClass().getResource("/materialProfile/mainMaterialProfileView.fxml"));
+        MaterialProfileController maControler = new MaterialProfileController();
+        mat.setController(maControler);
+        mainTabPane.getTabs().add(loadTab(mat, new Tab("Material Profiles")));
 
         mainTabPane.getTabs().add(new POTableTab().createTable());
     }

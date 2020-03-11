@@ -11,11 +11,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class PoScheduleDetails {
+public class ScheduleDetails {
 
-  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
   private int rowid;
+  private int orderRowId;
   private String bay;
   private int pallets;
   private int duration;
@@ -29,13 +30,43 @@ public class PoScheduleDetails {
   private int visible;
 
 
+  public ScheduleDetails() {
+
+  }
 
 
-  public PoScheduleDetails(
+  public ScheduleDetails(int rowid, int orderRowId, String bay, int pallets, int duration, String haulier, String comments, String registrationNo, Timestamp eta, Timestamp arrived, Timestamp departed, Timestamp bookedIn) {
+
+    this.rowid = rowid;
+    this.orderRowId = orderRowId;
+    this.bay = bay;
+    this.pallets = pallets;
+    this.duration = duration;
+    this.haulier = haulier;
+    this.comments = comments;
+    this.registrationNo = registrationNo;
+
+    if(eta != null){
+      this.eta = eta.toLocalDateTime();
+    }
+    if(arrived != null){
+      this.arrived = arrived.toLocalDateTime();
+    }
+    if(departed != null){
+      this.departed = departed.toLocalDateTime();
+    }
+    if(bookedIn != null){
+      this.bookedIn = bookedIn.toLocalDateTime();
+    }
+  }
+
+
+  public ScheduleDetails(
           int rowid, String bay, int pallets, int duration,
           String haulier, String comments, String registrationNo,
           String eta, String arrived, String departed,
           String bookedIn) {
+
     this.rowid = rowid;
     this.bay = bay;
     this.pallets = pallets;
@@ -45,18 +76,22 @@ public class PoScheduleDetails {
     this.registrationNo = registrationNo;
 
 
-    if(eta != null){
-      this.eta = LocalDateTime.parse(eta, formatter);
-    }
-    if(arrived != null){
-      this.arrived = LocalDateTime.parse(arrived, formatter);
-    }
-    if(departed != null){
-      this.departed = LocalDateTime.parse(departed, formatter);
-    }
-    if(bookedIn != null){
-      this.bookedIn = LocalDateTime.parse(bookedIn, formatter);
-    }
+
+      if(eta != null){
+        this.eta = LocalDateTime.parse(eta);
+      }
+      if(arrived != null ) {
+        this.arrived = LocalDateTime.parse(arrived);
+      }
+      if(departed != null){
+        this.departed = LocalDateTime.parse(departed);
+      }
+      if(bookedIn != null ){
+        this.bookedIn = LocalDateTime.parse(bookedIn);
+      }
+
+
+
 
   }
 
@@ -66,6 +101,23 @@ public class PoScheduleDetails {
     return rowid;
   }
 
+
+  public void setRowid(int rowid) {
+
+    this.rowid = rowid;
+  }
+
+
+  public int getOrderRowId() {
+
+    return orderRowId;
+  }
+
+
+  public void setOrderRowId(int orderRowId) {
+
+    this.orderRowId = orderRowId;
+  }
 
 
   public String getBay() {
@@ -200,5 +252,25 @@ public class PoScheduleDetails {
             new SimpleObjectProperty<>();
     prop.set(this.bookedIn);
     return prop;
+  }
+
+
+  @Override
+  public String toString() {
+
+    return "ScheduleDetails{" +
+           "rowid=" + rowid +
+           ", orderRowId=" + orderRowId +
+           ", bay='" + bay + '\'' +
+           ", pallets=" + pallets +
+           ", duration=" + duration +
+           ", haulier='" + haulier + '\'' +
+           ", comments='" + comments + '\'' +
+           ", registrationNo='" + registrationNo + '\'' +
+           ", eta=" + eta +
+           ", arrived=" + arrived +
+           ", departed=" + departed +
+           ", bookedIn=" + bookedIn +
+           '}';
   }
 }

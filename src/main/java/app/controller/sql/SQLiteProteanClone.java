@@ -10,14 +10,13 @@ public class SQLiteProteanClone {
 
     private static Connection getConnection(){
 
-        final String DB = "C:\\Users\\Asus\\OneDrive\\Desktop\\SQLite Bakkavor Database\\protean.db";
+        final String DB = "C:\\Users\\akazx\\OneDrive\\Desktop\\SQLite Bakkavor Database\\protean.db";
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:" + DB);
             c.setAutoCommit(false);
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-
         }
         return c;
     }
