@@ -1,6 +1,6 @@
 package app.controller.suppliersView;
 
-import app.controller.sql.dao.SuppliersDAO;
+import app.controller.sql.dao.SuppliersDao;
 import app.pojos.Suppliers;
 import com.jfoenix.controls.*;
 import javafx.beans.value.ChangeListener;
@@ -9,12 +9,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +20,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class SupplierDrawerController implements Initializable {
-    List<Suppliers> list = new SuppliersDAO().getAll();
+    List<Suppliers> list = new SuppliersDao().getAll();
     @FXML
     private JFXListView<Suppliers> supplierListView = new JFXListView<>();
 

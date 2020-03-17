@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplierOrderDAO implements Dao<SupplierOrders> {
+public class SupplierOrderDao implements Dao<SupplierOrders> {
 
     @Override
     public SupplierOrders get(long id) {
@@ -17,7 +17,7 @@ public class SupplierOrderDAO implements Dao<SupplierOrders> {
 
         @Language("SQLite")
         String sql = "Select * from SUPPLIER_ORDERS where rowid=" + id + " Limit 1";
-        ResultSet rs = SQLiteJDBC.selectQuery(sql);
+        ResultSet rs = SQLiteJDBC.select(sql);
 
         try{
             while (rs.next()) {
@@ -48,7 +48,7 @@ public class SupplierOrderDAO implements Dao<SupplierOrders> {
         @Language("SQLite")
         String sql = "SELECT * from SUPPLIER_ORDERS ORDER BY po";
 
-        ResultSet rs = SQLiteJDBC.selectQuery(sql);
+        ResultSet rs = SQLiteJDBC.select(sql);
         try{
             while (rs.next()) {
                 order.setSuppCode(rs.getString("supp_code"));

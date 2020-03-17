@@ -4,7 +4,7 @@ import app.pojos.Hauliers;
 
 import java.util.List;
 
-public class HaulierDAO implements Dao<Hauliers> {
+public class HaulierDao implements Dao<Hauliers> {
 
     @Override
     public Hauliers get(long id) {

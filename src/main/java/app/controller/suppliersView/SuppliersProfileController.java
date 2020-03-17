@@ -1,34 +1,24 @@
 package app.controller.suppliersView;
 
 import app.controller.sql.SQLiteJDBC;
-import app.controller.sql.dao.MaterialsDAO;
-import app.controller.sql.dao.SupplierMaterialsDAO;
-import app.pojos.SuppEmails;
-import app.pojos.SuppNumbers;
+import app.controller.sql.dao.MaterialsDao;
+import app.controller.sql.dao.SupplierMaterialsDao;
 import app.pojos.SupplierMaterials;
 import app.pojos.Suppliers;
 import com.jfoenix.controls.*;
 import com.jfoenix.validation.RegexValidator;
-import com.sun.org.apache.xpath.internal.objects.XNodeSet;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -181,7 +171,7 @@ public class SuppliersProfileController implements Initializable {
         SQLiteJDBC.close();
 
 
-        ObservableList<SupplierMaterials> list = FXCollections.observableArrayList(new SupplierMaterialsDAO().getAllSupplierMaterials(supplier.getSupplierCode()));
+        ObservableList<SupplierMaterials> list = FXCollections.observableArrayList(new SupplierMaterialsDao().getAllSupplierMaterials(supplier.getSupplierCode()));
         materialsList.setItems(list);
 
         materialsList.setCellFactory(param -> new JFXListCell<SupplierMaterials>() {
@@ -212,8 +202,8 @@ public class SuppliersProfileController implements Initializable {
                     }
 
 
-                    setText(new MaterialsDAO().get(item.getmCode()).getName());
-                    content.setText("Material: " + new MaterialsDAO().get(item.getmCode()).getName() +
+                    setText(new MaterialsDao().get(item.getmCode()).getName());
+                    content.setText("Material: " + new MaterialsDao().get(item.getmCode()).getName() +
                                     "\nM code: " + item.getmCode());
                     setTooltip(content);
                 }

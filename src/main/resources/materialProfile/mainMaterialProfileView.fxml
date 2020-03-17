@@ -177,7 +177,7 @@
                         </Label>
                         <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER">
                            <content>
-                               <JFXMasonryPane fx:id="masonryPane" HSpacing="10" VSpacing="10">
+                               <JFXMasonryPane fx:id="masonryPane" HSpacing="10" VSpacing="10" prefHeight="233.0" prefWidth="549.0">
                                    <padding>
                                     <Insets bottom="16" left="16" right="16" top="16" />
                                  </padding>

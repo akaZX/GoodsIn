@@ -1,19 +1,21 @@
 package app.pojos;
 
 
+
 public class SuppNumbers {
 
-  private String suppCode;
+  private long rowid;
   private String phoneNo;
+  private String suppCode;
   private String details;
 
 
-  public String getSuppCode() {
-    return suppCode;
+  public long getRowid() {
+    return rowid;
   }
 
-  public void setSuppCode(String suppCode) {
-    this.suppCode = suppCode;
+  public void setRowid(long rowid) {
+    this.rowid = rowid;
   }
 
 
@@ -23,6 +25,15 @@ public class SuppNumbers {
 
   public void setPhoneNo(String phoneNo) {
     this.phoneNo = phoneNo;
+  }
+
+
+  public String getSuppCode() {
+    return suppCode;
+  }
+
+  public void setSuppCode(String suppCode) {
+    this.suppCode = suppCode;
   }
 
 

@@ -1,9 +1,11 @@
 package app.controller.rmt;
 
 import app.controller.sql.dao.Dao;
-import app.controller.sql.dao.MaterialCountryDAO;
+import app.controller.sql.dao.MaterialCountryDao;
+import app.controller.sql.dao.MaterialSpecsDao;
 import app.controller.sql.dao.MaterialVarietiesDao;
 import app.pojos.MaterialCountries;
+import app.pojos.MaterialSpecs;
 import app.pojos.MaterialVarieties;
 import app.pojos.Materials;
 import com.jfoenix.controls.*;
@@ -19,8 +21,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,6 +28,10 @@ import java.util.ResourceBundle;
 public class MaterialProfileController implements Initializable {
 
     Materials material = new Materials();
+
+    private MinMaxInput majorBox = new MinMaxInput("Major Foreign bodies", "Glass/Wood/Plastic\nAllergen\nChemicals\nHeavy soiling\nInsects/pests");
+    private MinMaxInput minorBox = new MinMaxInput("Non-Critical Defects", "Dry/Dehydrated\nDiscoloured/Scarring\nHarvest or Handling damage\nBrowning/Translucency\nWater spotting");
+    private MinMaxInput criticalBox = new MinMaxInput("Critical Quality Defects", "Slimy\nExcessively wet\nSpongy/Pithy\nPest damage/Disease\nBreakdown/Mould");
 
     private JFXCheckBox density = new JFXCheckBox("Density");
     private MinMaxInput densityBox = new MinMaxInput("Density");
@@ -119,7 +123,11 @@ public class MaterialProfileController implements Initializable {
         imageBtn.setOnAction(event -> {
             try {
                 String path = chooser.showOpenDialog(null).toURI().toURL().toString();
-                addImage(path);
+                try {
+                    addImage(path);
+                }
+                catch (Exception ignored) {
+                }
             }
             catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -128,7 +136,7 @@ public class MaterialProfileController implements Initializable {
         });
 
         fileChooserBtn.setOnAction(event -> {
-
+          testas();
 
         });
 
@@ -136,8 +144,15 @@ public class MaterialProfileController implements Initializable {
 
 
         addListItems();
-        relateCheckToNode();
+        relateCheckBoxToNode();
+        qualityBoxTooltip();
 
+
+    }
+    private void testas(){
+        System.out.println("veikia");
+        MaterialSpecs specs = new MaterialSpecsDao().get("M801");
+        System.out.println(specs.toStringz());
     }
 
 
@@ -156,8 +171,11 @@ public class MaterialProfileController implements Initializable {
 
     }
 
-    private void relateCheckToNode(){
+    private void relateCheckBoxToNode(){
 
+        masonryPane.getChildren().add(majorBox);
+        masonryPane.getChildren().add(minorBox);
+        masonryPane.getChildren().add(criticalBox);
         addParamNode(density, densityBox);
         addParamNode(lorryTemp, lorryTempBox);
         addParamNode(materialTemp, materialTempBox);
@@ -170,6 +188,17 @@ public class MaterialProfileController implements Initializable {
         addParamNode(yield, yieldBox);
         addParamNode(country, countryBox());
         addParamNode(variety, varietyBox());
+        addParamNode(twa, new InformationNode("TWA input will be required"));
+        addParamNode(redTractorNumber, new InformationNode("RTA input will be required"));
+        addParamNode(ggn, new InformationNode("GGN number will be required"));
+        addParamNode(growerID, new InformationNode("Grower ID will be required"));
+        addParamNode(expiryDate, new InformationNode("Expiry date will be required"));
+        addParamNode(harvestDate, new InformationNode("Harvest date will be required"));
+        addParamNode(lotNumber, new InformationNode("Dry stock batch number will be required"));
+        addParamNode(day, new InformationNode("Material day will be required"));
+        addParamNode(room, new InformationNode("Material room will be required"));
+        addParamNode(healthMark, new InformationNode("Health mark will be required"));
+        addParamNode(likeForLike, new InformationNode("\"Like for like\" check will be required"));
 
 
     }
@@ -191,12 +220,12 @@ public class MaterialProfileController implements Initializable {
     private ParamListController countryBox(){
 
         ParamListController box = new ParamListController("Country");
-        MaterialCountryDAO dao = new MaterialCountryDAO();
+        MaterialCountryDao  dao = new MaterialCountryDao();
 
         box.reloadList(dao.getAll("M888"));
         box.removeBtn.setOnAction(event -> {
             if (box.getSelectedItem() != null) {
-                deleteAlertBox(box, new MaterialCountryDAO());
+                deleteAlertBox(box, new MaterialCountryDao());
             }
         });
 
@@ -288,6 +317,18 @@ public class MaterialProfileController implements Initializable {
         layout.setActions(continueBtn,cancel);
         alert.setContent(layout);
         alert.show();
+    }
+
+
+    private void qualityBoxTooltip(){
+
+        minorBox.setMin("0");
+        minorBox.disableMinField();
+        majorBox.setMin("0");
+        majorBox.disableMinField();
+        criticalBox.setMin("0");
+        criticalBox.disableMinField();
+
     }
 
 

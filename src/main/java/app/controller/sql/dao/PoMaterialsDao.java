@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PoMaterialsDAO implements Dao<PoMaterials> {
+public class PoMaterialsDao implements Dao<PoMaterials> {
 
     @Override
     public PoMaterials get(long id) {
@@ -19,7 +19,7 @@ public class PoMaterialsDAO implements Dao<PoMaterials> {
         PoMaterials mat = new PoMaterials();
         @Language("SQLite")
         String sql = "Select * from PO_MATERIALS where rowid=" + id + " Limit 1";
-        ResultSet rs = SQLiteJDBC.selectQuery(sql);
+        ResultSet rs = SQLiteJDBC.select(sql);
         try{
             while (rs.next()) {
 
@@ -70,7 +70,7 @@ public class PoMaterialsDAO implements Dao<PoMaterials> {
     private List<PoMaterials> getPoMaterialsList(List<PoMaterials> list, String sql) {
 
         PoMaterials mat;
-        ResultSet   rs = SQLiteJDBC.selectQuery(sql);
+        ResultSet   rs = SQLiteJDBC.select(sql);
         try {
             while (rs.next()){
                 mat = new PoMaterials();

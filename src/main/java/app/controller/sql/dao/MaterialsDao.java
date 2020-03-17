@@ -8,20 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaterialsDAO implements Dao<Materials> {
+public class MaterialsDao implements Dao<Materials> {
 
 
     @Override
-    public Materials get(long id) {
-       return null;
-    }
+    public <R> Materials get(R id) {
 
-    @Override
-    public Materials get(String id) {
         Materials supp = new Materials();
-        @Language("SQLite")
-        String sql = "Select  * from MATERIALS where m_code ='" + id + "'";
-        ResultSet rs = SQLiteJDBC.selectQuery(sql);
+
+        ResultSet rs = SQLiteJDBC.select("MATERIALS", "m_code", id);
 
         try{
             while (rs.next()) {
@@ -38,17 +33,12 @@ public class MaterialsDAO implements Dao<Materials> {
     }
 
 
-
-
     @Override
     public List<Materials> getAll() {
 
         List<Materials> list = new ArrayList<>();
         Materials temp;
-
-        @Language("SQLite")
-        String    query = "SELECT * FROM MATERIALS ORDER BY m_code";
-        ResultSet rs    = SQLiteJDBC.selectQuery(query);
+        ResultSet rs    = SQLiteJDBC.selectAll("MATERIALS", "m_code");
 
         try {
             while (rs.next()){
@@ -81,11 +71,10 @@ public class MaterialsDAO implements Dao<Materials> {
     @Override
     public void save(Materials materials) {
 
-        String values = "" + materials.getMCode() + "', '" + materials.getName() +"', '" +
-                        materials.getDescription() + "', '" + materials.getDocLink();
-        @Language("SQLite")
-        String sql ="INSERT INTO MATERIALS (m_code, name, description, doc_link) VALUES('" + values + "')";
-        SQLiteJDBC.update(sql);
+        String values = "'" + materials.getMCode() + "', '" + materials.getName() +"', '" +
+                        materials.getDescription() + "', '" + materials.getDocLink() +"'";
+        String fields = "m_code, name, description, doc_link";
+        SQLiteJDBC.insert(fields, values, "MATERIALS");
 
     }
 

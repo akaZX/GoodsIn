@@ -5,7 +5,7 @@ package app.controller.sql;
 import java.sql.*;
 
 
-public class ProteanDBConnection {
+public class ProteanJDBConnection {
 
     final private static String connectionUrl = "jdbc:sqlserver://PN-DB-BO;database=ERP_STD_BOURNE;user=Userapps_BO;password=h1Ghness;";
     private static ResultSet resultSet = null;

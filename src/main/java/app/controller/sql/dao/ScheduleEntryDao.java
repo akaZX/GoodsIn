@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-public class ScheduleEntryDAO implements Dao<ScheduleEntry> {
+public class ScheduleEntryDao implements Dao<ScheduleEntry> {
 
     @Override
     public ScheduleEntry get(long id) {
@@ -71,7 +71,7 @@ public class ScheduleEntryDAO implements Dao<ScheduleEntry> {
                        "AND so.visible = 1 AND sd.visible = 1) OR (so.order_date ='"+ date.toString() + "' " +
                        "AND so.visible = 1 AND sd.visible is null)";
 
-        ResultSet rs = SQLiteJDBC.selectQuery(query);
+        ResultSet rs = SQLiteJDBC.select(query);
 
         try {
 
@@ -126,7 +126,7 @@ public class ScheduleEntryDAO implements Dao<ScheduleEntry> {
     public void delete(ScheduleEntry scheduleEntry) {
 
         if (scheduleEntry.getScheduleDetails().getRowid() > 0) {
-            new ScheduleDetailsDAO().delete(scheduleEntry.getScheduleDetails());
+            new ScheduleDetailsDao().delete(scheduleEntry.getScheduleDetails());
         }else{
            String query = "UPDATE SUPPLIER_ORDERS SET visible = 0 WHERE rowid = " + scheduleEntry.getRowId() + ";";
             SQLiteJDBC.update(query);

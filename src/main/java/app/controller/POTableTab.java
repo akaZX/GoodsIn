@@ -120,7 +120,7 @@ public class POTableTab{
         });
 
         deleteEntry.setOnAction(event -> {
-            new ScheduleEntryDAO().delete(table.getSelectionModel().getSelectedItem().getValue());
+            new ScheduleEntryDao().delete(table.getSelectionModel().getSelectedItem().getValue());
             table.setRoot(populateTreeItems());
         });
 
@@ -189,7 +189,7 @@ public class POTableTab{
 
     private  ObservableList<ScheduleEntry> getDeliveriesFromDb(){
 
-        return FXCollections.observableArrayList(new ScheduleEntryDAO().getAll(dateField.getValue()));
+        return FXCollections.observableArrayList(new ScheduleEntryDao().getAll(dateField.getValue()));
     }
 
 
@@ -232,7 +232,7 @@ public class POTableTab{
             tempSupp.setSupplierCode(rs.getString("supp_code"));
             tempSupp.setSupplierName(supplierName);
 
-            new SuppliersDAO().save(tempSupp);
+            new SuppliersDao().save(tempSupp);
 
         }
         catch (SQLException e) {
@@ -241,7 +241,7 @@ public class POTableTab{
     }
 
     private void insertOrders(ResultSet rs) {
-            Dao<SupplierOrders> dao = new SupplierOrderDAO();
+            Dao<SupplierOrders> dao = new SupplierOrderDao();
 
         try {
 
@@ -255,7 +255,7 @@ public class POTableTab{
     private void insertNewMaterials(String po){
 
         Materials mat = new Materials();
-        Dao<Materials> materialsDAO = new MaterialsDAO();
+        Dao<Materials> materialsDAO = new MaterialsDao();
 
         @Language("SQLite")
         String query = "select m_code, material_name from protean where po ='" + po + "';";
@@ -279,7 +279,7 @@ public class POTableTab{
     }
 
     private void insertNewSupplierMaterials(String po){
-        Dao<SupplierMaterials> dao = new SupplierMaterialsDAO();
+        Dao<SupplierMaterials> dao = new SupplierMaterialsDao();
         SupplierMaterials material             = new SupplierMaterials();
         @Language("SQLite")
         String query = "select m_code, supp_code from protean where po ='" + po + "';";
@@ -301,7 +301,7 @@ public class POTableTab{
 
     private void insertNewPoMaterials(String po){
 
-        Dao<PoMaterials> dao = new PoMaterialsDAO();
+        Dao<PoMaterials> dao = new PoMaterialsDao();
         PoMaterials temp = new PoMaterials();
 
 

@@ -2,8 +2,8 @@ package app.controller.sql;
 
 import app.pojos.ScheduleDetails;
 import org.intellij.lang.annotations.Language;
-import sun.management.snmp.jvmmib.JVM_MANAGEMENT_MIBOidTable;
 
+import javax.swing.*;
 import java.sql.*;
 
 
@@ -15,10 +15,18 @@ public class SQLiteJDBC {
     private static ResultSet resultSet;
 
 
+    public static void insert(String fields, String values, String table){
+
+        String sql ="INSERT INTO" + table + " (" + fields + ") VALUES(" + values + ")";
+        update(sql);
+    }
+
+
     public static boolean update(String query) {
         close();
         try {
             connection = ApacheConnPool.getConnection();
+            assert connection != null;
             statement = connection.prepareStatement(query);
             statement.executeUpdate();
             return true;
@@ -31,11 +39,20 @@ public class SQLiteJDBC {
     }
 
 
-    public static ResultSet selectQuery(String query){
+    public static <T> ResultSet select(String table, String field, T param){
         close();
+        String par;
+        if (param instanceof Integer) {
+            par = param.toString();
+        }else{
+            par = "'" + param + "'";
+        }
+        @Language("SQLite")
+        String sql = "Select  * from " + table + " where " + field + " =" + par;
         try {
             connection = ApacheConnPool.getConnection();
-            statement = connection.prepareStatement(query);
+            assert connection != null;
+            statement = connection.prepareStatement(sql);
             resultSet = statement.executeQuery();
             return resultSet;
 
@@ -46,13 +63,33 @@ public class SQLiteJDBC {
         }
     }
 
-    public static <T> void delete(String tab, String field, T id){
+    public static ResultSet selectAll(String table, String order){
+        close();
+        try {
+            String    query = "SELECT * FROM " + table + " ORDER BY " + order;
+            connection = ApacheConnPool.getConnection();
+            assert connection != null;
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
+            return resultSet;
+
+        }
+        catch (SQLException | NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+
+    public static <T> void delete(String table, String field, T id){
 
         close();
         @Language("SQLite")
-        String query = "Delete from " + tab + " WHERE " + field + "= ?";
+        String query = "Delete from " + table + " WHERE " + field + "= ?";
         try{
             connection = ApacheConnPool.getConnection();
+            assert connection != null;
             statement = connection.prepareStatement(query);
 
             if( id instanceof Integer){
@@ -75,9 +112,9 @@ public class SQLiteJDBC {
 
 
     public static ScheduleDetails getDeliveryDetails(int rowid) {
-        String query = "SELECT rowid, * FROM PO_SCHEDULE_DETAILS WHERE so_rowid = "+ rowid + ";";
+        String query = "SELECT rowid, * FROM  WHERE so_rowid = "+ rowid + ";";
 
-        ResultSet rs = selectQuery(query);
+        ResultSet rs = select("PO_SCHEDULE_DETAILS", "so_rowid", rowid);
         try {
             while (rs.next()) {
 //                PoScheduleDetails temp = new PoScheduleDetails(

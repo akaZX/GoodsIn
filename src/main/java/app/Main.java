@@ -20,14 +20,13 @@ public class Main extends Application {
         GoodsInController contr = new GoodsInController();
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("goodsInMenu.fxml"));
-        System.out.println(loader);
         loader.setController(contr);
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
 
 
-        primaryStage.setTitle("GI");
+        primaryStage.setTitle("RMT/GI");
 
 
         primaryStage.setScene(scene);

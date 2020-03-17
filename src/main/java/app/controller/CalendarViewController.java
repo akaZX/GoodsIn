@@ -161,7 +161,7 @@ public class CalendarViewController {
 
     private static ResultSet getSupplierOrders(){
         String query = "SELECT * FROM V_ORDERS ORDER BY SUPPLIER;";
-        return SQLiteJDBC.selectQuery(query);
+        return SQLiteJDBC.select(query);
     }
 
     private static ScheduleDetails getOrderDetails(int rowid){

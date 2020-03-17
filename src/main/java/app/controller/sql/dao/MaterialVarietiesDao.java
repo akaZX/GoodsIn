@@ -1,7 +1,6 @@
 package app.controller.sql.dao;
 
 import app.controller.sql.SQLiteJDBC;
-import app.pojos.MaterialCountries;
 import app.pojos.MaterialVarieties;
 import org.intellij.lang.annotations.Language;
 
@@ -37,7 +36,7 @@ public class MaterialVarietiesDao implements Dao<MaterialVarieties> {
         List<MaterialVarieties> list =  new ArrayList<>();
         @Language("SQLite")
         String query = "Select * from MATERIAL_VARIETIES WHERE m_code ='" + mCode + "'";
-        ResultSet rs = SQLiteJDBC.selectQuery(query);
+        ResultSet rs = SQLiteJDBC.select(query);
 
         try {
             while (rs.next()) {

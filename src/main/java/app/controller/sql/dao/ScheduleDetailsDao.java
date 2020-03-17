@@ -10,7 +10,7 @@ import java.util.List;
 
 import static java.sql.Types.NULL;
 
-public class ScheduleDetailsDAO implements Dao<ScheduleDetails> {
+public class ScheduleDetailsDao implements Dao<ScheduleDetails> {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 

@@ -9,17 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuppliersDAO implements Dao<Suppliers> {
-
-
+public class SuppliersDao implements Dao<Suppliers> {
 
     @Override
-    public Suppliers get(long id) {
-
+    public <R> Suppliers get(R id) {
         Suppliers supp = new Suppliers();
-        @Language("SQLite")
-        String sql = "Select rowid, * from suppliers where supp_code =" + id;
-        ResultSet rs = SQLiteJDBC.selectQuery(sql);
+
+        ResultSet rs = SQLiteJDBC.select("SUPPLIERS", "supp_code", id);
 
         try{
             while (rs.next()) {
@@ -37,21 +33,13 @@ public class SuppliersDAO implements Dao<Suppliers> {
     }
 
 
-    @Override
-    public Suppliers get(String id) {
-
-        return null;
-    }
-
 
     @Override
     public List<Suppliers> getAll() {
         List<Suppliers> list = new ArrayList<>();
         Suppliers temp;
 
-        @Language("SQLite")
-        String    query = "SELECT rowid, * FROM suppliers ORDER BY supp_name";
-        ResultSet rs    = SQLiteJDBC.selectQuery(query);
+        ResultSet rs    = SQLiteJDBC.selectAll("SUPPLIERS", "supp_name");
 
         try {
             while (rs.next()){
@@ -84,6 +72,7 @@ public class SuppliersDAO implements Dao<Suppliers> {
     public void save(Suppliers suppliers) {
 
         String values = "" + suppliers.getSupplierName() + "', '" + suppliers.getSupplierCode() +"" ;
+
         @Language("SQLite")
         String sql ="INSERT INTO SUPPLIERS (supp_name, supp_code) VALUES('" + values + "')";
         boolean save = SQLiteJDBC.update(sql);

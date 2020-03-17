@@ -46,9 +46,16 @@ public class MinMaxInput extends StackPane {
         validateRequired(this.getMaxField());
     }
 
-    public MinMaxInput(String title){
+    public MinMaxInput(String title) {
+
         this();
         this.title.setText(title);
+    }
+
+    public MinMaxInput(String title, String tooltip){
+        this();
+        this.title.setText(title);
+        this.title.setTooltip(new Tooltip(tooltip));
     }
 
 
@@ -96,6 +103,16 @@ public class MinMaxInput extends StackPane {
     }
 
 
+    public void setMin(String min) {
+
+        minField.setText(min);
+    }
+
+    public void setMax(String max) {
+
+        minField.setText(max);
+    }
+
     private void setTooltips() {
 
         Tooltip minFieldTooltip = new Tooltip("Enter min value");
@@ -119,9 +136,9 @@ public class MinMaxInput extends StackPane {
     }
 
 
-    public void setMinField(JFXTextField minField) {
+    public void disableMinField() {
 
-        this.minField = minField;
+        minField.setDisable(true);
     }
 
 

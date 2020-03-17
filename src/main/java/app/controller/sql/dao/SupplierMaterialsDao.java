@@ -2,7 +2,6 @@ package app.controller.sql.dao;
 
 import app.controller.sql.SQLiteJDBC;
 import app.pojos.SupplierMaterials;
-import app.pojos.Suppliers;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplierMaterialsDAO implements Dao<SupplierMaterials> {
+public class SupplierMaterialsDao implements Dao<SupplierMaterials> {
 
     @Override
     public SupplierMaterials get(long id) {
@@ -20,7 +19,7 @@ public class SupplierMaterialsDAO implements Dao<SupplierMaterials> {
 
         @Language("SQLite")
         String sql = "Select * from SUPPLIER_MATERIALS where rowid= " + id;
-        ResultSet rs = SQLiteJDBC.selectQuery(sql);
+        ResultSet rs = SQLiteJDBC.select(sql);
 
         try{
             while (rs.next()) {
@@ -80,7 +79,7 @@ public class SupplierMaterialsDAO implements Dao<SupplierMaterials> {
     private List<SupplierMaterials> getSupplierMaterialsList(List<SupplierMaterials> list, String query) {
 
         SupplierMaterials temp;
-        ResultSet         rs = SQLiteJDBC.selectQuery(query);
+        ResultSet         rs = SQLiteJDBC.select(query);
 
         try {
             while (rs.next()){

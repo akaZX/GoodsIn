@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaterialCountryDAO implements Dao<MaterialCountries> {
+public class MaterialCountryDao implements Dao<MaterialCountries> {
 
     @Override
     public MaterialCountries get(long id) {
@@ -36,7 +36,7 @@ public class MaterialCountryDAO implements Dao<MaterialCountries> {
         List<MaterialCountries> list=  new ArrayList<>();
         @Language("SQLite")
         String query = "Select * from MATERIAL_COUNTRIES WHERE m_code ='" + mCode + "'";
-        ResultSet rs = SQLiteJDBC.selectQuery(query);
+        ResultSet rs = SQLiteJDBC.select(query);
 
         try {
             while (rs.next()) {
