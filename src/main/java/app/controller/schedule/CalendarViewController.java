@@ -1,6 +1,7 @@
-package app.controller;
+package app.controller.schedule;
 
 import app.controller.sql.SQLiteJDBC;
+import app.controller.sql.serviceClasses.ScheduleEntryService;
 import app.model.ScheduleEntry;
 import app.pojos.ScheduleDetails;
 import com.calendarfx.model.Calendar;
@@ -36,9 +37,6 @@ public class CalendarViewController {
     static Tab loadCalendar() {
 
         final CalendarView calendarView = new CalendarView();
-        calendarView.setShowAddCalendarButton(false);
-        calendarView.setShowDeveloperConsole(true);
-
 
 
 
@@ -59,9 +57,9 @@ public class CalendarViewController {
                     });
 
                     try {
-//                        removeEntriesFromCalendars();
-//                        loadCalendarEntries();
-                        sleep(100000L);
+                        removeEntriesFromCalendars();
+                        loadCalendarEntries();
+                        sleep(5000L);
 
 
 
@@ -79,24 +77,17 @@ public class CalendarViewController {
     }
 
     private static void loadCalendarEntries() throws InterruptedException {
-
-        List<ScheduleEntry> orders = null;
-        ResultSet           rs     = getSupplierOrders();
-        try {
-            while (rs.next()) {
-              ScheduleEntry temp = new ScheduleEntry(
-                       rs.getInt("rowid"), rs.getString("supp_name"), rs.getString("supp_code"),
-                       rs.getString("po"), rs.getString("order_date"));
-            temp.setScheduleDetails(getOrderDetails(temp.getRowId()));
-                orders.add(temp);
+//
+        List<ScheduleEntry> orders = ScheduleEntryService.getDeliveriesFromDb(LocalDate.of(2020,1,22), LocalDate.of(2020,1,27));
+//
+        sleep(100);
+        for (ScheduleEntry entry: orders) {
+            if (entry.getDetails().getEta() != null) {
+                orderEntryHashMap.put(entry, entry.generateCalendarEntry());
             }
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-//        sleep(100);
-        orders.forEach(listItem -> orderEntryHashMap.put(listItem, generateCalendarEntry(listItem)));
-        selectCalendar(orderEntryHashMap);
+        System.out.println(orderEntryHashMap.size());
+        selectCalendar();
 
     }
 
@@ -110,12 +101,12 @@ public class CalendarViewController {
 
     }
 
-    private static void selectCalendar(HashMap<ScheduleEntry, Entry<?>> map){
+    private static void selectCalendar(){
 
-        map.forEach((k,v)-> {
+        orderEntryHashMap.forEach((k,v)-> {
 
-            if(k.getScheduleDetails().getBay() != null){
-                switch (k.getScheduleDetails().getBay()) {
+            if(k.getDetails().getBay() != null){
+                switch (k.getDetails().getBay()) {
 
                     case "BAY01":
                         v.setCalendar(bayOne);
@@ -138,35 +129,6 @@ public class CalendarViewController {
         });
     }
 
-    private static Entry<?> generateCalendarEntry(ScheduleEntry order) {
-
-        String pallets = order.getScheduleDetails().getPallets() + (order.getScheduleDetails().getPallets() > 1 ? " pallets"
-                : " pallet");
-        String comments            = order.getScheduleDetails().getComments() == null ? "" : (" | " + order.getScheduleDetails().getComments());
-        String trailerRegistration = order.getScheduleDetails().getRegistrationNo() == null ? "" : (" | " + order.getScheduleDetails().getRegistrationNo());
-        String entryTitle          =
-                order.getSupplier() + " | " + order.getPo() + " | " + order.getScheduleDetails().getHaulier();
-
-        Interval interval = new Interval(order.getScheduleDetails().getEta(),
-                order.getScheduleDetails().getEta().plusMinutes(order.getScheduleDetails().getDuration()));
-
-
-        Entry<?> entry = new Entry<>(entryTitle, interval);
-
-        entry.setLocation(pallets + comments + trailerRegistration);
-        entry.setId(String.valueOf(order.getRowId()));
-
-        return entry;
-    }
-
-    private static ResultSet getSupplierOrders(){
-        String query = "SELECT * FROM V_ORDERS ORDER BY SUPPLIER;";
-        return SQLiteJDBC.select(query);
-    }
-
-    private static ScheduleDetails getOrderDetails(int rowid){
-        return SQLiteJDBC.getDeliveryDetails(rowid);
-    }
 
     public static void initializeCalendars(CalendarView calendarView, Calendar bayOne, Calendar bayTwo, Calendar bayThree, Calendar bayFour, StackPane calendarViewPane, Tab calendarViewTab) {
 
@@ -181,12 +143,23 @@ public class CalendarViewController {
         bayThree.setShortName("BAY 3");
         bayFour.setShortName("BAY 4");
 
+        bayOne.setReadOnly(true);
+        bayTwo.setReadOnly(true);
+        bayThree.setReadOnly(true);
+        bayFour.setReadOnly(true);
+
+
         CalendarSource goodsInBayCalendarSource = new CalendarSource("Goods In");
         goodsInBayCalendarSource.getCalendars().addAll(bayOne, bayTwo, bayThree, bayFour);
         calendarView.getCalendarSources().setAll(goodsInBayCalendarSource);
         calendarView.setRequestedTime(LocalTime.now());
         calendarViewPane.getChildren().addAll(calendarView);
         calendarViewTab.setContent(calendarViewPane);
+        calendarView.setShowPrintButton(false);
+        calendarView.setShowAddCalendarButton(false);
+        calendarView.showDayPage();
+
+
     }
 
 

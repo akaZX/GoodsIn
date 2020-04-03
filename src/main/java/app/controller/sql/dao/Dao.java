@@ -11,10 +11,10 @@ public interface Dao<T> {
 
     List<T> getAll(String param);
 
-    void save(T t);
+    boolean save(T t);
 
-    void update(T t);
+    boolean update(T t);
 
-    void delete(T t);
+    boolean delete(T t);
 
 }

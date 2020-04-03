@@ -2,579 +2,766 @@ package app.pojos;
 
 public class MaterialSpecs {
 
-  private String mCode;
-  private int density;
-  private int minDensity;
-  private int maxDensity;
-  private int lorryTemp;
-  private double minLorryTemp;
-  private double maxLorryTemp;
-  private int materialTemp;
-  private double minMaterialTemp;
-  private double maxMaterialTemp;
-  private int brix;
-  private double minBrix;
-  private double maxBrix;
-  private int pressure;
-  private double minPressure;
-  private double maxPressure;
-  private int length;
-  private int minLength;
-  private int maxLength;
-  private int width;
-  private int minWidth;
-  private int maxWidth;
-  private int colorStage;
-  private int minColorStage;
-  private int maxColorStage;
-  private int headWeight;
-  private int minHeadWeight;
-  private int maxHeadWeight;
-  private int yield;
-  private int minYield;
-  private int maxYield;
-  private int maxMajor;
-  private int maxCritical;
-  private int maxMinor;
-
-  private int variety;
-  private int country;
-  private int growerId;
-  private int harvestDate;
-  private int likeForLike;
-  private int lotNumber;
-  private int day;
-  private int room;
-  private int rtaNumber;
-  private int ggn;
-  private int twa;
-  private int healthMark;
-  private int expiryDate;
-
-
-  public String getMCode() {
-    return mCode;
-  }
-
-  public void setMCode(String mCode) {
-    this.mCode = mCode;
-  }
-
-
-  public int getDensity() {
-    return density;
-  }
-
-  public void setDensity(int density) {
-    this.density = density;
-  }
-
+    private String mCode;
 
-  public int getMinDensity() {
-    return minDensity;
-  }
+    private int density;
 
-  public void setMinDensity(int minDensity) {
-    this.minDensity = minDensity;
-  }
+    private int minDensity;
 
+    private int maxDensity;
 
-  public int getMaxDensity() {
-    return maxDensity;
-  }
+    private int lorryTemp;
 
-  public void setMaxDensity(int maxDensity) {
-    this.maxDensity = maxDensity;
-  }
+    private double minLorryTemp;
 
+    private double maxLorryTemp;
 
-  public int getLorryTemp() {
-    return lorryTemp;
-  }
+    private int materialTemp;
 
-  public void setLorryTemp(int lorryTemp) {
-    this.lorryTemp = lorryTemp;
-  }
+    private double minMaterialTemp;
 
+    private double maxMaterialTemp;
 
-  public double getMinLorryTemp() {
-    return minLorryTemp;
-  }
+    private int brix;
 
-  public void setMinLorryTemp(double minLorryTemp) {
-    this.minLorryTemp = minLorryTemp;
-  }
+    private double minBrix;
 
+    private double maxBrix;
 
-  public double getMaxLorryTemp() {
-    return maxLorryTemp;
-  }
+    private int pressure;
 
-  public void setMaxLorryTemp(double maxLorryTemp) {
-    this.maxLorryTemp = maxLorryTemp;
-  }
+    private double minPressure;
 
+    private double maxPressure;
 
-  public int getMaterialTemp() {
-    return materialTemp;
-  }
+    private int length;
 
-  public void setMaterialTemp(int materialTemp) {
-    this.materialTemp = materialTemp;
-  }
+    private int minLength;
 
+    private int maxLength;
 
-  public double getMinMaterialTemp() {
-    return minMaterialTemp;
-  }
+    private int width;
 
-  public void setMinMaterialTemp(double minMaterialTemp) {
-    this.minMaterialTemp = minMaterialTemp;
-  }
+    private int minWidth;
 
+    private int maxWidth;
 
-  public double getMaxMaterialTemp() {
-    return maxMaterialTemp;
-  }
+    private int colorStage;
 
-  public void setMaxMaterialTemp(double maxMaterialTemp) {
-    this.maxMaterialTemp = maxMaterialTemp;
-  }
+    private int minColorStage;
 
+    private int maxColorStage;
 
-  public int getBrix() {
-    return brix;
-  }
+    private int headWeight;
 
-  public void setBrix(int brix) {
-    this.brix = brix;
-  }
+    private int minHeadWeight;
 
+    private int maxHeadWeight;
 
-  public double getMinBrix() {
-    return minBrix;
-  }
+    private int yield;
 
-  public void setMinBrix(double minBrix) {
-    this.minBrix = minBrix;
-  }
+    private int minYield;
 
+    private int maxYield;
 
-  public double getMaxBrix() {
-    return maxBrix;
-  }
+    private int maxMajor;
 
-  public void setMaxBrix(double maxBrix) {
-    this.maxBrix = maxBrix;
-  }
+    private int maxCritical;
 
+    private int maxMinor;
 
-  public int getPressure() {
-    return pressure;
-  }
+    private int variety;
 
-  public void setPressure(int pressure) {
-    this.pressure = pressure;
-  }
+    private int country;
 
+    private int growerId;
 
-  public double getMinPressure() {
-    return minPressure;
-  }
+    private int harvestDate;
 
-  public void setMinPressure(double minPressure) {
-    this.minPressure = minPressure;
-  }
+    private int likeForLike;
 
+    private int lotNumber;
 
-  public double getMaxPressure() {
-    return maxPressure;
-  }
+    private int day;
 
-  public void setMaxPressure(double maxPressure) {
-    this.maxPressure = maxPressure;
-  }
+    private int room;
 
+    private int rtaNumber;
 
-  public int getLength() {
-    return length;
-  }
+    private int ggn;
 
-  public void setLength(int length) {
-    this.length = length;
-  }
+    private int twa;
 
+    private int healthMark;
 
-  public int getMinLength() {
-    return minLength;
-  }
+    private int expiryDate;
 
-  public void setMinLength(int minLength) {
-    this.minLength = minLength;
-  }
 
+    public String getMCode() {
 
-  public int getMaxLength() {
-    return maxLength;
-  }
+        return mCode;
+    }
 
-  public void setMaxLength(int maxLength) {
-    this.maxLength = maxLength;
-  }
 
+    public void setMCode(String mCode) {
 
-  public int getWidth() {
-    return width;
-  }
+        this.mCode = mCode;
+    }
 
-  public void setWidth(int width) {
-    this.width = width;
-  }
 
+    public int getDensity() {
 
-  public int getMinWidth() {
-    return minWidth;
-  }
+        return density;
+    }
 
-  public void setMinWidth(int minWidth) {
-    this.minWidth = minWidth;
-  }
 
+    public void setDensity(int density) {
 
-  public int getMaxWidth() {
-    return maxWidth;
-  }
+        this.density = density;
+    }
 
-  public void setMaxWidth(int maxWidth) {
-    this.maxWidth = maxWidth;
-  }
 
+    public int getMinDensity() {
 
-  public int getColorStage() {
-    return colorStage;
-  }
+        return minDensity;
+    }
 
-  public void setColorStage(int colorStage) {
-    this.colorStage = colorStage;
-  }
 
+    public void setMinDensity(int minDensity) {
 
-  public int getMinColorStage() {
-    return minColorStage;
-  }
+        this.minDensity = minDensity;
+    }
 
-  public void setMinColorStage(int minColourStage) {
-    this.minColorStage = minColourStage;
-  }
 
+    public int getMaxDensity() {
 
-  public int getMaxColorStage() {
-    return maxColorStage;
-  }
+        return maxDensity;
+    }
 
-  public void setMaxColorStage(int maxColourStage) {
-    this.maxColorStage = maxColourStage;
-  }
 
+    public void setMaxDensity(int maxDensity) {
 
-  public int getHeadWeight() {
-    return headWeight;
-  }
+        this.maxDensity = maxDensity;
+    }
 
-  public void setHeadWeight(int headWeight) {
-    this.headWeight = headWeight;
-  }
 
+    public int getLorryTemp() {
 
-  public int getMinHeadWeight() {
-    return minHeadWeight;
-  }
+        return lorryTemp;
+    }
 
-  public void setMinHeadWeight(int minHeadWeight) {
-    this.minHeadWeight = minHeadWeight;
-  }
 
+    public void setLorryTemp(int lorryTemp) {
 
-  public int getMaxHeadWeight() {
-    return maxHeadWeight;
-  }
+        this.lorryTemp = lorryTemp;
+    }
 
-  public void setMaxHeadWeight(int maxHeadWeight) {
-    this.maxHeadWeight = maxHeadWeight;
-  }
 
+    public double getMinLorryTemp() {
 
-  public int getYield() {
-    return yield;
-  }
+        return minLorryTemp;
+    }
 
-  public void setYield(int yield) {
-    this.yield = yield;
-  }
 
+    public void setMinLorryTemp(double minLorryTemp) {
 
-  public int getMinYield() {
-    return minYield;
-  }
+        this.minLorryTemp = minLorryTemp;
+    }
 
-  public void setMinYield(int minYield) {
-    this.minYield = minYield;
-  }
 
+    public double getMaxLorryTemp() {
 
-  public int getMaxYield() {
-    return maxYield;
-  }
+        return maxLorryTemp;
+    }
 
-  public void setMaxYield(int maxYield) {
-    this.maxYield = maxYield;
-  }
 
+    public void setMaxLorryTemp(double maxLorryTemp) {
 
-  public int getMaxMajor() {
-    return maxMajor;
-  }
+        this.maxLorryTemp = maxLorryTemp;
+    }
 
-  public void setMaxMajor(int maxMajor) {
-    this.maxMajor = maxMajor;
-  }
 
+    public int getMaterialTemp() {
 
-  public int getMaxCritical() {
-    return maxCritical;
-  }
+        return materialTemp;
+    }
 
-  public void setMaxCritical(int maxCritical) {
-    this.maxCritical = maxCritical;
-  }
 
+    public void setMaterialTemp(int materialTemp) {
 
-  public int getMaxMinor() {
-    return maxMinor;
-  }
+        this.materialTemp = materialTemp;
+    }
 
-  public void setMaxMinor(int maxMinor) {
-    this.maxMinor = maxMinor;
-  }
 
+    public double getMinMaterialTemp() {
 
-  public int getVariety() {
-    return variety;
-  }
+        return minMaterialTemp;
+    }
 
-  public void setVariety(int variety) {
-    this.variety = variety;
-  }
 
+    public void setMinMaterialTemp(double minMaterialTemp) {
 
-  public int getCountry() {
-    return country;
-  }
+        this.minMaterialTemp = minMaterialTemp;
+    }
 
-  public void setCountry(int country) {
-    this.country = country;
-  }
 
+    public double getMaxMaterialTemp() {
 
-  public int getGrowerId() {
-    return growerId;
-  }
+        return maxMaterialTemp;
+    }
 
-  public void setGrowerId(int growerId) {
-    this.growerId = growerId;
-  }
 
+    public void setMaxMaterialTemp(double maxMaterialTemp) {
 
-  public int getHarvestDate() {
-    return harvestDate;
-  }
+        this.maxMaterialTemp = maxMaterialTemp;
+    }
 
-  public void setHarvestDate(int harvestDate) {
-    this.harvestDate = harvestDate;
-  }
 
+    public int getBrix() {
 
-  public int getLikeForLike() {
-    return likeForLike;
-  }
+        return brix;
+    }
 
-  public void setLikeForLike(int likeForLike) {
-    this.likeForLike = likeForLike;
-  }
 
+    public void setBrix(int brix) {
 
-  public int getLotNumber() {
-    return lotNumber;
-  }
+        this.brix = brix;
+    }
 
-  public void setLotNumber(int lotNumber) {
-    this.lotNumber = lotNumber;
-  }
 
+    public double getMinBrix() {
 
-  public int getDay() {
-    return day;
-  }
+        return minBrix;
+    }
 
-  public void setDay(int day) {
-    this.day = day;
-  }
 
+    public void setMinBrix(double minBrix) {
 
-  public int getRoom() {
-    return room;
-  }
+        this.minBrix = minBrix;
+    }
 
-  public void setRoom(int room) {
-    this.room = room;
-  }
 
+    public double getMaxBrix() {
 
-  public int getRtaNumber() {
-    return rtaNumber;
-  }
+        return maxBrix;
+    }
 
-  public void setRtaNumber(int rtaNumber) {
-    this.rtaNumber = rtaNumber;
-  }
 
+    public void setMaxBrix(double maxBrix) {
 
-  public int getGgn() {
-    return ggn;
-  }
+        this.maxBrix = maxBrix;
+    }
 
-  public void setGgn(int ggn) {
-    this.ggn = ggn;
-  }
 
+    public int getPressure() {
 
-  public int getTwa() {
-    return twa;
-  }
+        return pressure;
+    }
 
-  public void setTwa(int twa) {
-    this.twa = twa;
-  }
 
+    public void setPressure(int pressure) {
 
-  public int getHealthMark() {
-    return healthMark;
-  }
+        this.pressure = pressure;
+    }
 
-  public void setHealthMark(int healthMark) {
-    this.healthMark = healthMark;
-  }
 
+    public double getMinPressure() {
 
-  public int getExpiryDate() {
-    return expiryDate;
-  }
+        return minPressure;
+    }
 
-  public void setExpiryDate(int expiryDate) {
-    this.expiryDate = expiryDate;
-  }
 
+    public void setMinPressure(double minPressure) {
 
+        this.minPressure = minPressure;
+    }
 
-  public String toString() {
 
-    return "mCode='" + mCode + "'" +
-           ", density=" + density +
-           ", min_density=" + minDensity +
-           ", max_density=" + maxDensity +
-           ", lorry_temp=" + lorryTemp +
-           ", min_lorry_temp=" + minLorryTemp +
-           ", max_lorry_temp=" + maxLorryTemp +
-           ", material_temp=" + materialTemp +
-           ", min_material_temp=" + minMaterialTemp +
-           ", max_material_temp=" + maxMaterialTemp +
-           ", brix=" + brix +
-           ", min_brix=" + minBrix +
-           ", max_brix=" + maxBrix +
-           ", pressure=" + pressure +
-           ", min_pressure=" + minPressure +
-           ", max_pressure=" + maxPressure +
-           ", length=" + length +
-           ", min_length=" + minLength +
-           ", max_length=" + maxLength +
-           ", width=" + width +
-           ", min_width=" + minWidth +
-           ", max_width=" + maxWidth +
-           ", color_stage=" + colorStage +
-           ", min_color_stage=" + minColorStage +
-           ", max_color_stage=" + maxColorStage +
-           ", head_weight=" + headWeight +
-           ", min_head_weight=" + minHeadWeight +
-           ", max_head_weight=" + maxHeadWeight +
-           ", yield=" + yield +
-           ", min_yield=" + minYield +
-           ", max_yield=" + maxYield +
-           ", max_major=" + maxMajor +
-           ", max_critical=" + maxCritical +
-           ", max_minor=" + maxMinor +
-           ", variety=" + variety +
-           ", country=" + country +
-           ", grower_id=" + growerId +
-           ", harvest-Date=" + harvestDate +
-           ", like_for_like=" + likeForLike +
-           ", lot_number=" + lotNumber +
-           ", day=" + day +
-           ", room=" + room +
-           ", rta_number=" + rtaNumber +
-           ", ggn=" + ggn +
-           ", twa=" + twa +
-           ", health_mark=" + healthMark +
-           ", expiry_date=" + expiryDate ;
-  }
+    public double getMaxPressure() {
 
+        return maxPressure;
+    }
 
-  public String saveString (){
-    return "'" + mCode + "', " +
-           ", " + density +
-           ", " + minDensity +
-           ", " + maxDensity +
-           ", " + lorryTemp +
-           ", " + minLorryTemp +
-           ", " + maxLorryTemp +
-           ", " + materialTemp +
-           ", " + minMaterialTemp +
-           ", " + maxMaterialTemp +
-           ", " + brix +
-           ", " + minBrix +
-           ", " + maxBrix +
-           ", " + pressure +
-           ", " + minPressure +
-           ", " + maxPressure +
-           ", " + length +
-           ", " + minLength +
-           ", " + maxLength +
-           ", " + width +
-           ", " + minWidth +
-           ", " + maxWidth +
-           ", " + colorStage +
-           ", " + minColorStage +
-           ", " + maxColorStage +
-           ", " + headWeight +
-           ", " + minHeadWeight +
-           ", " + maxHeadWeight +
-           ", " + yield +
-           ", " + minYield +
-           ", " + maxYield +
-           ", " + maxMajor +
-           ", " + maxCritical +
-           ", " + maxMinor +
-           ", " + variety +
-           ", " + country +
-           ", " + growerId +
-           ", " + harvestDate +
-           ", " + likeForLike +
-           ", " + lotNumber +
-           ", " + day +
-           ", " + room +
-           ", " + rtaNumber +
-           ", " + ggn +
-           ", " + twa +
-           ", " + healthMark +
-           ", " + expiryDate ;
-  }
+
+    public void setMaxPressure(double maxPressure) {
+
+        this.maxPressure = maxPressure;
+    }
+
+
+    public int getLength() {
+
+        return length;
+    }
+
+
+    public void setLength(int length) {
+
+        this.length = length;
+    }
+
+
+    public int getMinLength() {
+
+        return minLength;
+    }
+
+
+    public void setMinLength(int minLength) {
+
+        this.minLength = minLength;
+    }
+
+
+    public int getMaxLength() {
+
+        return maxLength;
+    }
+
+
+    public void setMaxLength(int maxLength) {
+
+        this.maxLength = maxLength;
+    }
+
+
+    public int getWidth() {
+
+        return width;
+    }
+
+
+    public void setWidth(int width) {
+
+        this.width = width;
+    }
+
+
+    public int getMinWidth() {
+
+        return minWidth;
+    }
+
+
+    public void setMinWidth(int minWidth) {
+
+        this.minWidth = minWidth;
+    }
+
+
+    public int getMaxWidth() {
+
+        return maxWidth;
+    }
+
+
+    public void setMaxWidth(int maxWidth) {
+
+        this.maxWidth = maxWidth;
+    }
+
+
+    public int getColorStage() {
+
+        return colorStage;
+    }
+
+
+    public void setColorStage(int colorStage) {
+
+        this.colorStage = colorStage;
+    }
+
+
+    public int getMinColorStage() {
+
+        return minColorStage;
+    }
+
+
+    public void setMinColorStage(int minColourStage) {
+
+        this.minColorStage = minColourStage;
+    }
+
+
+    public int getMaxColorStage() {
+
+        return maxColorStage;
+    }
+
+
+    public void setMaxColorStage(int maxColourStage) {
+
+        this.maxColorStage = maxColourStage;
+    }
+
+
+    public int getHeadWeight() {
+
+        return headWeight;
+    }
+
+
+    public void setHeadWeight(int headWeight) {
+
+        this.headWeight = headWeight;
+    }
+
+
+    public int getMinHeadWeight() {
+
+        return minHeadWeight;
+    }
+
+
+    public void setMinHeadWeight(int minHeadWeight) {
+
+        this.minHeadWeight = minHeadWeight;
+    }
+
+
+    public int getMaxHeadWeight() {
+
+        return maxHeadWeight;
+    }
+
+
+    public void setMaxHeadWeight(int maxHeadWeight) {
+
+        this.maxHeadWeight = maxHeadWeight;
+    }
+
+
+    public int getYield() {
+
+        return yield;
+    }
+
+
+    public void setYield(int yield) {
+
+        this.yield = yield;
+    }
+
+
+    public int getMinYield() {
+
+        return minYield;
+    }
+
+
+    public void setMinYield(int minYield) {
+
+        this.minYield = minYield;
+    }
+
+
+    public int getMaxYield() {
+
+        return maxYield;
+    }
+
+
+    public void setMaxYield(int maxYield) {
+
+        this.maxYield = maxYield;
+    }
+
+
+    public int getMaxMajor() {
+
+        return maxMajor;
+    }
+
+
+    public void setMaxMajor(int maxMajor) {
+
+        this.maxMajor = maxMajor;
+    }
+
+
+    public int getMaxCritical() {
+
+        return maxCritical;
+    }
+
+
+    public void setMaxCritical(int maxCritical) {
+
+        this.maxCritical = maxCritical;
+    }
+
+
+    public int getMaxMinor() {
+
+        return maxMinor;
+    }
+
+
+    public void setMaxMinor(int maxMinor) {
+
+        this.maxMinor = maxMinor;
+    }
+
+
+    public int getVariety() {
+
+        return variety;
+    }
+
+
+    public void setVariety(int variety) {
+
+        this.variety = variety;
+    }
+
+
+    public int getCountry() {
+
+        return country;
+    }
+
+
+    public void setCountry(int country) {
+
+        this.country = country;
+    }
+
+
+    public int getGrowerId() {
+
+        return growerId;
+    }
+
+
+    public void setGrowerId(int growerId) {
+
+        this.growerId = growerId;
+    }
+
+
+    public int getHarvestDate() {
+
+        return harvestDate;
+    }
+
+
+    public void setHarvestDate(int harvestDate) {
+
+        this.harvestDate = harvestDate;
+    }
+
+
+    public int getLikeForLike() {
+
+        return likeForLike;
+    }
+
+
+    public void setLikeForLike(int likeForLike) {
+
+        this.likeForLike = likeForLike;
+    }
+
+
+    public int getLotNumber() {
+
+        return lotNumber;
+    }
+
+
+    public void setLotNumber(int lotNumber) {
+
+        this.lotNumber = lotNumber;
+    }
+
+
+    public int getDay() {
+
+        return day;
+    }
+
+
+    public void setDay(int day) {
+
+        this.day = day;
+    }
+
+
+    public int getRoom() {
+
+        return room;
+    }
+
+
+    public void setRoom(int room) {
+
+        this.room = room;
+    }
+
+
+    public int getRtaNumber() {
+
+        return rtaNumber;
+    }
+
+
+    public void setRtaNumber(int rtaNumber) {
+
+        this.rtaNumber = rtaNumber;
+    }
+
+
+    public int getGgn() {
+
+        return ggn;
+    }
+
+
+    public void setGgn(int ggn) {
+
+        this.ggn = ggn;
+    }
+
+
+    public int getTwa() {
+
+        return twa;
+    }
+
+
+    public void setTwa(int twa) {
+
+        this.twa = twa;
+    }
+
+
+    public int getHealthMark() {
+
+        return healthMark;
+    }
+
+
+    public void setHealthMark(int healthMark) {
+
+        this.healthMark = healthMark;
+    }
+
+
+    public int getExpiryDate() {
+
+        return expiryDate;
+    }
+
+
+    public void setExpiryDate(int expiryDate) {
+
+        this.expiryDate = expiryDate;
+    }
+
+
+    public String toString() {
+
+        return "m_code='" + mCode +
+               "', density= " + density +
+               " , min_density= " + minDensity +
+               " , max_density= " + maxDensity +
+               " , lorry_temp= " + lorryTemp +
+               " , min_lorry_temp= " + minLorryTemp +
+               " , max_lorry_temp= " + maxLorryTemp +
+               " , material_temp= " + materialTemp +
+               " , min_material_temp= " + minMaterialTemp +
+               " , max_material_temp= " + maxMaterialTemp +
+               " , brix= " + brix +
+               " , min_brix= " + minBrix +
+               " , max_brix= " + maxBrix +
+               " , pressure= " + pressure +
+               " , min_pressure= " + minPressure +
+               " , max_pressure= " + maxPressure +
+               " , length= " + length +
+               " , min_length= " + minLength +
+               " , max_length= " + maxLength +
+               " , width= " + width +
+               " , min_width= " + minWidth +
+               " , max_width= " + maxWidth +
+               " , color_stage= " + colorStage +
+               " , min_colour_stage= " + minColorStage +
+               " , max_colour_stage= " + maxColorStage +
+               " , head_weight= " + headWeight +
+               " , min_head_weight= " + minHeadWeight +
+               " , max_head_weight= " + maxHeadWeight +
+               " , yield= " + yield +
+               " , min_yield= " + minYield +
+               " , max_yield= " + maxYield +
+               " , max_major= " + maxMajor +
+               " , max_critical= " + maxCritical +
+               " , max_minor= " + maxMinor +
+               " , variety= " + variety +
+               " , country= " + country +
+               " , grower_id= " + growerId +
+               " , harvest_date= " + harvestDate +
+               " , like_for_like= " + likeForLike +
+               " , lot_number= " + lotNumber +
+               " , day= " + day +
+               " , room= " + room +
+               " , rta_number= " + rtaNumber +
+               " , ggn= " + ggn +
+               " , twa= " + twa +
+               " , health_mark= "  + healthMark +
+               " , expiry_date= " + expiryDate;
+    }
+
+
+    public String saveString() {
+
+        return "'" + mCode  +
+               "', " + density +
+               " , " + minDensity +
+               " , " + maxDensity +
+               " , " + lorryTemp +
+               " , " + minLorryTemp +
+               " , " + maxLorryTemp +
+               " , " + materialTemp +
+               " , " + minMaterialTemp +
+               " , " + maxMaterialTemp +
+               " , " + brix +
+               " , " + minBrix +
+               " , " + maxBrix +
+               " , " + pressure +
+               " , " + minPressure +
+               " , " + maxPressure +
+               " , " + length +
+               " , " + minLength +
+               " , " + maxLength +
+               " , " + width +
+               " , " + minWidth +
+               " , " + maxWidth +
+               " , " + colorStage +
+               " , " + minColorStage +
+               " , " + maxColorStage +
+               " , " + headWeight +
+               " , " + minHeadWeight +
+               " , " + maxHeadWeight +
+               " , " + yield +
+               " , " + minYield +
+               " , " + maxYield +
+               " , " + maxMajor +
+               " , " + maxCritical +
+               " , " + maxMinor +
+               " , " + variety +
+               " , " + country +
+               " , " + growerId +
+               " , " + harvestDate +
+               " , " + likeForLike +
+               " , " + lotNumber +
+               " , " + day +
+               " , " + room +
+               " , " + rtaNumber +
+               " , " + ggn +
+               " , " + twa +
+               " , " + healthMark +
+               " , " + expiryDate;
+    }
+
 }

@@ -2,7 +2,10 @@ package app.controller.suppliersView;
 
 import app.controller.sql.SQLiteJDBC;
 import app.controller.sql.dao.MaterialsDao;
+import app.controller.sql.dao.SuppEmailsDao;
 import app.controller.sql.dao.SupplierMaterialsDao;
+import app.pojos.SuppEmails;
+import app.pojos.SuppNumbers;
 import app.pojos.SupplierMaterials;
 import app.pojos.Suppliers;
 import com.jfoenix.controls.*;
@@ -26,44 +29,48 @@ import java.util.ResourceBundle;
 public class SuppliersProfileController implements Initializable {
 
     private static final String FX_LABEL_FLOAT_TRUE = "-fx-label-float:true;";
+
     private static final String ERROR = "error";
 
     JFXDialog dialog = new JFXDialog();
 
-    Suppliers supplier;
+    Suppliers supplier = null;
 
     @FXML
     Label supplierName;
+
     @FXML
     Label materialName;
 
     @FXML
     JFXListView<SuppEmails> emailsList;
+
     @FXML
     JFXTextField newEmailField;
+
     @FXML
     JFXButton saveNewEmail;
+
     @FXML
     JFXButton deleteEmail;
-
 
     @FXML
     JFXListView<SupplierMaterials> materialsList;
 
-
     @FXML
     JFXListView<SuppNumbers> numbersList;
+
     @FXML
     JFXTextField contactNameField;
+
     @FXML
     JFXTextField newPhoneNumber;
+
     @FXML
     JFXButton deletePhoneNumber;
+
     @FXML
     JFXButton addContact;
-
-
-
 
 
     public SuppliersProfileController() {
@@ -72,44 +79,54 @@ public class SuppliersProfileController implements Initializable {
 
 
     public SuppliersProfileController(Suppliers supplier) {
+
         this.supplier = supplier;
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        supplierName.setText(supplier.getSupplierName());
 
-
-        loadMaterials();
 
         buttonsListeners();
         emailBox();
 
+        if (supplier != null) {
+            supplierName.setText(supplier.getSupplierName());
+            loadMaterials();
+            loadEmails();
+        }
 
     }
 
-    private void buttonsListeners(){
+
+    private void buttonsListeners() {
+
+        deleteEmail.setOnAction(event -> {
+            if (emailsList.getSelectionModel().getSelectedItem() != null) {
+                new SuppEmailsDao().delete(emailsList.getSelectionModel().getSelectedItem());
+                loadEmails();
+            }
+        });
         saveNewEmail.setOnAction(event -> {
-            if(newEmailField.validate()){
-                System.out.println("veikia emailai");
-            }else{
-
-
-
+            if (newEmailField.validate()) {
+                saveNewEmail();
+                loadEmails();
+            }
+            else {
 
                 JFXAlert<Void> alert = new JFXAlert<>((Stage) saveNewEmail.getScene().getWindow());
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setOverlayClose(false);
-                JFXDialogLayout layout = new JFXDialogLayout();
-                Label label = new Label("Incorrect email address");
+                JFXDialogLayout     layout   = new JFXDialogLayout();
+                Label               label    = new Label("Incorrect email address");
                 FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.EXCLAMATION_TRIANGLE);
                 iconView.setStyle("-fx-fill: red; -glyph-size: 20px");
 
                 label.setGraphic(iconView);
                 label.setStyle("-fx-font-size: 15px; -fx-cell-size: 100px");
                 layout.setHeading(label);
-                layout.setBody(new Label(( newEmailField.getText())));
+                layout.setBody(new Label((newEmailField.getText())));
                 JFXButton closeButton = new JFXButton("ACCEPT");
 
                 closeButton.getStyleClass().add("dialog-accept");
@@ -127,10 +144,7 @@ public class SuppliersProfileController implements Initializable {
     }
 
 
-
-
-
-    public void emailBox(){
+    public void emailBox() {
 
         newEmailField.setStyle(FX_LABEL_FLOAT_TRUE);
 
@@ -152,7 +166,8 @@ public class SuppliersProfileController implements Initializable {
 
     }
 
-    private void doEmailValidate(){
+
+    private void doEmailValidate() {
 
         newEmailField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -166,17 +181,19 @@ public class SuppliersProfileController implements Initializable {
 
     }
 
-    private void loadMaterials(){
+
+    private void loadMaterials() {
 
         SQLiteJDBC.close();
 
 
-        ObservableList<SupplierMaterials> list = FXCollections.observableArrayList(new SupplierMaterialsDao().getAllSupplierMaterials(supplier.getSupplierCode()));
+        ObservableList<SupplierMaterials> list = FXCollections.observableArrayList(new SupplierMaterialsDao().getAll(supplier.getSupplierCode()));
         materialsList.setItems(list);
 
         materialsList.setCellFactory(param -> new JFXListCell<SupplierMaterials>() {
 
             final Tooltip content = new Tooltip();
+
 
             @Override
             protected void updateItem(SupplierMaterials item, boolean empty) {
@@ -194,7 +211,7 @@ public class SuppliersProfileController implements Initializable {
                     materialsList.setExpanded(true);
                     materialsList.getSelectionModel().selectFirst();
 
-                    if(item.getPalletWeight()<=0){
+                    if (item.getPalletWeight() <= 0) {
                         FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.EXCLAMATION);
                         iconView.setStyle("-fx-fill: red");
                         setStyle("-fx-background-color: rgb(255,174,179)");
@@ -214,9 +231,21 @@ public class SuppliersProfileController implements Initializable {
     }
 
 
-    private void showAllertMessage(){
+    private void loadEmails() {
 
+        emailsList.getItems().clear();
+        ObservableList<SuppEmails> list = FXCollections.observableArrayList(new SuppEmailsDao().getAll(supplier.getSupplierCode()));
+        emailsList.getItems().addAll(list);
     }
 
+
+    private void saveNewEmail() {
+
+        SuppEmails email = new SuppEmails();
+        email.setEmail(newEmailField.getText());
+        email.setSuppCode(supplier.getSupplierCode());
+        new SuppEmailsDao().save(email);
+
+    }
 
 }

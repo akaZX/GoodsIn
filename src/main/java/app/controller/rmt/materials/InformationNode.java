@@ -1,4 +1,4 @@
-package app.controller.rmt;
+package app.controller.rmt.materials;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ public class InformationNode extends HBox {
 
 
     public InformationNode() {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("materialProfile/informationNode.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/informationNode.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 

@@ -5,18 +5,18 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class ScheduleDetails {
 
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
   private int rowid;
-  private int orderRowId;
+  private String po;
   private String bay;
   private int pallets;
   private int duration;
@@ -27,6 +27,7 @@ public class ScheduleDetails {
   private LocalDateTime arrived;
   private LocalDateTime departed;
   private LocalDateTime bookedIn;
+  private LocalDate orderDate;
   private int visible;
 
 
@@ -35,10 +36,22 @@ public class ScheduleDetails {
   }
 
 
-  public ScheduleDetails(int rowid, int orderRowId, String bay, int pallets, int duration, String haulier, String comments, String registrationNo, Timestamp eta, Timestamp arrived, Timestamp departed, Timestamp bookedIn) {
+  public ScheduleDetails(String po, String orderDate) {
+
+    this.po = po;
+    try {
+      this.orderDate = LocalDate.parse(orderDate);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+
+  public ScheduleDetails(int rowid, String po, String bay, int pallets, int duration, String haulier, String comments, String registrationNo, String eta, String arrived, String departed, String bookedIn, String orderDate) {
 
     this.rowid = rowid;
-    this.orderRowId = orderRowId;
+    this.po = po;
     this.bay = bay;
     this.pallets = pallets;
     this.duration = duration;
@@ -47,16 +60,23 @@ public class ScheduleDetails {
     this.registrationNo = registrationNo;
 
     if(eta != null){
-      this.eta = eta.toLocalDateTime();
+
+      this.eta = LocalDateTime.parse(eta);
     }
     if(arrived != null){
-      this.arrived = arrived.toLocalDateTime();
+      this.arrived = LocalDateTime.parse(arrived);
     }
     if(departed != null){
-      this.departed = departed.toLocalDateTime();
+      this.departed = LocalDateTime.parse(departed);
     }
     if(bookedIn != null){
-      this.bookedIn = bookedIn.toLocalDateTime();
+      this.bookedIn = LocalDateTime.parse(bookedIn);
+    }
+    try {
+      this.orderDate = LocalDate.parse(orderDate);
+    }
+    catch (NullPointerException e) {
+
     }
   }
 
@@ -90,9 +110,6 @@ public class ScheduleDetails {
         this.bookedIn = LocalDateTime.parse(bookedIn);
       }
 
-
-
-
   }
 
 
@@ -108,15 +125,27 @@ public class ScheduleDetails {
   }
 
 
-  public int getOrderRowId() {
+  public String getPo() {
 
-    return orderRowId;
+    return po;
   }
 
 
-  public void setOrderRowId(int orderRowId) {
+  public void setPo(String po) {
 
-    this.orderRowId = orderRowId;
+    this.po = po;
+  }
+
+
+  public LocalDate getOrderDate() {
+
+    return orderDate;
+  }
+
+
+  public void setOrderDate(LocalDate orderDate) {
+
+    this.orderDate = orderDate;
   }
 
 
@@ -255,12 +284,14 @@ public class ScheduleDetails {
   }
 
 
+
+
   @Override
   public String toString() {
 
     return "ScheduleDetails{" +
            "rowid=" + rowid +
-           ", orderRowId=" + orderRowId +
+           ", orderRowId=" + po +
            ", bay='" + bay + '\'' +
            ", pallets=" + pallets +
            ", duration=" + duration +
@@ -272,5 +303,27 @@ public class ScheduleDetails {
            ", departed=" + departed +
            ", bookedIn=" + bookedIn +
            '}';
+  }
+
+
+  @Override
+  public boolean equals(Object o) {
+
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ScheduleDetails that = (ScheduleDetails) o;
+    return po.equalsIgnoreCase(that.po) &&
+           orderDate.equals(that.orderDate);
+  }
+
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(po, orderDate);
   }
 }

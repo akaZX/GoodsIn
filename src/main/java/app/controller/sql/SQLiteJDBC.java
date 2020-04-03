@@ -3,52 +3,94 @@ package app.controller.sql;
 import app.pojos.ScheduleDetails;
 import org.intellij.lang.annotations.Language;
 
-import javax.swing.*;
-import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 public class SQLiteJDBC {
 
     private static Connection connection;
+
     private static PreparedStatement statement;
+
     private static ResultSet resultSet;
 
 
-    public static void insert(String fields, String values, String table){
+    public static boolean insert(String fields, String values, String table) {
 
-        String sql ="INSERT INTO" + table + " (" + fields + ") VALUES(" + values + ")";
-        update(sql);
+        String sql = "INSERT INTO " + table + " (" + fields + ") VALUES (" + values + ")";
+        return update(sql);
     }
 
 
     public static boolean update(String query) {
-        close();
+
         try {
             connection = ApacheConnPool.getConnection();
             assert connection != null;
             statement = connection.prepareStatement(query);
             statement.executeUpdate();
+            close();
+
             return true;
 
         }
         catch (SQLException | NullPointerException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            close();
             return false;
         }
     }
 
 
-    public static <T> ResultSet select(String table, String field, T param){
+    public static <T> ResultSet select(String table, String field, T param) {
+
         close();
         String par;
         if (param instanceof Integer) {
             par = param.toString();
-        }else{
+        }
+        else {
             par = "'" + param + "'";
         }
         @Language("SQLite")
         String sql = "Select  * from " + table + " where " + field + " =" + par;
+        return mainSelect(sql);
+    }
+
+
+    public static <T> ResultSet select(String table, String field, T low, T high) {
+
+        close();
+        String par1;
+        String par2;
+        if (low instanceof Integer) {
+            par1 = low.toString();
+            par2 = high.toString();
+        }
+        else {
+            par1 = "'" + low + "'";
+            par2 = "'" + high + "'";
+        }
+        @Language("SQLite")
+        String sql = "Select  * from " + table + " where " + field +
+                     " > DATE(" + par1 + ") AND " + field + " < DATE (" + par2 + ")";
+        return mainSelect(sql);
+    }
+
+
+    public static ResultSet selectAll(String table, String order) {
+
+        String sql = "SELECT * FROM " + table + " ORDER BY " + order;
+        return mainSelect(sql);
+    }
+
+
+    public static ResultSet mainSelect(String sql) {
+
+        close();
         try {
             connection = ApacheConnPool.getConnection();
             assert connection != null;
@@ -61,58 +103,43 @@ public class SQLiteJDBC {
             e.printStackTrace();
             return null;
         }
+
+
     }
 
-    public static ResultSet selectAll(String table, String order){
-        close();
+
+    public static <T> boolean delete(String table, String field, T id) {
+
+        @Language("SQLite")
+        String query = "Delete from " + table + " WHERE " + field + "= ?";
         try {
-            String    query = "SELECT * FROM " + table + " ORDER BY " + order;
             connection = ApacheConnPool.getConnection();
             assert connection != null;
             statement = connection.prepareStatement(query);
-            resultSet = statement.executeQuery();
-            return resultSet;
 
+            if (id instanceof Integer) {
+                statement.setInt(1, (Integer) id);
+            }
+            else {
+                statement.setString(1, (String) id);
+            }
+            statement.executeUpdate();
+            close();
+
+            return true;
         }
         catch (SQLException | NullPointerException e) {
             e.printStackTrace();
-            return null;
-        }
+            close();
 
-
-    }
-
-    public static <T> void delete(String table, String field, T id){
-
-        close();
-        @Language("SQLite")
-        String query = "Delete from " + table + " WHERE " + field + "= ?";
-        try{
-            connection = ApacheConnPool.getConnection();
-            assert connection != null;
-            statement = connection.prepareStatement(query);
-
-            if( id instanceof Integer){
-                statement.setInt(1, (Integer) id);
-            }else{
-                statement.setString(1, (String)id);
-            }
-            statement.executeUpdate();
-
-
-        }catch (SQLException | NullPointerException e) {
-            e.printStackTrace();
+            return false;
         }
     }
-
-
-
-
-
 
 
     public static ScheduleDetails getDeliveryDetails(int rowid) {
-        String query = "SELECT rowid, * FROM  WHERE so_rowid = "+ rowid + ";";
+
+        String query = "SELECT rowid, * FROM  WHERE so_rowid = " + rowid + ";";
 
         ResultSet rs = select("PO_SCHEDULE_DETAILS", "so_rowid", rowid);
         try {
@@ -141,7 +168,8 @@ public class SQLiteJDBC {
 
     }
 
-    public static void close(){
+
+    public static void close() {
 
         try {
             if (resultSet != null) {

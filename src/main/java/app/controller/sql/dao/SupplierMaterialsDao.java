@@ -3,7 +3,6 @@ package app.controller.sql.dao;
 import app.controller.sql.SQLiteJDBC;
 import app.pojos.SupplierMaterials;
 import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,37 +11,24 @@ import java.util.List;
 
 public class SupplierMaterialsDao implements Dao<SupplierMaterials> {
 
+    private static final String TABLE = "SUPPLIER_MATERIALS";
+
+
     @Override
-    public SupplierMaterials get(long id) {
+    public <R> SupplierMaterials get(R id) {
 
-        SupplierMaterials material = new SupplierMaterials();
-
-        @Language("SQLite")
-        String sql = "Select * from SUPPLIER_MATERIALS where rowid= " + id;
-        ResultSet rs = SQLiteJDBC.select(sql);
-
-        try{
-            while (rs.next()) {
-
-                material.setRowid(rs.getInt("rowid"));
-                material.setmCode(rs.getString("m_code"));
-                material.setSuppCode(rs.getString("supp_code"));
-                material.setPalletWeight(rs.getInt("pallet_weight"));
-
+        ResultSet         rs        = SQLiteJDBC.select(TABLE, "rowid", id);
+        SupplierMaterials materials = null;
+        try {
+            if (rs.next()) {
+                materials = mapRsToObject(rs);
             }
-        }catch (NullPointerException | SQLException e){
+        }
+        catch (NullPointerException | SQLException e) {
             e.printStackTrace();
         }
-
-        return material;
-
-    }
-
-
-    @Override
-    public SupplierMaterials get(String id) {
-
-        return null;
+        SQLiteJDBC.close();
+        return materials;
     }
 
 
@@ -50,84 +36,78 @@ public class SupplierMaterialsDao implements Dao<SupplierMaterials> {
     public List<SupplierMaterials> getAll() {
 
         List<SupplierMaterials> list = new ArrayList<>();
+        ResultSet               rs   = SQLiteJDBC.selectAll(TABLE, "supp_code");
 
-        @Language("SQLite")
-        String    query = "SELECT * FROM SUPPLIER_MATERIALS ORDER BY supp_code";
-        return getSupplierMaterialsList(list, query);
+        try {
+            while (rs.next()) {
+                list.add(mapRsToObject(rs));
+            }
+        }
+        catch (SQLException | NullPointerException e) {
+            e.printStackTrace();
+        }
+        SQLiteJDBC.close();
+        return list;
     }
 
 
     @Override
     public List<SupplierMaterials> getAll(String param) {
 
-        return null;
-    }
-
-
-    public List<SupplierMaterials> getAllSupplierMaterials(String supplierCode){
-
         List<SupplierMaterials> list = new ArrayList<>();
 
-        @Language("SQLite")
-        String    query = "SELECT * FROM SUPPLIER_MATERIALS WHERE supp_code ='" + supplierCode + "' ORDER BY supp_code";
-        return getSupplierMaterialsList(list, query);
-
-    }
-
-
-    @Nullable
-    private List<SupplierMaterials> getSupplierMaterialsList(List<SupplierMaterials> list, String query) {
-
-        SupplierMaterials temp;
-        ResultSet         rs = SQLiteJDBC.select(query);
+        ResultSet rs = SQLiteJDBC.select(TABLE, "supp_code", param);
 
         try {
-            while (rs.next()){
-
-                temp = new SupplierMaterials();
-                temp.setRowid(rs.getInt("rowid"));
-                temp.setmCode(rs.getString("m_code"));
-                temp.setSuppCode(rs.getString("supp_code"));
-                temp.setPalletWeight(rs.getInt("pallet_weight"));
-
-                list.add(temp);
-
+            while (rs.next()) {
+                list.add(mapRsToObject(rs));
             }
         }
         catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         }
-
+        SQLiteJDBC.close();
         return list;
     }
 
 
     @Override
-    public void save(SupplierMaterials supplierMaterials) {
+    public boolean save(SupplierMaterials supplierMaterials) {
 
         String values = "" + supplierMaterials.getSuppCode() + "', '" + supplierMaterials.getmCode();
         @Language("SQLite")
-        String sql ="INSERT INTO SUPPLIER_MATERIALS (supp_code, m_code) VALUES('" + values + "')";
-        SQLiteJDBC.update(sql);
+        String sql = "INSERT INTO SUPPLIER_MATERIALS (supp_code, m_code) VALUES('" + values + "')";
+        return SQLiteJDBC.update(sql);
 
     }
 
 
     @Override
-    public void update(SupplierMaterials supplierMaterials) {
-        String values = "pallet_weight="  + supplierMaterials.getPalletWeight() ;
+    public boolean update(SupplierMaterials supplierMaterials) {
+
+        String values = "pallet_weight=" + supplierMaterials.getPalletWeight();
         @Language("SQLite")
-        String sql = "UPDATE SUPPLIER_MATERIALS SET " + values + " WHERE rowid=" + supplierMaterials.getRowid() ;
-        SQLiteJDBC.update(sql);
+        String sql = "UPDATE SUPPLIER_MATERIALS SET " + values + " WHERE rowid=" + supplierMaterials.getRowid();
+        return SQLiteJDBC.update(sql);
 
     }
 
 
     @Override
-    public void delete(SupplierMaterials supplierMaterials) {
-        SQLiteJDBC.delete("SUPPLIER_MATERIALS", "rowid", supplierMaterials.getRowid());
+    public boolean delete(SupplierMaterials supplierMaterials) {
+
+        return SQLiteJDBC.delete(TABLE, "rowid", supplierMaterials.getRowid());
     }
 
 
+    private SupplierMaterials mapRsToObject(ResultSet rs) throws SQLException {
+
+        SupplierMaterials material = new SupplierMaterials();
+        material.setRowid(rs.getInt("rowid"));
+        material.setmCode(rs.getString("m_code"));
+        material.setSuppCode(rs.getString("supp_code"));
+        material.setPalletWeight(rs.getInt("pallet_weight"));
+        return material;
+    }
 
 }

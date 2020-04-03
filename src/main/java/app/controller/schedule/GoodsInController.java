@@ -1,8 +1,7 @@
-package app.controller;
+package app.controller.schedule;
 
 
-
-import app.controller.rmt.MaterialProfileController;
+import app.controller.rmt.materials.MainMaterialProfileController;
 import app.controller.suppliersView.MainSupplierController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,23 +19,28 @@ public class GoodsInController implements Initializable {
     @FXML
     TabPane mainTabPane;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 //        adds calendar tab to tabpane
 //       mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
 
+        FXMLLoader                    matProf    = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
+        MainMaterialProfileController controller = new MainMaterialProfileController();
+        matProf.setController(controller);
+        mainTabPane.getTabs().add(loadTab(matProf, new Tab("Testing")));
 
 
-        FXMLLoader             loader = new FXMLLoader(getClass().getResource("/suppliers/blankStackPane.fxml"));
+        FXMLLoader             loader = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
         MainSupplierController contr  = new MainSupplierController();
         loader.setController(contr);
         mainTabPane.getTabs().add(loadTab(loader, new Tab("Supplier Profiles")));
 
 
-        FXMLLoader                mat         = new FXMLLoader(getClass().getResource("/materialProfile/mainMaterialProfileView.fxml"));
-        MaterialProfileController maControler = new MaterialProfileController();
-        mat.setController(maControler);
-        mainTabPane.getTabs().add(loadTab(mat, new Tab("Material Profiles")));
+//        FXMLLoader                mat         = new FXMLLoader(getClass().getResource("/rmt/MaterialProfileView.fxml"));
+//        MaterialProfileController maControler = new MaterialProfileController();
+//        mat.setController(maControler);
+//        mainTabPane.getTabs().add(loadTab(mat, new Tab("Material Profiles")));
 
         mainTabPane.getTabs().add(new POTableTab().createTable());
     }
@@ -48,7 +52,8 @@ public class GoodsInController implements Initializable {
 //        loader.setController(contr);
         try {
             tab.setContent(loader.load());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return tab;

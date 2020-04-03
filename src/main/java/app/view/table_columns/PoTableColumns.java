@@ -36,7 +36,7 @@ public  class PoTableColumns {
         setColumnTooltip(supplierCol, "SUPPLIER","Supplier name");
         supplierCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<ScheduleEntry, String> param) ->{
             if(supplierCol.validateValue(param)) {
-                String supplier = param.getValue().getValue().getSupplier();
+                String supplier = param.getValue().getValue().getSupplier().getSupplierName();
                 return new SimpleStringProperty(supplier);
             } else return supplierCol.getComputedValue(param);
         });
@@ -53,7 +53,7 @@ public  class PoTableColumns {
         setColumnTooltip(poCol, "ORDER \nNUMBER","Purchase order number");
         poCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<ScheduleEntry, String> param) ->{
             if(poCol.validateValue(param)) {
-                String poNumber = param.getValue().getValue().getPo();
+                String poNumber = param.getValue().getValue().getOrder().getPoNumber();
                 return new SimpleStringProperty(poNumber);
             } else return poCol.getComputedValue(param);
         });
@@ -68,7 +68,7 @@ public  class PoTableColumns {
         setColumnTooltip(haulierCol,"HAULIER" , "Haulage company delivering materials for order");
         haulierCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<ScheduleEntry, String> param) ->{
             if(haulierCol.validateValue(param)) {
-                String haulier = param.getValue().getValue().getScheduleDetails().getHaulier();
+                String haulier = param.getValue().getValue().getDetails().getHaulier();
                 return new SimpleStringProperty(haulier);
             } else return haulierCol.getComputedValue(param);
         });
@@ -83,7 +83,7 @@ public  class PoTableColumns {
         setColumnTooltip(bayCol, "BAY", "Assigned bay for delivery");
         bayCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<ScheduleEntry, String> param) ->{
             if(bayCol.validateValue(param)) {
-                String bay = param.getValue().getValue().getScheduleDetails().getBay();
+                String bay = param.getValue().getValue().getDetails().getBay();
                 return new SimpleStringProperty(bay);
             } else return bayCol.getComputedValue(param);
         });
@@ -97,7 +97,7 @@ public  class PoTableColumns {
         JFXTreeTableColumn<ScheduleEntry, Integer> palletsCol = new JFXTreeTableColumn<>();
         setColumnTooltip(palletsCol, "PALLETS", "Expected pallets");
         palletsCol.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(cellData.getValue().getValue().getScheduleDetails().getPallets()).asObject());
+                new SimpleIntegerProperty(cellData.getValue().getValue().getDetails().getPallets()).asObject());
         formatIntColumns(palletsCol);
 
         columnConstraints(palletsCol, 0.055, 0.055);
@@ -110,7 +110,7 @@ public  class PoTableColumns {
         JFXTreeTableColumn<ScheduleEntry, Integer> unloadingTimeCol = new JFXTreeTableColumn<>();
         setColumnTooltip(unloadingTimeCol, "UNLOAD \nTIME", "Expected time for lorry to be unloaded");
         unloadingTimeCol.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(cellData.getValue().getValue().getScheduleDetails().getDuration()).asObject());
+                new SimpleIntegerProperty(cellData.getValue().getValue().getDetails().getDuration()).asObject());
         formatIntColumns(unloadingTimeCol);
         columnConstraints(unloadingTimeCol, 0.06, 0.06);
 
@@ -121,7 +121,7 @@ public  class PoTableColumns {
     public  JFXTreeTableColumn<ScheduleEntry, LocalDateTime> expectedETACol(){
 
         JFXTreeTableColumn<ScheduleEntry, LocalDateTime> expectedETACol = new JFXTreeTableColumn<>("ETA");
-        expectedETACol.setCellValueFactory(cellData -> cellData.getValue().getValue().getScheduleDetails().getEtaProperty());
+        expectedETACol.setCellValueFactory(cellData -> cellData.getValue().getValue().getDetails().getEtaProperty());
 
         columnConstraints(expectedETACol, 0.05, 0.05);
         formatDateCells(expectedETACol);
@@ -134,7 +134,7 @@ public  class PoTableColumns {
 
 
         JFXTreeTableColumn<ScheduleEntry, LocalDateTime> arrivedCol = new JFXTreeTableColumn<>("Arrived");
-        arrivedCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getScheduleDetails().getArrivedProperty());
+        arrivedCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getDetails().getArrivedProperty());
 
         columnConstraints(arrivedCol, dateColConstraints,dateColConstraints);
         formatDateCells(arrivedCol);
@@ -146,7 +146,7 @@ public  class PoTableColumns {
     public  JFXTreeTableColumn<ScheduleEntry, LocalDateTime> departedCol(){
 
         JFXTreeTableColumn<ScheduleEntry, LocalDateTime> departedCol = new JFXTreeTableColumn<>("Departed");
-        departedCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getScheduleDetails().getDepartedPoperty());
+        departedCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getDetails().getDepartedPoperty());
 
         columnConstraints(departedCol, dateColConstraints,dateColConstraints);
         formatDateCells(departedCol);
@@ -160,7 +160,7 @@ public  class PoTableColumns {
 
         JFXTreeTableColumn<ScheduleEntry, LocalDateTime> bookedInCol = new JFXTreeTableColumn<>();
         setColumnTooltip(bookedInCol, "BOOKED IN", "Time when raw materials delivered was booked in");
-        bookedInCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getScheduleDetails().getBookedinProperty());
+        bookedInCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getDetails().getBookedinProperty());
 
 
         columnConstraints(bookedInCol, dateColConstraints,dateColConstraints);
@@ -176,7 +176,7 @@ public  class PoTableColumns {
         setColumnTooltip(commentsCol, "COMMENTS","Additional information");
         commentsCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<ScheduleEntry, String> param) ->{
             if(commentsCol.validateValue(param)) {
-                String comments = param.getValue().getValue().getScheduleDetails().getComments();
+                String comments = param.getValue().getValue().getDetails().getComments();
                 return new SimpleStringProperty(comments);
             } else return commentsCol.getComputedValue(param);
         });
@@ -191,7 +191,7 @@ public  class PoTableColumns {
         setColumnTooltip(regCol, "REGISTRATION \nNUMBER","Trailer registration or container number");
         regCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<ScheduleEntry, String> param) ->{
             if(regCol.validateValue(param)) {
-                String trailerNo = param.getValue().getValue().getScheduleDetails().getRegistrationNo();
+                String trailerNo = param.getValue().getValue().getDetails().getRegistrationNo();
                 return new SimpleStringProperty(trailerNo);
             } else return regCol.getComputedValue(param);
         });

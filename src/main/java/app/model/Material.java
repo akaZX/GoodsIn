@@ -13,8 +13,6 @@ import java.util.List;
 public class Material {
 
     private Materials material;
-    private List<MaterialCountries> countries;
-    private List<MaterialVarieties> varieties;
     private MaterialSpecs specs;
 
 
@@ -25,10 +23,13 @@ public class Material {
     }
 
 
+    public Material() {
+
+    }
+
+
     private void initParams(){
 
-        countries = new MaterialCountryDao().getAll(material.getMCode());
-        varieties = new MaterialVarietiesDao().getAll(material.getMCode());
         specs = new MaterialSpecsDao().get(material.getMCode());
 
 
@@ -41,20 +42,21 @@ public class Material {
     }
 
 
-    public List<MaterialCountries> getCountries() {
-
-        return countries;
-    }
-
-
-    public List<MaterialVarieties> getVarieties() {
-
-        return varieties;
-    }
-
 
     public MaterialSpecs getSpecs() {
 
         return specs;
+    }
+
+
+    public void setMaterial(Materials material) {
+
+        this.material = material;
+    }
+
+
+    public void setSpecs(MaterialSpecs specs) {
+
+        this.specs = specs;
     }
 }

@@ -2,7 +2,9 @@ package app.controller.sql.dao;
 
 import app.controller.sql.SQLiteJDBC;
 import app.pojos.Materials;
+import com.sun.istack.internal.localization.NullLocalizable;
 import org.intellij.lang.annotations.Language;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,25 +12,27 @@ import java.util.List;
 
 public class MaterialsDao implements Dao<Materials> {
 
+    private static final String TABLE = "MATERIALS";
+
 
     @Override
     public <R> Materials get(R id) {
 
-        Materials supp = new Materials();
+        Materials supp = null;
 
-        ResultSet rs = SQLiteJDBC.select("MATERIALS", "m_code", id);
+        ResultSet rs = SQLiteJDBC.select(TABLE, "m_code", id);
 
-        try{
+        try {
             while (rs.next()) {
-                supp.setName(rs.getString("name"));
-                supp.setMCode(rs.getString("m_code"));
+               supp = mapRsToObject(rs);
 
             }
             rs.close();
-        }catch (NullPointerException | SQLException e){
+        }
+        catch (NullPointerException | SQLException e) {
             e.printStackTrace();
         }
-
+        SQLiteJDBC.close();
         return supp;
     }
 
@@ -37,18 +41,12 @@ public class MaterialsDao implements Dao<Materials> {
     public List<Materials> getAll() {
 
         List<Materials> list = new ArrayList<>();
-        Materials temp;
-        ResultSet rs    = SQLiteJDBC.selectAll("MATERIALS", "m_code");
+        ResultSet       rs   = SQLiteJDBC.selectAll(TABLE, "m_code");
 
         try {
-            while (rs.next()){
+            while (rs.next()) {
 
-                temp = new Materials();
-                temp.setName(rs.getString("name"));
-                temp.setMCode(rs.getString("m_code"));
-                temp.setDescription(rs.getString("description"));
-                temp.setDocLink(rs.getString("doc_link"));
-                list.add(temp);
+                list.add(mapRsToObject(rs));
 
             }
             rs.close();
@@ -56,7 +54,7 @@ public class MaterialsDao implements Dao<Materials> {
         catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         }
-
+        SQLiteJDBC.close();
         return list;
     }
 
@@ -69,29 +67,50 @@ public class MaterialsDao implements Dao<Materials> {
 
 
     @Override
-    public void save(Materials materials) {
+    public boolean save(Materials materials) {
 
-        String values = "'" + materials.getMCode() + "', '" + materials.getName() +"', '" +
-                        materials.getDescription() + "', '" + materials.getDocLink() +"'";
-        String fields = "m_code, name, description, doc_link";
-        SQLiteJDBC.insert(fields, values, "MATERIALS");
+        String values = "'" + materials.getMCode() + "', '" + materials.getName() + "', " +
+                        stringOrNull(materials.getDescription()) + ", " + stringOrNull(materials.getDocLink()) + ", " +
+                        stringOrNull(materials.getImagePath()) + "";
+        String fields = "m_code, name, description, doc_link, image_path";
+        return SQLiteJDBC.insert(fields, values, TABLE);
 
     }
 
 
     @Override
-    public void update(Materials materials) {
+    public boolean update(Materials materials) {
+
         @Language("SQLite")
         String values = "name= '" + materials.getName() + "', description='" + materials.getDescription() +
-                        "', doc_link='" + materials.getDocLink() + "'";
+                        "', doc_link='" + materials.getDocLink() + "', image_path='" + materials.getImagePath() + "'";
         @Language("SQLite")
-        String sql = "Update MATERIALS set " + values + " Where m_code= '" + materials.getMCode()+ "'";
-        SQLiteJDBC.update(sql);
+        String sql = "Update MATERIALS set " + values + " Where m_code= '" + materials.getMCode() + "'";
+        return SQLiteJDBC.update(sql);
     }
 
 
     @Override
-    public void delete(Materials materials) {
-        SQLiteJDBC.delete("MATERIALS" , "m_code", materials.getMCode());
+    public boolean delete(Materials materials) {
+
+       return SQLiteJDBC.delete(TABLE, "m_code", materials.getMCode());
+    }
+
+
+    private Materials mapRsToObject(ResultSet rs) throws SQLException {
+
+        Materials temp = new Materials();
+        temp.setName(rs.getString("name"));
+        temp.setMCode(rs.getString("m_code"));
+        temp.setDescription(rs.getString("description"));
+        temp.setDocLink(rs.getString("doc_link"));
+        temp.setImagePath(rs.getString("image_path"));
+        return temp;
+    }
+
+
+    private String stringOrNull(String string) {
+        return (string == null || (string.trim().equalsIgnoreCase("null") || string.isEmpty()) ? "NULL" : ("'" + string + "'"));
+
     }
 }

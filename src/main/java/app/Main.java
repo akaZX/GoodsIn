@@ -1,7 +1,6 @@
 package app;
 
-import app.controller.GoodsInController;
-import com.jfoenix.controls.JFXDecorator;
+import app.controller.schedule.GoodsInController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -42,8 +41,8 @@ public class Main extends Application {
         primaryStage.getScene().getStylesheets().add(css);
 
 
-        primaryStage.setMinHeight(800);
-        primaryStage.setMinWidth(1025);
+        primaryStage.setMinHeight(850);
+        primaryStage.setMinWidth(1300);
         primaryStage.show();
     }
 

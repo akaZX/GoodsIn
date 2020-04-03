@@ -28,7 +28,7 @@ public class SuppliersDao implements Dao<Suppliers> {
         }catch (NullPointerException | SQLException e){
             e.printStackTrace();
         }
-
+        SQLiteJDBC.close();
         return supp;
     }
 
@@ -56,7 +56,7 @@ public class SuppliersDao implements Dao<Suppliers> {
         catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         }
-
+        SQLiteJDBC.close();
         return list;
     }
 
@@ -69,34 +69,34 @@ public class SuppliersDao implements Dao<Suppliers> {
 
 
     @Override
-    public void save(Suppliers suppliers) {
+    public boolean save(Suppliers suppliers) {
 
         String values = "" + suppliers.getSupplierName() + "', '" + suppliers.getSupplierCode() +"" ;
 
         @Language("SQLite")
-        String sql ="INSERT INTO SUPPLIERS (supp_name, supp_code) VALUES('" + values + "')";
+        String sql ="INSERT INTO SUPPLIERS (supp_name, supp_code) VALUES('" + values.toUpperCase() + "')";
         boolean save = SQLiteJDBC.update(sql);
         if(!save){
             update(suppliers);
         }
-
+        return save;
     }
 
 
     @Override
-    public void update(Suppliers suppliers) {
+    public boolean update(Suppliers suppliers) {
 
         String values = "supp_name = '" + suppliers.getSupplierName() + "'";
         @Language("SQLite")
         String sql = "Update suppliers set " + values + " Where supp_code= '" + suppliers.getSupplierCode()+ "'";
-        SQLiteJDBC.update(sql);
+        return SQLiteJDBC.update(sql);
 
     }
 
 
     @Override
-    public void delete(Suppliers suppliers) {
-        SQLiteJDBC.delete("SUPPLIERS" , "supp_code", suppliers.getSupplierCode());
+    public boolean delete(Suppliers suppliers) {
+       return SQLiteJDBC.delete("SUPPLIERS" , "supp_code", suppliers.getSupplierCode());
     }
 
 

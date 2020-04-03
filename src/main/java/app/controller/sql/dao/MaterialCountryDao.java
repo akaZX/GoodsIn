@@ -2,7 +2,6 @@ package app.controller.sql.dao;
 
 import app.controller.sql.SQLiteJDBC;
 import app.pojos.MaterialCountries;
-import org.intellij.lang.annotations.Language;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,17 +10,25 @@ import java.util.List;
 
 public class MaterialCountryDao implements Dao<MaterialCountries> {
 
-    @Override
-    public MaterialCountries get(long id) {
-
-        return null;
-    }
+    private static final String TABLE = "MATERIAL_COUNTRIES";
 
 
     @Override
-    public MaterialCountries get(String id) {
+    public <R> MaterialCountries get(R id) {
 
-        return null;
+        ResultSet resultSet = SQLiteJDBC.select(TABLE, "rowid", id);
+        MaterialCountries country = null;
+        try {
+            if (resultSet.next()) {
+                country =  mapRsToObject(resultSet);
+            }
+            resultSet.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        SQLiteJDBC.close();
+        return country;
     }
 
 
@@ -33,42 +40,52 @@ public class MaterialCountryDao implements Dao<MaterialCountries> {
 
 
     public List<MaterialCountries> getAll(String mCode) {
-        List<MaterialCountries> list=  new ArrayList<>();
-        @Language("SQLite")
-        String query = "Select * from MATERIAL_COUNTRIES WHERE m_code ='" + mCode + "'";
-        ResultSet rs = SQLiteJDBC.select(query);
+
+        List<MaterialCountries> list = new ArrayList<>();
+
+        ResultSet rs = SQLiteJDBC.select(TABLE, "m_code", mCode);
 
         try {
             while (rs.next()) {
-                MaterialCountries country = new MaterialCountries(rs.getString("m_code"),
-                        rs.getString("country"), rs.getInt("rowid"));
-                list.add(country);
+
+                list.add(mapRsToObject(rs));
             }
+            rs.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+        SQLiteJDBC.close();
         return list;
     }
 
+
     @Override
-    public void save(MaterialCountries materialCountries) {
+    public boolean save(MaterialCountries materialCountries) {
 
         String values = "'" + materialCountries.getMCode() + "', '" + materialCountries.getCountry() + "'";
-        String sql ="INSERT INTO MATERIAL_COUNTRIES (m_code, country) VALUES(" + values + ")";
-        SQLiteJDBC.update(sql);
+        String sql    = "INSERT INTO MATERIAL_COUNTRIES (m_code, country) VALUES(" + values + ")";
+        return SQLiteJDBC.update(sql);
 
     }
 
 
     @Override
-    public void update(MaterialCountries materialCountries) {
-
+    public boolean update(MaterialCountries materialCountries) {
+        return false;
     }
 
 
     @Override
-    public void delete(MaterialCountries materialCountries) {
-        SQLiteJDBC.delete("MATERIAL_COUNTRIES", "rowid", materialCountries.getRowid());
+    public boolean delete(MaterialCountries materialCountries) {
+
+        return SQLiteJDBC.delete(TABLE, "rowid", materialCountries.getRowid());
+    }
+
+
+    private MaterialCountries mapRsToObject(ResultSet rs) throws SQLException {
+
+        return new MaterialCountries(rs.getString("m_code"),
+                rs.getString("country"), rs.getInt("rowid"));
     }
 }

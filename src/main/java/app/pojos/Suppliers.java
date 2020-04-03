@@ -3,6 +3,8 @@ package app.pojos;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
+import java.util.Objects;
+
 public class Suppliers extends RecursiveTreeObject<Suppliers> {
 
   private String supplierName;
@@ -52,4 +54,31 @@ public class Suppliers extends RecursiveTreeObject<Suppliers> {
     this.supplierCode = supplierCode;
   }
 
+
+  @Override
+  public String toString() {
+
+    return getSupplierName();
+  }
+
+
+  @Override
+  public boolean equals(Object o) {
+
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Suppliers suppliers = (Suppliers) o;
+    return supplierName.equals(suppliers.supplierName);
+  }
+
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(supplierName);
+  }
 }

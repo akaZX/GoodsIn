@@ -1,4 +1,4 @@
-package app.controller.rmt;
+package app.controller.rmt.materials;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ParamListController extends StackPane{
 
     @FXML
-    JFXButton removeBtn;
+    public JFXButton removeBtn;
     @FXML
     JFXButton addBtn;
     @FXML
@@ -32,7 +32,7 @@ public class ParamListController extends StackPane{
 
 
     public ParamListController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("materialProfile/StringList.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/StringList.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 

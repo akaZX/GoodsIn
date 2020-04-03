@@ -1,4 +1,4 @@
-package app.controller.rmt;
+package app.controller.rmt.materials;
 
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -28,7 +28,7 @@ public class MinMaxInput extends StackPane {
 
     public MinMaxInput() {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("materialProfile/numericInputBox.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/numericInputBox.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
@@ -93,15 +93,35 @@ public class MinMaxInput extends StackPane {
 
     public double getMin() {
 
-        return Double.parseDouble(this.getMinField().getText());
+        try {
+            return Double.parseDouble(this.getMinField().getText());
+        }
+        catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
 
     public double getMax() {
 
-        return Double.parseDouble(this.getMaxField().getText());
+        try {
+            return Double.parseDouble(this.getMaxField().getText());
+        }
+        catch (NumberFormatException e) {
+           return 0;
+        }
     }
 
+    public int getMinInt() {
+
+        return (int)getMin();
+    }
+
+
+    public int getMaxInt() {
+
+        return (int)getMax();
+    }
 
     public void setMin(String min) {
 
@@ -110,7 +130,7 @@ public class MinMaxInput extends StackPane {
 
     public void setMax(String max) {
 
-        minField.setText(max);
+        maxField.setText(max);
     }
 
     private void setTooltips() {

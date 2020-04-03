@@ -1,7 +1,6 @@
 package app.pojos;
-
-
 import java.time.LocalDate;
+
 
 public class SupplierOrders {
 
@@ -12,6 +11,19 @@ public class SupplierOrders {
 
 
   public SupplierOrders() {
+    
+  }
+
+
+  public SupplierOrders(int rowId, String suppCode, String poNumber, String orderDate) {
+
+    this.rowId = rowId;
+    this.suppCode = suppCode;
+    this.poNumber = poNumber;
+
+    if(orderDate != null){
+      this.orderDate = LocalDate.parse(orderDate);
+    }
 
   }
 
@@ -25,7 +37,6 @@ public class SupplierOrders {
 
 
   public int getRowId() {
-
     return rowId;
   }
 

@@ -2,102 +2,96 @@ package app.model;
 
 
 import app.pojos.ScheduleDetails;
+import app.pojos.SupplierOrders;
+import app.pojos.Suppliers;
+import com.calendarfx.model.Entry;
+import com.calendarfx.model.Interval;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import java.time.LocalDate;
 
 
 public class ScheduleEntry extends RecursiveTreeObject<ScheduleEntry> {
 
-    private int rowId ;
-    public String supplier;
-    private String suppCode;
-    private String po;
-    private LocalDate orderDate;
-    private ScheduleDetails scheduleDetails = null;
+    private SupplierOrders order = null;
+
+    private Suppliers supplier = null;
+
+    private ScheduleDetails details = null;
 
 
-    public ScheduleEntry(String supplier, String suppCode, String po, String orderDate) {
+    public ScheduleEntry() {
 
+    }
+
+
+    public ScheduleEntry(SupplierOrders order, Suppliers supplier) {
+
+        this.order = order;
         this.supplier = supplier;
-        this.suppCode = suppCode;
-        this.po = po;
-        this.orderDate = LocalDate.parse(orderDate);
     }
 
 
-    public ScheduleEntry(
-            int rowId, String supplier, String suppCode, String po, String orderDate) {
+    public ScheduleEntry(SupplierOrders order, Suppliers supplier, ScheduleDetails scheduleDetails) {
 
-        this.rowId = rowId;
+        this.order = order;
         this.supplier = supplier;
-        this.suppCode = suppCode;
-        this.po = po;
-        this.orderDate = LocalDate.parse(orderDate);
+        this.details = scheduleDetails;
     }
 
 
-    public ScheduleDetails getScheduleDetails() {
+    public SupplierOrders getOrder() {
 
-        return scheduleDetails;
+        return order;
     }
 
 
-    public void setScheduleDetails(ScheduleDetails scheduleDetails) {
+    public void setOrder(SupplierOrders order) {
 
-        this.scheduleDetails = scheduleDetails;
+        this.order = order;
     }
 
 
-    public int getRowId() {
-
-        return rowId;
-    }
-
-
-    public String getSupplier() {
+    public Suppliers getSupplier() {
 
         return supplier;
     }
 
 
-    public void setSupplier(String supplier) {
+    public void setSupplier(Suppliers supplier) {
 
         this.supplier = supplier;
     }
 
 
-    public String getSuppCode() {
+    public ScheduleDetails getDetails() {
 
-        return suppCode;
+        return details;
     }
 
 
-    public void setSuppCode(String suppCode) {
+    public void setDetails(ScheduleDetails details) {
 
-        this.suppCode = suppCode;
+        this.details = details;
     }
 
 
-    public String getPo() {
+    public  Entry<?> generateCalendarEntry() {
 
-        return po;
+        String pallets = this.getDetails().getPallets() + (this.getDetails().getPallets() > 1 ? " pallets"
+                : " pallet");
+        String comments            = this.getDetails().getComments() == null ? "" : (" | " + this.getDetails().getComments());
+        String trailerRegistration = this.getDetails().getRegistrationNo() == null ? "" : (" | " + this.getDetails().getRegistrationNo());
+        String entryTitle          =
+                this.getSupplier().getSupplierName() + " | " + this.getOrder().getPoNumber() + " | " + this.getDetails().getHaulier();
+
+        Interval interval = new Interval(this.getDetails().getEta(),
+                this.getDetails().getEta().plusMinutes(this.getDetails().getDuration()));
+
+
+        Entry<?> entry = new Entry<>(entryTitle, interval);
+
+        entry.setLocation(pallets + comments + trailerRegistration);
+        entry.setId(String.valueOf(this.getDetails().getRowid()));
+        return entry;
     }
 
-
-    public void setPo(String po) {
-
-        this.po = po;
-    }
-
-
-    public LocalDate getOrderDate() {
-
-        return orderDate;
-    }
-
-
-    public void setOrderDate(LocalDate orderDate) {
-
-        this.orderDate = orderDate;
-    }
 }

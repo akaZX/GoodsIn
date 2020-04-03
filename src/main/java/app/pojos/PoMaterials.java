@@ -126,4 +126,20 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
     this.proteanEntry = proteanEntry;
   }
 
+
+  @Override
+  public String toString() {
+
+    return "PoMaterials{" +
+           "rowid=" + rowid +
+           ", po='" + po + '\'' +
+           ", mCode='" + mCode + '\'' +
+           ", lineNo=" + lineNo +
+           ", deliveryNo=" + deliveryNo +
+           ", expectedDate=" + expectedDate +
+           ", expectedQuantity=" + expectedQuantity +
+           ", arrivedQuantity=" + arrivedQuantity +
+           ", proteanEntry=" + proteanEntry +
+           '}';
+  }
 }

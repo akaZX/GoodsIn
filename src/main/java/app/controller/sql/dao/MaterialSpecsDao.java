@@ -4,6 +4,7 @@ import app.controller.sql.SQLiteJDBC;
 import app.pojos.MaterialSpecs;
 import org.intellij.lang.annotations.Language;
 
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,19 +12,22 @@ import java.util.List;
 
 public class MaterialSpecsDao implements Dao<MaterialSpecs> {
 
+    private static final String TABLE = "MATERIAL_SPECS";
+    MaterialSpecs specs = null;
     @Override
     public <R> MaterialSpecs get(R id) {
 
-        ResultSet resultSet = SQLiteJDBC.select("MATERIAL_SPECS", "m_code", id);
+        ResultSet resultSet = SQLiteJDBC.select(TABLE, "m_code", id);
         try {
             if (resultSet.next()) {
-                return mapRsToObject(resultSet);
+                specs =  mapRsToObject(resultSet);
             }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        SQLiteJDBC.close();
+        return specs;
     }
 
 
@@ -32,7 +36,7 @@ public class MaterialSpecsDao implements Dao<MaterialSpecs> {
 
         List<MaterialSpecs> list = new ArrayList<>();
 
-        ResultSet rs    = SQLiteJDBC.selectAll("MATERIAL_SPECS", "m_code");
+        ResultSet rs    = SQLiteJDBC.selectAll(TABLE, "m_code");
 
         try {
             while (rs.next()){
@@ -44,7 +48,7 @@ public class MaterialSpecsDao implements Dao<MaterialSpecs> {
         catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         }
-
+        SQLiteJDBC.close();
         return list;
     }
 
@@ -57,24 +61,25 @@ public class MaterialSpecsDao implements Dao<MaterialSpecs> {
 
 
     @Override
-    public void save(MaterialSpecs materialSpecs) {
+    public boolean save(MaterialSpecs materialSpecs) {
 
-        String fields = "m_code, density, min_density, max_density, lorry_temp, min_lorry_temp, max_lorry_temp, material_temp, min_material_temp, max_material_temp, brix, min_brix, max_brix, pressure, min_pressure, max_pressure, length, min_length, max_length, width, min_width, max_width, color_stage, min_colour_stage, max_colour_stage, head_weigth, min_head_weight, max_head_weight, yield, min_yield, max_yield, max_major, max_critical, max_minor, variety, country, grower_id, harvest_date, like_for_like, lot_number, day, room, rta_number, ggn, twa, health_mark, expiry_date";
-        SQLiteJDBC.insert(fields, materialSpecs.saveString(), "MATERIAL_SPECS");
+
+        String fields = "m_code, density, min_density, max_density, lorry_temp, min_lorry_temp, max_lorry_temp, material_temp, min_material_temp, max_material_temp, brix, min_brix, max_brix, pressure, min_pressure, max_pressure, length, min_length, max_length, width, min_width, max_width, color_stage, min_colour_stage, max_colour_stage, head_weight, min_head_weight, max_head_weight, yield, min_yield, max_yield, max_major, max_critical, max_minor, variety, country, grower_id, harvest_date, like_for_like, lot_number, day, room, rta_number, ggn, twa, health_mark, expiry_date ";
+        return SQLiteJDBC.insert(fields, materialSpecs.saveString(), TABLE);
     }
 
 
     @Override
-    public void update(MaterialSpecs materialSpecs) {
+    public boolean update(MaterialSpecs materialSpecs) {
         @Language("SQLite")
         String sql = "UPDATE MATERIAL_SPECS SET " + materialSpecs.toString() + " WHERE m_code='" + materialSpecs.getMCode() + "'";
-        SQLiteJDBC.update(sql);
+        return SQLiteJDBC.update(sql);
     }
 
 
     @Override
-    public void delete(MaterialSpecs materialSpecs) {
-        SQLiteJDBC.delete("MATERIAL_SPECS", "m_code", materialSpecs.getMCode());
+    public boolean delete(MaterialSpecs materialSpecs) {
+        return SQLiteJDBC.delete(TABLE, "m_code", materialSpecs.getMCode());
     }
 
     private MaterialSpecs mapRsToObject(ResultSet rs) throws SQLException {
@@ -106,7 +111,7 @@ public class MaterialSpecsDao implements Dao<MaterialSpecs> {
         s.setColorStage(rs.getInt("color_stage"));
         s.setMinColorStage(rs.getInt("min_colour_stage"));
         s.setMaxColorStage(rs.getInt("max_colour_stage"));
-        s.setHeadWeight(rs.getInt("head_weigth"));
+        s.setHeadWeight(rs.getInt("head_weight"));
         s.setMinHeadWeight(rs.getInt("min_head_weight"));
         s.setMaxHeadWeight(rs.getInt("max_head_weight"));
         s.setYield(rs.getInt("yield"));
