@@ -2,7 +2,7 @@ package app.model;
 
 
 
-import app.controller.CalendarViewController;
+import app.controller.schedule.CalendarViewController;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.view.CalendarView;
 import javafx.application.Platform;

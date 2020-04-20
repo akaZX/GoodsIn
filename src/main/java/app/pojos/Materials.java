@@ -1,11 +1,14 @@
 package app.pojos;
 
-public class Materials {
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+public class Materials extends RecursiveTreeObject<Materials> {
 
   private String mCode;
   private String name;
   private String description;
   private String docLink;
+  private String imagePath;
   private long visible;
 
 
@@ -53,4 +56,36 @@ public class Materials {
     this.visible = visible;
   }
 
+
+  public String getImagePath() {
+
+    return imagePath;
+  }
+
+
+  public void setImagePath(String imagePath) {
+
+    this.imagePath = imagePath;
+  }
+
+
+  @Override
+  public String toString() {
+
+    return getName();
+  }
+
+
+
+  public String toStrings() {
+
+    return "Materials{" +
+           "mCode='" + mCode + '\'' +
+           ", name='" + name + '\'' +
+           ", description='" + description + '\'' +
+           ", docLink='" + docLink + '\'' +
+           ", imagePath='" + imagePath + '\'' +
+           ", visible=" + visible +
+           '}';
+  }
 }

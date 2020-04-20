@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<fx:root stylesheets="@../../style.css" type="VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="29.0" prefWidth="296.0">
+         <children>
+            <Label prefHeight="29.0" styleClass="sched-form-label" text="Density check (5 samples)" />
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0">
+         <children>
+            <Label prefWidth="110.0" styleClass="sched-form-label" text="Diameter(mm):  " />
+            <JFXTextField fx:id="diam1" prefWidth="40.0">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="diam2" layoutX="111.0" layoutY="14.0" prefWidth="40.0">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="diam3" layoutX="188.0" layoutY="14.0" prefWidth="40.0">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="diam4" layoutX="218.0" layoutY="14.0" prefWidth="40.0">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="diam5" layoutX="235.0" layoutY="14.0" prefWidth="40.0">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </JFXTextField>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="20.0" top="5.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="17.0" layoutY="47.0">
+         <children>
+            <Label styleClass="sched-form-label" text="Total gross weight:  " HBox.hgrow="SOMETIMES" />
+            <JFXTextField fx:id="grossField" prefWidth="45.0" />
+            <HBox HBox.hgrow="SOMETIMES" />
+            <Label fx:id="densityLabel" layoutX="10.0" layoutY="15.0" styleClass="sched-form-label" text="Density:  " />
+            <JFXTextField fx:id="densityField" editable="false" prefWidth="40.0">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </JFXTextField>
+         </children>
+         <padding>
+            <Insets bottom="20.0" top="5.0" />
+         </padding>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="7.0" right="7.0" top="5.0" />
+   </padding>
+</fx:root>

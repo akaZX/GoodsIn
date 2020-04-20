@@ -3,35 +3,59 @@ package app.pojos;
 
 public class SupplierMaterials {
 
-  private String suppCode;
-  private String mCode;
-  private long palletWeight;
+    private int rowid;
+
+    private String suppCode;
+
+    private String mCode;
+
+    private long palletWeight;
 
 
-  public String getSuppCode() {
-    return suppCode;
-  }
+    public int getRowid() {
 
-  public void setSuppCode(String suppCode) {
-    this.suppCode = suppCode;
-  }
+        return rowid;
+    }
 
 
-  public String getMCode() {
-    return mCode;
-  }
+    public void setRowid(int rowid) {
 
-  public void setMCode(String mCode) {
-    this.mCode = mCode;
-  }
+        this.rowid = rowid;
+    }
 
 
-  public long getPalletWeight() {
-    return palletWeight;
-  }
+    public String getSuppCode() {
 
-  public void setPalletWeight(long palletWeight) {
-    this.palletWeight = palletWeight;
-  }
+        return suppCode;
+    }
 
+
+    public void setSuppCode(String suppCode) {
+
+        this.suppCode = suppCode;
+    }
+
+
+    public String getmCode() {
+
+        return mCode;
+    }
+
+
+    public void setmCode(String mCode) {
+
+        this.mCode = mCode;
+    }
+
+
+    public long getPalletWeight() {
+
+        return palletWeight;
+    }
+
+
+    public void setPalletWeight(long palletWeight) {
+
+        this.palletWeight = palletWeight;
+    }
 }

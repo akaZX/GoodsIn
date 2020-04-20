@@ -5,15 +5,16 @@ import java.util.Optional;
 
 public interface Dao<T> {
 
-    T get(long id);
+    <R> T get(R id);
 
     List<T> getAll();
 
-    void save(T t);
+    List<T> getAll(String param);
 
-    void update(T t);
+    boolean save(T t);
 
-    void delete(T t);
+    boolean update(T t);
 
-    void close ();
+    boolean delete(T t);
+
 }

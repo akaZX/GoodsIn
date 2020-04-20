@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root maxHeight="602.0" maxWidth="1.7976931348623157E308" minHeight="600.0" prefHeight="602.0" prefWidth="1178.0" style="-fx-border-color: black;" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane layoutX="577.0" layoutY="10.0" prefHeight="592.0" prefWidth="601.0" styleClass="rmt-param-box" stylesheets="@../../style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <HBox fillHeight="false" prefHeight="532.0" prefWidth="489.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <VBox maxHeight="1.7976931348623157E308" prefHeight="600.0" prefWidth="673.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox prefHeight="362.0" prefWidth="487.0">
+                                 <children>
+                                    <VBox minWidth="340.0" prefHeight="362.0" prefWidth="340.0" HBox.hgrow="SOMETIMES">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="40.0">
+                                             <children>
+                                                <Label styleClass="sched-form-label" text="General information:" />
+                                             </children>
+                                          </HBox>
+                                          <ScrollPane fx:id="topScrollPane" fitToWidth="true" hbarPolicy="NEVER" minHeight="190.0" pannable="true" prefHeight="185.0" VBox.vgrow="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                             <content>
+                                                <GridPane fx:id="topGridPane" hgap="25.0" prefHeight="76.0" prefWidth="326.0" vgap="25.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="ALWAYS" maxWidth="300.0" minWidth="130.0" percentWidth="55.0" prefWidth="150.0" />
+                                                    <ColumnConstraints hgrow="ALWAYS" maxWidth="300.0" minWidth="130.0" prefWidth="150.0" />
+                                                  </columnConstraints>
+                                                   <padding>
+                                                      <Insets bottom="20.0" left="5.0" right="5.0" top="10.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </content>
+                                             <padding>
+                                                <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                                             </padding>
+                                          </ScrollPane>
+                                       </children>
+                                    </VBox>
+                                    <Separator maxHeight="1.7976931348623157E308" maxWidth="3.0" minWidth="3.0" orientation="VERTICAL" prefWidth="3.0">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <VBox layoutX="10.0" layoutY="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0">
+                                             <children>
+                                                <Label styleClass="sched-form-label" text="Samples inputs:" />
+                                                <HBox HBox.hgrow="SOMETIMES" />
+                                                <Label styleClass="sched-form-label" text="Number of samples: " />
+                                                <JFXComboBox fx:id="samplesComboBox" prefHeight="25.0" prefWidth="54.0" styleClass="jfx-combo-box-small">
+                                                   <HBox.margin>
+                                                      <Insets right="2.0" />
+                                                   </HBox.margin>
+                                                </JFXComboBox>
+                                             </children>
+                                          </HBox>
+                                          <ScrollPane prefHeight="185.0" VBox.vgrow="ALWAYS">
+                                             <content>
+                                                <VBox fx:id="vBox" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                                   <padding>
+                                                      <Insets bottom="15.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </content>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </ScrollPane>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <Separator prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets top="2.0" />
+                                 </VBox.margin>
+                              </Separator>
+                              <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <VBox maxWidth="360.0" minWidth="300.0" prefHeight="131.0" prefWidth="350.0" HBox.hgrow="SOMETIMES">
+                                       <children>
+                                          <Label styleClass="sched-form-label" text="Additional parameters:" />
+                                          <Separator prefWidth="200.0" />
+                                          <ScrollPane fitToWidth="true" VBox.vgrow="SOMETIMES">
+                                             <content>
+                                                <VBox fx:id="bottomLeftBox" />
+                                             </content>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </ScrollPane>
+                                       </children>
+                                    </VBox>
+                                    <Separator maxWidth="3.0" minWidth="3.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="3.0">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <VBox prefHeight="131.0" HBox.hgrow="SOMETIMES">
+                                       <children>
+                                          <Label styleClass="sched-form-label" text="Comments:" />
+                                          <Separator prefWidth="200.0" />
+                                          <TextArea fx:id="commentsField" prefHeight="200.0" prefWidth="200.0" styleClass="sched-form-text-area" wrapText="true">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </TextArea>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="2.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Separator maxHeight="1.7976931348623157E308" maxWidth="3.0" minWidth="3.0" orientation="VERTICAL" prefHeight="420.0" prefWidth="3.0">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Separator>
+                  <HBox maxWidth="600.0" prefHeight="568.0" prefWidth="435.0" HBox.hgrow="SOMETIMES">
+                     <children>
+                        <VBox HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="sched-form-label" text="Foreign bodies and quality deffects:" />
+                              <Separator prefWidth="200.0" />
+                              <VBox prefHeight="30.0" prefWidth="284.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="284.0">
+                                       <children>
+                                          <Label text="Major foreign bodies exceeds: " HBox.hgrow="SOMETIMES">
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="majorValueLabel" text="3">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="\%?">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox HBox.hgrow="SOMETIMES" />
+                                          <JFXCheckBox fx:id="majorMain" text="Yes">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="20.0" />
+                                             </HBox.margin>
+                                          </JFXCheckBox>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets top="5.0" />
+                                       </opaqueInsets>
+                                    </HBox>
+                                    <HBox fx:id="majorBox" disable="true" maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+                                       <children>
+                                          <VBox HBox.hgrow="SOMETIMES">
+                                             <children>
+                                                <JFXCheckBox fx:id="majorGlass" text="Glass/wood/plastic">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="majorSoiling" layoutX="10.0" layoutY="25.0" text="Heavy soiling">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="majorInsects" layoutX="10.0" layoutY="43.0" text="Insects/pests">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox layoutX="10.0" layoutY="10.0" HBox.hgrow="SOMETIMES">
+                                             <children>
+                                                <JFXCheckBox fx:id="majorChemicals" text="Chemicals">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="majorAllergen" layoutX="10.0" layoutY="25.0" text="Allergen">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="majorOther" layoutX="10.0" layoutY="43.0" text="Other">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <Separator prefWidth="200.0" />
+                              <VBox layoutX="10.0" layoutY="10.0" prefHeight="30.0" prefWidth="284.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="284.0">
+                                       <children>
+                                          <Label text="Critical quality defects exceeds: " HBox.hgrow="SOMETIMES">
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="criticalValueLabel" text="3">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="\%?">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox HBox.hgrow="SOMETIMES" />
+                                          <JFXCheckBox fx:id="criticalMain" text="Yes">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="20.0" />
+                                             </HBox.margin>
+                                          </JFXCheckBox>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets top="5.0" />
+                                       </opaqueInsets>
+                                    </HBox>
+                                    <HBox fx:id="criticalBox" disable="true" maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+                                       <children>
+                                          <VBox HBox.hgrow="SOMETIMES">
+                                             <children>
+                                                <JFXCheckBox fx:id="criticalWet" text="Excessively wet">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="criticalPest" layoutX="10.0" layoutY="25.0" text="Pest damage/ disease">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="criticalMould" layoutX="10.0" layoutY="43.0" text="Breakdown/mould">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox layoutX="10.0" layoutY="10.0" HBox.hgrow="SOMETIMES">
+                                             <children>
+                                                <JFXCheckBox fx:id="criticalSlimey" text="Slimey">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="criticalSpongy" layoutX="10.0" layoutY="25.0" text="Spongy/pithy">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="criticalOther" layoutX="10.0" layoutY="43.0" text="Other">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <Separator layoutX="10.0" layoutY="140.0" prefWidth="200.0" />
+                              <VBox layoutX="10.0" layoutY="140.0" prefHeight="30.0" prefWidth="284.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="284.0">
+                                       <children>
+                                          <Label text="Non-critical quality defects  more than: " HBox.hgrow="SOMETIMES">
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="minorValueLabel" text="3">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="\%?">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox HBox.hgrow="SOMETIMES" />
+                                          <JFXCheckBox fx:id="minorMain" text="Yes">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="20.0" />
+                                             </HBox.margin>
+                                          </JFXCheckBox>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets top="5.0" />
+                                       </opaqueInsets>
+                                    </HBox>
+                                    <HBox fx:id="minorBox" disable="true" maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+                                       <children>
+                                          <VBox HBox.hgrow="SOMETIMES">
+                                             <children>
+                                                <JFXCheckBox fx:id="minorHarvest" text="Harvest/handling damage">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="minorDiscoloured" layoutX="10.0" layoutY="25.0" text="Discoloured/scarring">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="minorBrowning" layoutX="10.0" layoutY="43.0" text="Browning/translucency">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox layoutX="10.0" layoutY="10.0" HBox.hgrow="SOMETIMES">
+                                             <children>
+                                                <JFXCheckBox fx:id="minorDry" text="Dry/dehydrated">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="minorWaterSpotting" layoutX="10.0" layoutY="25.0" text="Water spotting">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="minorOther" layoutX="10.0" layoutY="43.0" text="Other">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </JFXCheckBox>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <Separator layoutX="10.0" layoutY="273.0" prefWidth="200.0" />
+                              <HBox VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="SOMETIMES" />
+                                    <VBox alignment="BOTTOM_RIGHT" layoutX="62.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="SOMETIMES">
+                                       <children>
+                                          <JFXButton fx:id="btn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="217.0" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </HBox>
+         </children>
+         <effect>
+            <DropShadow color="#00000080" />
+         </effect>
+         <padding>
+            <Insets bottom="15.0" left="10.0" right="10.0" top="15.0" />
+         </padding>
+      </StackPane>
+   </children>
+</fx:root>

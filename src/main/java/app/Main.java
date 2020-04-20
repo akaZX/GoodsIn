@@ -1,6 +1,6 @@
 package app;
 
-import app.controller.GoodsInController;
+import app.controller.schedule.GoodsInController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,13 +19,14 @@ public class Main extends Application {
         GoodsInController contr = new GoodsInController();
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("goodsInMenu.fxml"));
-        System.out.println(loader);
         loader.setController(contr);
         Parent root = loader.load();
+
         Scene scene = new Scene(root);
 
 
-        primaryStage.setTitle("GI");
+        primaryStage.setTitle("RMT/GI");
+
 
         primaryStage.setScene(scene);
 
@@ -35,12 +36,13 @@ public class Main extends Application {
             System.out.println("Resource not found. Aborting.");
             System.exit(-1);
         }
-        String css = url.toExternalForm();
+        String       css       = url.toExternalForm();
+
         primaryStage.getScene().getStylesheets().add(css);
 
 
-        primaryStage.setMinHeight(750);
-        primaryStage.setMinWidth(1000);
+        primaryStage.setMinHeight(850);
+        primaryStage.setMinWidth(1300);
         primaryStage.show();
     }
 

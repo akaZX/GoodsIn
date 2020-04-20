@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXMasonryPane?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="950.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane layoutX="166.0" layoutY="87.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="250.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="320.0" minHeight="320.0" prefHeight="320.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox fx:id="paramListBox" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
+               <children>
+                  <Label maxWidth="1.7976931348623157E308" minHeight="40.0" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #58b8ff;" text="Available parameters">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" left="7.0" top="10.0" />
+                     </padding>
+                  </Label>
+                  <JFXListView fx:id="paramList" VBox.vgrow="ALWAYS" />
+               </children>
+               <rotationAxis>
+                  <Point3D z="25.0" />
+               </rotationAxis>
+               <effect>
+                  <DropShadow color="#00000080" />
+               </effect>
+            </VBox>
+            <StackPane fx:id="staticContent" prefHeight="150.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowSpan="2">
+               <children>
+                  <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="43.0" minWidth="43.0" prefWidth="43.0" />
+                      <ColumnConstraints fillWidth="false" minWidth="300.0" prefWidth="300.0" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                        <ColumnConstraints maxWidth="350.0" minWidth="200.0" prefWidth="250.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="60.0" prefHeight="60.0" vgrow="ALWAYS" />
+                      <RowConstraints minHeight="60.0" prefHeight="60.0" vgrow="ALWAYS" />
+                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="60.0" prefHeight="60.0" vgrow="ALWAYS" />
+                      <RowConstraints minHeight="60.0" prefHeight="60.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="ALWAYS" />
+                    </rowConstraints>
+                     <children>
+                        <VBox maxHeight="265.0" maxWidth="299.0" prefHeight="255.0" prefWidth="299.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="4">
+                           <children>
+                              <ImageView fx:id="materialImage" depthTest="ENABLE" fitHeight="229.0" fitWidth="299.0" pickOnBounds="true" VBox.vgrow="ALWAYS">
+                                 <image>
+                                    <Image url="@../images/missing_image_placeholder.jpg" />
+                                 </image>
+                              </ImageView>
+                              <JFXButton fx:id="imageBtn" maxWidth="1.7976931348623157E308" text="Add picture">
+                                 <graphic>
+                                    <FontAwesomeIconView fill="WHITE" glyphName="IMAGE" size="14">
+                                       <styleClass>
+                                          <String fx:value="white-icon" />
+                                          <String fx:value="small-icon" />
+                                       </styleClass>
+                                    </FontAwesomeIconView>
+                                 </graphic></JFXButton>
+                           </children>
+                           <effect>
+                              <DropShadow color="#00000080" />
+                           </effect>
+                        </VBox>
+                        <Label text="Material M Code" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.vgrow="SOMETIMES">
+                           <GridPane.margin>
+                              <Insets left="7.0" right="7.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label layoutX="160.0" layoutY="74.0" text="Material name" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+                           <GridPane.margin>
+                              <Insets left="7.0" right="7.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <JFXTextField fx:id="materialNameField" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="7.0" right="7.0" />
+                           </GridPane.margin>
+                        </JFXTextField>
+                        <JFXTextField fx:id="mCodeField" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="7.0" right="7.0" />
+                           </GridPane.margin>
+                        </JFXTextField>
+                        <JFXButton fx:id="fileChooserBtn" text="Add file" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="7.0" right="7.0" />
+                           </GridPane.margin>
+                        </JFXButton>
+                        <JFXTextArea fx:id="shortDescription" promptText="Short material description required" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="1" GridPane.rowSpan="3">
+                           <GridPane.margin>
+                              <Insets bottom="7.0" left="25.0" right="10.0" top="7.0" />
+                           </GridPane.margin>
+                        </JFXTextArea>
+                        <JFXButton fx:id="saveBtn" text="Save" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                           <graphic>
+                              <FontAwesomeIconView glyphName="SAVE">
+                                 <styleClass>
+                                    <String fx:value="small-icon" />
+                                    <String fx:value="white-icon" />
+                                 </styleClass>
+                              </FontAwesomeIconView>
+                           </graphic>
+                        </JFXButton>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="documentPathField" prefHeight="30.0" prefWidth="103.0" promptText="Spec Link">
+                                 <HBox.margin>
+                                    <Insets left="7.0" right="7.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                              <HBox HBox.hgrow="SOMETIMES" />
+                              <JFXButton fx:id="openDocBtn" text="Open file">
+                                 <HBox.margin>
+                                    <Insets left="7.0" right="7.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <VBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="444444.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="paramLabel" text="New material details">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="50.0" top="7.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Separator maxHeight="1.0" maxWidth="1.7976931348623157E308" minHeight="1.0" prefHeight="1.0" prefWidth="88888.0" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+               </children>
+            </StackPane>
+            <StackPane fx:id="paramPane" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="2" GridPane.rowSpan="2">
+               <children>
+                  <VBox maxHeight="1.7976931348623157E308">
+                     <children>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="28.0" prefWidth="551.0" style="-fx-background-color: #58b8ff;">
+                           <children>
+                              <Label maxWidth="1.7976931348623157E308" minHeight="40.0" prefHeight="40.0" style="-fx-background-color: #58b8ff;" text="Selected parameters">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </Label>
+                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                              <JFXButton fx:id="saveParamBtn" text="Save parameters">
+                                 <HBox.margin>
+                                    <Insets right="7.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="SAVE">
+                                       <styleClass>
+                                          <String fx:value="small-icon" />
+                                          <String fx:value="white-icon" />
+                                       </styleClass>
+                                    </FontAwesomeIconView>
+                                 </graphic>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
+                           <content>
+                               <JFXMasonryPane fx:id="masonryPane" HSpacing="10" VSpacing="10">
+                                   <padding>
+                                    <Insets bottom="16" left="16" right="16" top="16" />
+                                 </padding>
+                               </JFXMasonryPane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+               </children>
+               <effect>
+                  <DropShadow color="#00000080" />
+               </effect>
+            </StackPane>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
