@@ -9,6 +9,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 
+import javax.tools.Tool;
 import java.io.IOException;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
@@ -25,6 +26,8 @@ public class MinMaxInput extends StackPane {
     @FXML
     private Label title;
 
+    private Tooltip tooltip;
+
 
     public MinMaxInput() {
 
@@ -39,7 +42,6 @@ public class MinMaxInput extends StackPane {
         catch (IOException e) {
             e.printStackTrace();
         }
-        this.setStyle("-fx-background-color: #58b8ff; -fx-border-radius: 5 5 5 5; -fx-border-color: #0069a6;");
 
         setTooltips();
         validateRequired(this.getMinField());
@@ -47,7 +49,6 @@ public class MinMaxInput extends StackPane {
     }
 
     public MinMaxInput(String title) {
-
         this();
         this.title.setText(title);
     }
@@ -55,7 +56,10 @@ public class MinMaxInput extends StackPane {
     public MinMaxInput(String title, String tooltip){
         this();
         this.title.setText(title);
-        this.title.setTooltip(new Tooltip(tooltip));
+        this.tooltip = new Tooltip(tooltip);
+        wrapTooltip();
+        this.title.setTooltip(this.tooltip);
+
     }
 
 
@@ -78,6 +82,11 @@ public class MinMaxInput extends StackPane {
 
         setNumericValidators(this.getMinField());
         setNumericValidators(this.getMaxField());
+    }
+
+    private void wrapTooltip(){
+        tooltip.setPrefWidth(200);
+        tooltip.setWrapText(true);
     }
 
 

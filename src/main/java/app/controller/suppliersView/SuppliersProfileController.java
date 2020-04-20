@@ -4,10 +4,9 @@ import app.controller.sql.SQLiteJDBC;
 import app.controller.sql.dao.MaterialsDao;
 import app.controller.sql.dao.SuppEmailsDao;
 import app.controller.sql.dao.SupplierMaterialsDao;
-import app.pojos.SuppEmails;
-import app.pojos.SuppNumbers;
-import app.pojos.SupplierMaterials;
-import app.pojos.Suppliers;
+import app.controller.utils.LabelWithIcons;
+import app.controller.utils.Messages;
+import app.pojos.*;
 import com.jfoenix.controls.*;
 import com.jfoenix.validation.RegexValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -19,8 +18,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,7 +29,7 @@ public class SuppliersProfileController implements Initializable {
 
     private static final String ERROR = "error";
 
-    JFXDialog dialog = new JFXDialog();
+    Messages msg = new Messages();
 
     Suppliers supplier = null;
 
@@ -73,6 +70,16 @@ public class SuppliersProfileController implements Initializable {
     JFXButton addContact;
 
 
+    @FXML
+    Label materialLabel;
+    @FXML
+    JFXButton addMaterialBtn;
+    @FXML
+    JFXButton updateWeightBtn;
+    @FXML
+    JFXComboBox<Materials> materialsComboBox;
+
+
     public SuppliersProfileController() {
 
     }
@@ -92,11 +99,16 @@ public class SuppliersProfileController implements Initializable {
         emailBox();
 
         if (supplier != null) {
-            supplierName.setText(supplier.getSupplierName());
-            loadMaterials();
-            loadEmails();
+            loadSupplier();
         }
 
+    }
+
+    private void loadSupplier(){
+        String supp = supplier.getSupplierCode() + " - " + supplier.getSupplierName();
+        supplierName.setText(supp);
+        loadMaterials();
+        loadEmails();
     }
 
 
@@ -115,30 +127,11 @@ public class SuppliersProfileController implements Initializable {
             }
             else {
 
-                JFXAlert<Void> alert = new JFXAlert<>((Stage) saveNewEmail.getScene().getWindow());
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setOverlayClose(false);
-                JFXDialogLayout     layout   = new JFXDialogLayout();
-                Label               label    = new Label("Incorrect email address");
-                FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.EXCLAMATION_TRIANGLE);
-                iconView.setStyle("-fx-fill: red; -glyph-size: 20px");
-
-                label.setGraphic(iconView);
-                label.setStyle("-fx-font-size: 15px; -fx-cell-size: 100px");
-                layout.setHeading(label);
-                layout.setBody(new Label((newEmailField.getText())));
-                JFXButton closeButton = new JFXButton("ACCEPT");
-
-                closeButton.getStyleClass().add("dialog-accept");
-                closeButton.setOnAction(e -> {
-                    alert.hideWithAnimation();
-                    newEmailField.clear();
-                    newEmailField.setPromptText("Enter valid email address");
-                });
-                layout.setActions(closeButton);
-                alert.setContent(layout);
-                alert.show();
-
+                String heading = "Incorrect email address";
+                String body = "Email: '" + newEmailField.getText() + "' is not valid";
+                msg.continueAlert(saveNewEmail, LabelWithIcons.midWarningIconLabel(heading), new Label(body));
+                newEmailField.clear();
+                newEmailField.setPromptText("Enter valid email address");
             }
         });
     }
@@ -207,19 +200,24 @@ public class SuppliersProfileController implements Initializable {
                 }
                 else {
 
+                    String weight;
                     materialsList.setDepth(5);
                     materialsList.setExpanded(true);
                     materialsList.getSelectionModel().selectFirst();
 
                     if (item.getPalletWeight() <= 0) {
+                        weight = "MISSING!";
                         FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.EXCLAMATION);
                         iconView.setStyle("-fx-fill: red");
                         setStyle("-fx-background-color: rgb(255,174,179)");
                         setGraphic(iconView);
+                    }else{
+                        weight = item.getPalletWeight() + "Kg";
                     }
 
-
-                    setText(new MaterialsDao().get(item.getmCode()).getName());
+                    Materials material = new MaterialsDao().get(item.getmCode());
+                    String displayString = material.getMCode() + " | " + material.getName() + " | " + weight;
+                    setText(displayString);
                     content.setText("Material: " + new MaterialsDao().get(item.getmCode()).getName() +
                                     "\nM code: " + item.getmCode());
                     setTooltip(content);

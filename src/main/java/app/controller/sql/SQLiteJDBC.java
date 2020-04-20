@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class SQLiteJDBC {
@@ -22,6 +23,7 @@ public class SQLiteJDBC {
 
         String sql = "INSERT INTO " + table + " (" + fields + ") VALUES (" + values + ")";
         return update(sql);
+//        return false;
     }
 
 
@@ -38,12 +40,12 @@ public class SQLiteJDBC {
 
         }
         catch (SQLException | NullPointerException e) {
+            System.out.println("Error at: SQLiteJDBC.update():");
 //            e.printStackTrace();
             close();
             return false;
         }
     }
-
 
     public static <T> ResultSet select(String table, String field, T param) {
 
@@ -59,7 +61,6 @@ public class SQLiteJDBC {
         String sql = "Select  * from " + table + " where " + field + " =" + par;
         return mainSelect(sql);
     }
-
 
     public static <T> ResultSet select(String table, String field, T low, T high) {
 
@@ -80,13 +81,11 @@ public class SQLiteJDBC {
         return mainSelect(sql);
     }
 
-
     public static ResultSet selectAll(String table, String order) {
 
         String sql = "SELECT * FROM " + table + " ORDER BY " + order;
         return mainSelect(sql);
     }
-
 
     public static ResultSet mainSelect(String sql) {
 
@@ -100,13 +99,13 @@ public class SQLiteJDBC {
 
         }
         catch (SQLException | NullPointerException e) {
+            System.out.println("Error at: SQLiteJDBC.mainSelect():");
             e.printStackTrace();
             return null;
         }
 
 
     }
-
 
     public static <T> boolean delete(String table, String field, T id) {
 
@@ -129,45 +128,13 @@ public class SQLiteJDBC {
             return true;
         }
         catch (SQLException | NullPointerException e) {
+            System.out.println("Error at: SQLiteJDBC.delete():");
             e.printStackTrace();
             close();
 
             return false;
         }
     }
-
-
-    public static ScheduleDetails getDeliveryDetails(int rowid) {
-
-        String query = "SELECT rowid, * FROM  WHERE so_rowid = " + rowid + ";";
-
-        ResultSet rs = select("PO_SCHEDULE_DETAILS", "so_rowid", rowid);
-        try {
-            while (rs.next()) {
-//                PoScheduleDetails temp = new PoScheduleDetails(
-//                        rs.getInt("rowid"),
-//                        rs.getString("po"),
-//                        rs.getString("bay"),
-//                        rs.getInt("pallets"),
-//                        rs.getInt("duration"),
-//                        rs.getString("haulier"),
-//                        rs.getString("comments"),
-//                        rs.getString("registration_no"),
-//                        LocalDateTime.parse(rs.getString("eta")),
-//                        LocalDateTime.parse(rs.getString("arrived")),
-//                        LocalDateTime.parse(rs.getString("departed")),
-//                        LocalDateTime.parse(rs.getString("booked_in")));
-//                return temp;
-
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
-
 
     public static void close() {
 

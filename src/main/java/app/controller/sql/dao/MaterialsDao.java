@@ -82,8 +82,8 @@ public class MaterialsDao implements Dao<Materials> {
     public boolean update(Materials materials) {
 
         @Language("SQLite")
-        String values = "name= '" + materials.getName() + "', description='" + materials.getDescription() +
-                        "', doc_link='" + materials.getDocLink() + "', image_path='" + materials.getImagePath() + "'";
+        String values = "name= '" + materials.getName() + "', description=" + stringOrNull(materials.getDescription()) +
+                        ", doc_link=" + stringOrNull(materials.getDocLink()) + ", image_path=" + stringOrNull(materials.getImagePath()) + "";
         @Language("SQLite")
         String sql = "Update MATERIALS set " + values + " Where m_code= '" + materials.getMCode() + "'";
         return SQLiteJDBC.update(sql);

@@ -21,39 +21,43 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-
 public class MaterialListDrawerController implements Initializable {
 
     public List<Materials> list = null;
+
     @FXML
     private JFXListView<Materials> listView = new JFXListView<>();
 
     @FXML
     private JFXButton addNewMaterial = new JFXButton();
+
+    @FXML
+    private JFXButton refreshBtn = new JFXButton();
+
     @FXML
     JFXTextField searchField;
+
     @FXML
     private AnchorPane listas;
 
     @FXML
     private JFXHamburger hamburger;
 
-    private boolean aBoolean = true;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-       loadList();
-        addNewMaterial.setVisible(false);
+        loadList();
         nodesListeners();
     }
 
 
-    public void loadList(){
+    public void loadList() {
+
         list = new MaterialsDao().getAll();
         listView.setItems(FXCollections.observableArrayList(list));
     }
+
 
     private void nodesListeners() {
 
@@ -62,6 +66,10 @@ public class MaterialListDrawerController implements Initializable {
                 (ChangeListener) (observable, oldVal, newVal) -> searchMaterials((String) oldVal, (String) newVal));
 
 
+        refreshBtn.setOnAction(event -> {
+            searchField.clear();
+            loadList();
+        });
         // Adds listView cell formatter to show supp names and adds tooltip for each row
         listView.setCellFactory(param -> new JFXListCell<Materials>() {
 
@@ -88,20 +96,26 @@ public class MaterialListDrawerController implements Initializable {
 
     }
 
+
     public void selected(JFXDrawersStack drawersStack, JFXDrawer leftDrawer) {
+
+        if (list.size() > 0) {
+            listView.getSelectionModel().selectFirst();
+            drawersStack.setContent(initializeSuppForm(false));
+        }
 
         HamburgerBasicCloseTransition burgerTask1 = new HamburgerBasicCloseTransition(hamburger);
 
-        burgerTask1.setRate(-1);
-        hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) ->{
-            burgerTask1.setRate(burgerTask1.getRate() * -1);
+        burgerTask1.setRate(- 1);
+        hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            burgerTask1.setRate(burgerTask1.getRate() * - 1);
             burgerTask1.play();
             toggle(drawersStack, leftDrawer);
 
         });
 
 
-        addNewMaterial.setOnAction(event ->  drawersStack.setContent(initializeSuppForm(true)));
+        addNewMaterial.setOnAction(event -> drawersStack.setContent(initializeSuppForm(true)));
 
 
         listView.setOnKeyPressed(event -> {
@@ -119,16 +133,14 @@ public class MaterialListDrawerController implements Initializable {
         });
     }
 
-    private void toggle(JFXDrawersStack drawersStack, JFXDrawer leftDrawer){
-        addNewMaterial.setVisible(aBoolean);
+
+    private void toggle(JFXDrawersStack drawersStack, JFXDrawer leftDrawer) {
+
         drawersStack.toggle(leftDrawer);
-        aBoolean = !aBoolean;
     }
 
 
-
-
-    private AnchorPane loadMaterialForm(MaterialProfileController controller){
+    private AnchorPane loadMaterialForm(MaterialProfileController controller) {
 
         FXMLLoader supplierForm = new FXMLLoader(
                 getClass().getResource(
@@ -146,20 +158,22 @@ public class MaterialListDrawerController implements Initializable {
         return null;
     }
 
-    private AnchorPane initializeSuppForm(boolean bool){
+
+    private AnchorPane initializeSuppForm(boolean bool) {
+
         MaterialProfileController suppProfileController;
-        if(bool){
+        if (bool) {
             suppProfileController = new MaterialProfileController(this);
-        }else{
+        }
+        else {
             suppProfileController = new MaterialProfileController(listView.getSelectionModel().getSelectedItem(), this);
         }
         return loadMaterialForm(suppProfileController);
     }
 
 
-
-
     public void searchMaterials(String oldVal, String newVal) {
+
         if (oldVal == null || (newVal.length() < oldVal.length())) {
             listView.setItems(FXCollections.observableArrayList(list));
         }

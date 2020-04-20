@@ -74,42 +74,28 @@ public class Messages extends JFXAlert<String> {
         alert.show();
     }
 
-    public void continueAlert(Node box, String heading, String body) {
+    public void continueAlert(Node node, String heading, String body) {
 
-        JFXAlert<String> alert = new JFXAlert<>((Stage) box.getScene().getWindow());
+        continueAlert(node, new Label(heading), new Label(body));
+    }
+
+
+    public void continueAlert(Node node, Label heading, Label body){
+        JFXAlert<String> alert = new JFXAlert<>((Stage) node.getScene().getWindow());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(false);
-
+        alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
         JFXDialogLayout layout = new JFXDialogLayout();
-        layout.setHeading(new Label(heading));
-        layout.setBody(new Label(body));
-        JFXButton continueBtn = new JFXButton("CONTINUE");
-
+        layout.setHeading(heading);
+        layout.setBody(body);
+        JFXButton continueBtn = new JFXButton("Continue");
 
         continueBtn.setOnAction(e -> {
             alert.hideWithAnimation();
         });
-
         layout.setActions(continueBtn);
         alert.setContent(layout);
         alert.show();
     }
 
-    public void showAlert(Node node, String title, String message){
-        JFXDialogLayout layout = new JFXDialogLayout();
-        layout.setHeading(new Label(title));
-        layout.setBody(new Label(message));
-        JFXAlert<Void> alert = new JFXAlert<>((Stage) node.getScene().getWindow());
-        alert.setOverlayClose(true);
-        alert.setAnimation(JFXAlertAnimation.CENTER_ANIMATION);
-        alert.setContent(layout);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        JFXButton continueBtn = new JFXButton("Continue");
-        continueBtn.getStyleClass().add("dialog-accept");
-        continueBtn.setOnAction(event -> {
-            alert.hideWithAnimation();
-        });
-        layout.setActions(continueBtn);
-        alert.showAndWait();
-    }
 }

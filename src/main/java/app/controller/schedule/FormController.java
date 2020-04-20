@@ -1,34 +1,33 @@
 package app.controller.schedule;
 
 
-import app.controller.sql.SQLiteJDBC;
 import app.controller.sql.dao.*;
+import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
+import app.controller.utils.ValidateInput;
 import app.model.OrderMaterials;
-import app.pojos.Hauliers;
-import app.pojos.PoMaterials;
-import app.pojos.ScheduleDetails;
+import app.pojos.*;
 import app.view.custom_nodes.DateTimeInput;
 import app.model.ScheduleEntry;
 import app.view.table_columns.OrderDetailsColumns;
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -38,6 +37,8 @@ import static java.lang.String.valueOf;
 public class FormController  implements Initializable {
 
     private ScheduleEntry scheduleEntry;
+    private Node node;
+    POTableTab tableTab = null;
 
     Messages msg = new Messages();
 
@@ -59,9 +60,9 @@ public class FormController  implements Initializable {
     private final Label arrived = new Label("Arrived:");
     private final Label departed = new Label("Departed:");
     private final Label bookedIn = new Label("Booked In:");
-    private final Label poDetailsLabel = new Label();
+    private final Label poDetailsLabel = new Label("New schedule entry:");
     private final TextArea commentsBox = new TextArea();
-    private final JFXTextField supplierField = new JFXTextField();
+    private final JFXComboBox<Suppliers> supplierBox = new JFXComboBox<>();
     private final JFXTextField poField = new JFXTextField();
     private final JFXTextField haulierField = new JFXTextField();
     private final JFXTextField palletsField = new JFXTextField();
@@ -76,15 +77,21 @@ public class FormController  implements Initializable {
     private final JFXButton getArrivedTime = new JFXButton("Get Arrival Time");
     private final JFXButton getDepartedTime = new JFXButton("Get departure Time");
     private final JFXButton getBookedInTime = new JFXButton("Get booked in Time");
-    private final JFXButton submitForm = new JFXButton("Submit");
+    private final JFXButton submitForm = new JFXButton("Save");
 
+
+    private final Label[] labels = {
+            dPoint,supplier,poNumber,haulier, pallets,
+            expectedArrivalTime, unloadingTime, poDetails,
+            trailerNo, comments, arrived, departed, bookedIn
+    };
 
     private final Node [] leftLeftList = {
             dPoint, poNumber, supplier, haulier, pallets, unloadingTime,
             expectedArrivalTime, poDetails};
 
     private final Node[] leftRightList = {
-            bays, poField, supplierField, haulierField, palletsField, approxUnloadField,
+            bays, poField, supplierBox, haulierField, palletsField, approxUnloadField,
             expectedETA};
 
     private final Node[] rightLeftList = {
@@ -98,21 +105,34 @@ public class FormController  implements Initializable {
 
     public FormController() {
         scheduleEntry = null;
-        SQLiteJDBC.close();
         addBaysToChoiceBox();
     }
 
-    public FormController(ScheduleEntry scheduleEntry) {
+    public FormController(Node node, POTableTab tableTab){
         this();
-        this.scheduleEntry = scheduleEntry;
+        this.scheduleEntry = null;
+        this.node = node;
+        this.tableTab = tableTab;
     }
 
+    public FormController(ScheduleEntry scheduleEntry, Node node, POTableTab tableTab) {
+        this();
+        this.scheduleEntry = scheduleEntry;
+        this.node = node;
+        this.tableTab = tableTab;
+    }
 
     private void loadOrderDetails() {
 
         if (scheduleEntry != null) {
+
+            poDetailsLabel.setText(scheduleEntry.getSupplier().getSupplierName() + "  " + scheduleEntry.getOrder().getPoNumber());
             poField.setText(scheduleEntry.getOrder().getPoNumber());
-            supplierField.setText(scheduleEntry.getSupplier().getSupplierName());
+            poField.setEditable(false);
+
+            supplierBox.getSelectionModel().select(scheduleEntry.getSupplier());
+            supplierBox.setDisable(true);
+
             bays.setValue(scheduleEntry.getDetails().getBay());
             haulierField.setText(scheduleEntry.getDetails().getHaulier());
 
@@ -149,31 +169,29 @@ public class FormController  implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadOrderDetails();
-        addTextfieldValidation(haulierField, "Select haulier");
-        addTextfieldValidation(approxUnloadField, "Missing estimated time");
-        addTextfieldValidation(palletsField, "Missing estimated pallets");
-        addComboBoxValidation();
+        //validation
+        addTextfieldValidation();
 
 
          //adds autocomplete for fields
         hauliersField(new HaulierDao(), haulierField);
-        hauliersField(new SuppliersDao(), supplierField);
-
+        suppliersBox();
 
         initializeForm();
         initializeOrderDetailsTable();
 
         Platform.runLater(bays::requestFocus);
-
-
     }
 
 
 
     private void initializeForm(){
 
+        addCssClassForLabels();
 
-        gridPane.add(poDetailsLabel, 1, 0,5,1);
+        supplierBox.setMaxWidth(Double.MAX_VALUE);
+
+        gridPane.add(poDetailsLabel, 1, 0,3,1);
 
         for(int i = 0; i < leftLeftList.length; i++){
             gridPane.add(leftLeftList[i], 1, i+1 );
@@ -202,8 +220,8 @@ public class FormController  implements Initializable {
 
 
 
-        gridPane.add(submitForm, 5, 13);
-        gridPane.add(orderDetailsTable, 1, 9,2,5);
+        gridPane.add(submitForm, 5, 12);
+        gridPane.add(orderDetailsTable, 1, 9,2,4);
 
 
 //        submitForm.minWidthProperty().bind(gridPane.minWidthProperty().multiply(0.4));
@@ -212,6 +230,24 @@ public class FormController  implements Initializable {
         addNumberFormat(approxUnloadField);
 
         addActionsForButtons();
+
+    }
+
+
+    private void addCssClassForLabels() {
+
+        commentsBox.getStyleClass().add("sched-form-text-area");
+        commentsBox.setWrapText(true);
+        poDetailsLabel.getStyleClass().add("sched-form-label-top");
+        for (Label label : labels) {
+            label.getStyleClass().add("sched-form-label");
+        }
+    }
+
+
+    private void suppliersBox(){
+        supplierBox.setItems(FXCollections.observableArrayList(new SuppliersDao().getAll()));
+
 
     }
 
@@ -240,18 +276,18 @@ public class FormController  implements Initializable {
             error = true;
             bays.validate();
         }
-       if(poField.getText() == null){
+       if(poField.getText() == null || poField.getText().length() < 7){
            poField.validate();
-           errorMessage += "\n PO field is blank";
+           errorMessage += "\n PO field is left blank or it is too short";
            error = true;
        }
-        if (supplierField.getText() == null) {
-            supplierField.validate();
+        if (supplierBox.getSelectionModel().getSelectedItem() == null) {
+            supplierBox.validate();
             errorMessage += "\n Supplier field is blank";
             error = true;
         }
 
-        if (haulierField.getText() == null) {
+        if (haulierField.getText() == null || haulierField.getText().length() == 0) {
             errorMessage += "\n Haulier field is blank";
             haulierField.validate();
             error = true;
@@ -282,21 +318,28 @@ public class FormController  implements Initializable {
         if(!error){
 
 
-            if(scheduleEntry.getDetails().getRowid() == 0){
-                System.out.println("saving new entry: \n" + getScheduleDetails().toString() );
-                new ScheduleDetailsDao().save(getScheduleDetails());
+            if(scheduleEntry == null){
+
+
+                SupplierOrders supplierOrders = getSupplierOrder();
+                ScheduleDetails scheduleDetails = getScheduleDetails();
+                new SupplierOrderDao().save(supplierOrders);
+
+//                System.out.println("saving new entry: \n" + getScheduleDetails().toString());
+                boolean saved = new ScheduleDetailsDao().save(scheduleDetails);
+                System.out.println(saved);
             }else{
-                System.out.println("updating order: " + getScheduleDetails().toString());
-                msg.showAlert(dPoint,"Entry created/Updated", null);
+//                System.out.println("updating order: " + getScheduleDetails().toString());
+                msg.continueAlert(node, LabelWithIcons.midCheckIconLabel("Entry created/Updated"), new Label(""));
                 new ScheduleDetailsDao().update(getScheduleDetails());
 
             }
             new HaulierDao().save(new Hauliers(haulierField.getText()));
-
+            tableTab.listAllRecords();
             ((Node)(event.getSource())).getScene().getWindow().hide();
 
         }else{
-            msg.showAlert(dPoint, "Failed to create/update entry", ("Errors: " + errorMessage ));
+            msg.continueAlert(dPoint, LabelWithIcons.midWarningIconLabel("Failed to create/update entry"), new Label("Errors: " + errorMessage ));
 
         }
 
@@ -320,11 +363,16 @@ public class FormController  implements Initializable {
         orderDetailsTable.getColumns().setAll(columns.mCodeCol(), columns.descCol(),
                 columns.expectedCol(), columns.bookedCol());
 
-
-        if((scheduleEntry.getOrder().getPoNumber() != null) || ! scheduleEntry.getOrder().getPoNumber().equals("")){
-            final TreeItem<OrderMaterials> root = new RecursiveTreeItem<>(getOrderDetails(), RecursiveTreeObject::getChildren);
-            orderDetailsTable.setRoot(root);
+        if (scheduleEntry != null) {
+            try {
+                    final TreeItem<OrderMaterials> root = new RecursiveTreeItem<>(getOrderDetails(), RecursiveTreeObject::getChildren);
+                    orderDetailsTable.setRoot(root);
+            }
+            catch (NullPointerException e) {
+                System.out.println("klaida kraunant scheduleform/order materials table");
+            }
         }
+
 
     }
 
@@ -339,11 +387,25 @@ public class FormController  implements Initializable {
         details.setComments(commentsBox.getText());
         details.setRegistrationNo(trailerNoField.getText());
         details.setHaulier(haulierField.getText());
-        details.setPo(scheduleEntry.getOrder().getPoNumber());
         details.setPallets(Integer.parseInt(palletsField.getText()));
         details.setDuration(Integer.parseInt(approxUnloadField.getText()));
-        details.setRowid(scheduleEntry.getDetails().getRowid());
+        if (scheduleEntry != null) {
+            details.setRowid(scheduleEntry.getDetails().getRowid());
+            details.setPo(scheduleEntry.getOrder().getPoNumber());
+
+        }else{
+            details.setOrderDate(expectedETA.getLocalDate());
+            details.setPo(poField.getText().toUpperCase().trim());
+        }
         return details;
+    }
+
+    private SupplierOrders getSupplierOrder(){
+        SupplierOrders supplierOrders = new SupplierOrders();
+        supplierOrders.setSuppCode(supplierBox.getSelectionModel().getSelectedItem().getSupplierCode());
+        supplierOrders.setPoNumber(poField.getText().trim().toUpperCase());
+        supplierOrders.setOrderDate(expectedETA.getLocalDate());
+        return supplierOrders;
     }
 
     //add number formatting for textfield
@@ -353,6 +415,7 @@ public class FormController  implements Initializable {
             if (newValue.matches("\\d*")) return;
             field.setText(newValue.replaceAll("[^\\d]", ""));
         });
+
 
     }
 
@@ -367,31 +430,16 @@ public class FormController  implements Initializable {
 
     }
 
-    private void addComboBoxValidation(){
-        RequiredFieldValidator validator = new RequiredFieldValidator();
-        validator.setMessage("Please select Bay");
-        bays.getValidators().add(validator);
 
+    private void addTextfieldValidation(){
+        ValidateInput.requiredFieldValidation(haulierField, "Select haulier", true,true);
+        ValidateInput.requiredFieldValidation(poField, "Missing order number", true,true);
+        ValidateInput.requiredFieldValidation(approxUnloadField, "Missing estimated time", true,true);
+        ValidateInput.requiredFieldValidation(palletsField, "Missing estimated pallets", true,true);
+        ValidateInput.requiredFieldValidation(poField, "Missing order number", true,true);
 
-        bays.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue){
-                bays.validate();
-            }
-        });
-    }
-
-    private void addTextfieldValidation(JFXTextField node, String message){
-        RequiredFieldValidator validator = new RequiredFieldValidator();
-        validator.setMessage(message);
-        node.getValidators().add(validator);
-
-
-        node.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue){
-                node.validate();
-            }
-
-        });
+        ValidateInput.requiredFieldValidation(bays,"Please select Bay", true,true);
+        ValidateInput.requiredFieldValidation(supplierBox,"Please select supplier", true, true);
     }
 
 
@@ -434,6 +482,30 @@ public class FormController  implements Initializable {
         });
 
         return materialList;
+    }
+
+    public void displayForm(JFXTreeTableView<ScheduleEntry> table){
+
+        FXMLLoader     loader = new FXMLLoader(getClass().getResource("/deliveryForm.fxml"));
+        loader.setController(this);
+
+        JFXAlert<String> alert = new JFXAlert<>((Stage) table.getScene().getWindow());
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setAnimation(JFXAlertAnimation.BOTTOM_ANIMATION);
+        JFXDialogLayout layout = new JFXDialogLayout();
+
+        try {
+            StackPane pane = loader.load();
+            pane.setMinSize(850, 700);
+            layout.setBody(pane);
+            alert.setContent(layout)    ;
+            alert.show();
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

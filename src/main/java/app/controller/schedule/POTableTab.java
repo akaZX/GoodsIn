@@ -5,34 +5,28 @@ import app.controller.sql.SQLiteJDBC;
 import app.controller.sql.SQLiteProteanClone;
 import app.controller.sql.dao.*;
 import app.controller.sql.serviceClasses.ScheduleEntryService;
+import app.controller.utils.Messages;
+import app.controller.utils.ValidateInput;
 import app.model.ScheduleEntry;
-import app.pojos.*;
 import app.view.table_columns.PoTableColumns;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeItem;
-import javafx.scene.input.MouseButton;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.intellij.lang.annotations.Language;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 
 public class POTableTab {
@@ -42,6 +36,8 @@ public class POTableTab {
 
     }
 
+
+    private Messages msg = new Messages();
 
     private final Tab tab = new Tab("Orders List");
 
@@ -53,9 +49,13 @@ public class POTableTab {
 
     private final JFXButton importEntries = new JFXButton("Import Orders");
 
+    private final JFXButton edit = new JFXButton("Edit Entry");
+
     private final JFXButton listOrders = new JFXButton("List");
 
     private final JFXButton deleteEntry = new JFXButton("Delete");
+
+    private final JFXButton addEntry = new JFXButton("Add new");
 
     private final JFXButton duplicateOrder = new JFXButton("Duplicate");
 
@@ -65,6 +65,10 @@ public class POTableTab {
 
     private final ToolBar toolBar = new ToolBar();
 
+    private Node[] nodes = {
+            selectedDateLabel, dateField, listOrders, importEntries,
+            edit, addEntry, deleteEntry, duplicateOrder
+    };
 
     Tab createTable() {
 
@@ -74,19 +78,25 @@ public class POTableTab {
                 Priority.SOMETIMES
         );
 
+        toolbarMargins();
+        selectedDateLabel.getStyleClass().add("sched-form-label");
+
         toolBar.getItems().addAll(
                 selectedDateLabel,
                 leftSpacer,
                 dateField,
                 listOrders,
                 importEntries,
+                edit,
+                addEntry,
                 deleteEntry,
                 duplicateOrder
         );
 
+        toolBar.setPadding(new Insets(10, 35, 10, 35));
 
-        toolBar.setPadding(new Insets(15, 25, 15, 25));
 
+        ValidateInput.requiredFieldValidation(dateField,"Missing date!");
 
         bPane.setTop(toolBar);
         bPane.setCenter(table);
@@ -104,22 +114,31 @@ public class POTableTab {
     }
 
 
+    private void toolbarMargins() {
+
+        for (Node node : nodes
+        ) {
+            HBox.setMargin(node, new Insets(0,5,0,5));
+        }
+    }
+
     private void addColumnsToTable() {
 
         PoTableColumns tableColumns = new PoTableColumns(table);
 
         table.columnResizePolicyProperty();
-        table.getColumns().addAll(tableColumns.supplierCol(), tableColumns.poCol(),
+        boolean b = table.getColumns().addAll(tableColumns.supplierCol(), tableColumns.poCol(),
                 tableColumns.haulierCol(), tableColumns.expectedETACol(), tableColumns.bayCol(),
-                tableColumns.unloadingTimeCol(), tableColumns.palletsCol(), tableColumns.registrationCol(),
+                tableColumns.unloadingTimeCol(), tableColumns.palletsCol(),tableColumns.commentsCol() ,
                 tableColumns.arrivedCol(), tableColumns.departedCol(),
-                tableColumns.bookedInCol());
+                tableColumns.bookedInCol(), tableColumns.registrationCol());
 
         table.setShowRoot(false);
         table.setEditable(false);
     }
 
     private void initialListLoad(){
+        //TODO change back to today's value
         dateField.setValue(LocalDate.of(2020,01,24));
         listAllRecords();
     }
@@ -133,21 +152,51 @@ public class POTableTab {
 
         importEntries.setOnAction(event -> {
 
-            SQLiteProteanClone.getOrderDetailsFromProtean(dateField.getValue());
-            table.setRoot(populateTreeItems());
+                SQLiteProteanClone.getOrderDetailsFromProtean(dateField.getValue());
+                table.setRoot(populateTreeItems());
 
         });
 
-        deleteEntry.setOnAction(event -> {
-//         TODO patvarkyti sita kad trintu ka reikia
-            new ScheduleDetailsDao().delete(table.getSelectionModel().getSelectedItem().getValue().getDetails());
+        edit.setOnAction(event -> {
+            try {
+                loadRow();
+            }
+            catch (NullPointerException e) {
+                msg.continueAlert(table, "Error", "No rows were selected.");
+            }
 
+        });
+
+        addEntry.setOnAction(event -> {
+            loadOrderForm(null, dateField);
+        });
+
+        deleteEntry.setOnAction(event -> {
+
+            try {
+                ScheduleEntry record = table.getSelectionModel().getSelectedItem().getValue();
+                boolean b = new ScheduleDetailsDao().delete(table.getSelectionModel().getSelectedItem().getValue().getDetails());
+                if(b){
+                    msg.continueAlert(table, "Success", "Entry was deleted");
+                }else{
+
+                    msg.continueAlert(table, "Error", "Failed to delete following entry:\n" + record.getSupplier().getSupplierName() + " " + record.getOrder().getPoNumber());
+                }
+            }
+            catch (NullPointerException ignored) {
+            }
             table.setRoot(populateTreeItems());
         });
 
         duplicateOrder.setOnAction(event -> {
             //TODO padaryti kad forma loadintu tik is PO be entry details
-            new ScheduleDetailsDao().saveFromProtean(table.getSelectionModel().getSelectedItem().getValue().getDetails());
+            try {
+                new ScheduleDetailsDao().saveFromProtean(table.getSelectionModel().getSelectedItem().getValue().getDetails());
+
+            }
+            catch (NullPointerException e) {
+                msg.continueAlert(table, "Error", "No rows were selected.");
+            }
             table.setRoot(populateTreeItems());
         });
 
@@ -156,29 +205,29 @@ public class POTableTab {
             JFXTreeTableRow<ScheduleEntry> row = new JFXTreeTableRow<>();
 
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 1 && (! row.isEmpty())) {
-                    ScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
-                    selectedDateLabel.setText(
-                            dateField.getValue().toString() + "  " + order.getSupplier().getSupplierName());
+                if (event.getClickCount() == 1 && (!row.isEmpty())) {
+                    try {
+                        ScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
+                        selectedDateLabel.setText(
+                                dateField.getValue().toString() + "  " + order.getSupplier().getSupplierName());
+                    }
+                    catch (Exception ignored) {
+                    }
                 }
                 if (event.getClickCount() == 2 && (! row.isEmpty())) {
-                    ScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
-                    System.out.println(order.getOrder().getSuppCode());
-                    System.out.println(order.getSupplier().getSupplierName() + " " + order.getSupplier().getSupplierCode());
-                    System.out.println(order.getOrder().getPoNumber().equals(order.getDetails().getPo()));
-                    loadOrderForm(order);
+                  loadRow();
                 }
-                //TODO add right click functionality after main buttons will be sorted
-                if (event.getButton() == MouseButton.SECONDARY && ! row.isEmpty()) {
-                    System.out.println("Right button clicked");
+            });
+            row.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER && !row.isEmpty()) {
+                    loadRow();
                 }
             });
             return row;
         });
-
     }
 
-    private void listAllRecords(){
+    public void listAllRecords(){
 
         try {
             table.setRoot(populateTreeItems());
@@ -190,45 +239,33 @@ public class POTableTab {
         selectedDateLabel.setText(String.valueOf(dateField.getValue()));
     }
 
+    private void loadRow(){
+        ScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
+        loadOrderForm(order, dateField);
+    }
+
     //loads delivery form with order details
-    private void loadOrderForm(ScheduleEntry order) {
-
-        FXMLLoader     loader = new FXMLLoader(getClass().getResource("/deliveryForm.fxml"));
-        FormController contr  = new FormController(order);
-        loader.setController(contr);
-
-        try {
-            Scene scene     = new Scene(loader.load(), 950, 750);
-            Stage formStage = new Stage();
-            formStage.setScene(scene);
-            formStage.show();
-            URL url = this.getClass().getResource("/style.css");
-            if (url == null) {
-                System.out.println("Resource not found. Aborting.");
-                System.exit(- 1);
-            }
-            String css = url.toExternalForm();
-            formStage.getScene().getStylesheets().add(css);
-            //reloads table with updated data
-            formStage.setOnHiding(event -> {
-                table.setRoot(populateTreeItems());
-                SQLiteJDBC.close();
-            });
+    private void loadOrderForm(ScheduleEntry order, Node node) {
+        FormController contr;
+        if (order == null) {
+            contr = new FormController(node, this);
+        }else{
+             contr  = new FormController(order, node, this);
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        contr.displayForm(table);
 
     }
 
 
-    private TreeItem<ScheduleEntry> populateTreeItems() {
-
-        return new RecursiveTreeItem<>(FXCollections.observableArrayList(ScheduleEntryService.getDeliveriesFromDb(dateField.getValue())), RecursiveTreeObject::getChildren);
+    public TreeItem<ScheduleEntry> populateTreeItems() {
+        if(dateField.getValue() != null){
+            dateField.resetValidation();
+            return new RecursiveTreeItem<>(FXCollections.observableArrayList(ScheduleEntryService.getDeliveriesFromDb(dateField.getValue())), RecursiveTreeObject::getChildren);
+        }else{
+            msg.continueAlert(table, "Error", "Date field is left blank or date format is incorrect.\nIt should be in dd/mm/yyyy form. ");
+            dateField.validate();
+            return null;
+        }
     }
-
-
-
 
 }

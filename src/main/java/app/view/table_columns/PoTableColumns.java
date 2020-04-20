@@ -20,7 +20,7 @@ public  class PoTableColumns {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private final double dateColConstraints = 0.09;
+    private final double dateColConstraints = 0.08;
 
     private final JFXTreeTableView<ScheduleEntry> table;
 
@@ -40,11 +40,9 @@ public  class PoTableColumns {
                 return new SimpleStringProperty(supplier);
             } else return supplierCol.getComputedValue(param);
         });
-        columnConstraints(supplierCol, 0.2, 0.15);
-
+        columnConstraints(supplierCol, 0.17, 0.15);
 
         return supplierCol;
-
     }
 
     public  JFXTreeTableColumn<ScheduleEntry, String> poCol(){
@@ -72,7 +70,7 @@ public  class PoTableColumns {
                 return new SimpleStringProperty(haulier);
             } else return haulierCol.getComputedValue(param);
         });
-        columnConstraints(haulierCol, 0.08, 0.07);
+        columnConstraints(haulierCol, 0.07, 0.07);
 
         return haulierCol;
     }
@@ -100,7 +98,7 @@ public  class PoTableColumns {
                 new SimpleIntegerProperty(cellData.getValue().getValue().getDetails().getPallets()).asObject());
         formatIntColumns(palletsCol);
 
-        columnConstraints(palletsCol, 0.055, 0.055);
+        columnConstraints(palletsCol, 0.05, 0.05);
 
         return palletsCol;
     }
@@ -123,17 +121,16 @@ public  class PoTableColumns {
         JFXTreeTableColumn<ScheduleEntry, LocalDateTime> expectedETACol = new JFXTreeTableColumn<>("ETA");
         expectedETACol.setCellValueFactory(cellData -> cellData.getValue().getValue().getDetails().getEtaProperty());
 
-        columnConstraints(expectedETACol, 0.05, 0.05);
+        columnConstraints(expectedETACol, 0.08, 0.08);
         formatDateCells(expectedETACol);
 
         return expectedETACol;
-
     }
 
     public  JFXTreeTableColumn<ScheduleEntry, LocalDateTime> arrivedCol(){
 
 
-        JFXTreeTableColumn<ScheduleEntry, LocalDateTime> arrivedCol = new JFXTreeTableColumn<>("Arrived");
+        JFXTreeTableColumn<ScheduleEntry, LocalDateTime> arrivedCol = new JFXTreeTableColumn<>("ARRIVED");
         arrivedCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getDetails().getArrivedProperty());
 
         columnConstraints(arrivedCol, dateColConstraints,dateColConstraints);
@@ -145,7 +142,7 @@ public  class PoTableColumns {
 
     public  JFXTreeTableColumn<ScheduleEntry, LocalDateTime> departedCol(){
 
-        JFXTreeTableColumn<ScheduleEntry, LocalDateTime> departedCol = new JFXTreeTableColumn<>("Departed");
+        JFXTreeTableColumn<ScheduleEntry, LocalDateTime> departedCol = new JFXTreeTableColumn<>("DEPARTED");
         departedCol.setCellValueFactory(cellData -> cellData.getValue().getValue().getDetails().getDepartedPoperty());
 
         columnConstraints(departedCol, dateColConstraints,dateColConstraints);
@@ -180,7 +177,7 @@ public  class PoTableColumns {
                 return new SimpleStringProperty(comments);
             } else return commentsCol.getComputedValue(param);
         });
-        columnConstraints(commentsCol, 0.08, 0.07);
+        columnConstraints(commentsCol, 0.1,0.1);
 
         return commentsCol;
     }
@@ -201,20 +198,11 @@ public  class PoTableColumns {
     }
 
 
+
     // removes 'T' from LocalDateTime
     private void formatDateCells(JFXTreeTableColumn<ScheduleEntry, LocalDateTime> column){
 
-        column.setCellFactory(col -> new JFXTreeTableCell<ScheduleEntry, LocalDateTime>() {
-            @Override
-            protected void updateItem(LocalDateTime item, boolean empty) {
-
-                super.updateItem(item, empty);
-                if (item == null)
-                    setText(null);
-                else
-                    setText(item.format(formatter));
-            }
-        });
+        column.setCellFactory(this::call);
     }
 
     //removes 0 values from column
@@ -257,4 +245,22 @@ public  class PoTableColumns {
         column.setGraphic(columnLabel);
     }
 
+
+    private TreeTableCell<ScheduleEntry, LocalDateTime> call(TreeTableColumn<ScheduleEntry, LocalDateTime> col) {
+
+        return new JFXTreeTableCell<ScheduleEntry, LocalDateTime>() {
+
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+
+                super.updateItem(item, empty);
+                if (item == null) {
+                    setText(null);
+                }
+                else {
+                    setText(item.format(formatter));
+                }
+            }
+        };
+    }
 }

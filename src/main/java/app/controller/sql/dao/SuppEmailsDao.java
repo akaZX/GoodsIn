@@ -67,7 +67,7 @@ public class SuppEmailsDao implements Dao<SuppEmails> {
     @Override
     public boolean save(SuppEmails suppEmails) {
 
-        String values = "'" + suppEmails.getSuppCode() + "', '" + suppEmails.getEmail() + "'";
+        String values = "" + stringOrNull(suppEmails.getSuppCode()) + ", " + stringOrNull(suppEmails.getEmail()) + "";
         String fields = "supp_code, email";
 
         return SQLiteJDBC.insert(fields, values, TABLE);
@@ -91,10 +91,14 @@ public class SuppEmailsDao implements Dao<SuppEmails> {
     private SuppEmails mapRsToObject(ResultSet rs) throws SQLException {
 
         SuppEmails email = new SuppEmails();
-        email = new SuppEmails();
         email.setRowid(rs.getInt("rowid"));
         email.setEmail(rs.getString("email"));
         email.setSuppCode(rs.getString("supp_code"));
         return email;
     }
+    private String stringOrNull(String string) {
+        return (string == null || (string.trim().equalsIgnoreCase("null") || string.isEmpty()) ? "NULL" : ("'" + string + "'"));
+
+    }
+
 }

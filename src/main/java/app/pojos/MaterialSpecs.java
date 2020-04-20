@@ -96,6 +96,8 @@ public class MaterialSpecs {
 
     private int expiryDate;
 
+    private int count;
+
 
     public String getMCode() {
 
@@ -661,6 +663,18 @@ public class MaterialSpecs {
     }
 
 
+    public int getCount() {
+
+        return count;
+    }
+
+
+    public void setCount(int count) {
+
+        this.count = count;
+    }
+
+
     public String toString() {
 
         return "m_code='" + mCode +
@@ -709,7 +723,8 @@ public class MaterialSpecs {
                " , ggn= " + ggn +
                " , twa= " + twa +
                " , health_mark= "  + healthMark +
-               " , expiry_date= " + expiryDate;
+               " , expiry_date= " + expiryDate +
+               " , count=" + count;
     }
 
 
@@ -761,7 +776,8 @@ public class MaterialSpecs {
                " , " + ggn +
                " , " + twa +
                " , " + healthMark +
-               " , " + expiryDate;
+               " , " + expiryDate +
+               " , " + count;
     }
 
 }

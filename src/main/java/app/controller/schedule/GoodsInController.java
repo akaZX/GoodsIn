@@ -2,6 +2,7 @@ package app.controller.schedule;
 
 
 import app.controller.rmt.materials.MainMaterialProfileController;
+import app.controller.rmt.records.SpecsIntakePane;
 import app.controller.suppliersView.MainSupplierController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +26,12 @@ public class GoodsInController implements Initializable {
 //        adds calendar tab to tabpane
 //       mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
 
+
+        Tab rmt = new Tab("Rmt Intake");
+        rmt.setContent(new SpecsIntakePane());
+        mainTabPane.getTabs().add(rmt);
+
+
         FXMLLoader                    matProf    = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
         MainMaterialProfileController controller = new MainMaterialProfileController();
         matProf.setController(controller);
@@ -35,6 +42,8 @@ public class GoodsInController implements Initializable {
         MainSupplierController contr  = new MainSupplierController();
         loader.setController(contr);
         mainTabPane.getTabs().add(loadTab(loader, new Tab("Supplier Profiles")));
+
+
 
 
 //        FXMLLoader                mat         = new FXMLLoader(getClass().getResource("/rmt/MaterialProfileView.fxml"));

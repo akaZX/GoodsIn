@@ -24,11 +24,12 @@ public class InformationNode extends HBox {
         catch (IOException e) {
             e.printStackTrace();
         }
-        this.setStyle("-fx-background-color: #58b8ff; -fx-border-radius: 5 5 5 5; -fx-border-color: #0069a6;");
 
-        this.setPrefHeight(40);
+        this.setMinHeight(60);
+        this.setMinWidth(150);
+        this.setPrefHeight(60);
         this.setPrefWidth(150);
-        this.setMaxHeight(40);
+        this.setMaxHeight(60);
         this.setMaxWidth(150);
     }
 

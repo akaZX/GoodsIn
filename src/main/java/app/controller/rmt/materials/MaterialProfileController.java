@@ -1,6 +1,8 @@
 package app.controller.rmt.materials;
 
+import app.controller.rmt.records.SpecsIntakePane;
 import app.controller.sql.dao.*;
+import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
 import app.controller.utils.OpenFile;
 import app.model.Material;
@@ -13,6 +15,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,11 +25,13 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
 public class MaterialProfileController implements Initializable {
+
 
     private String imagePath;
 
@@ -45,15 +50,15 @@ public class MaterialProfileController implements Initializable {
 
     private JFXCheckBox density = new JFXCheckBox("Density");
 
-    private MinMaxInput densityBox = new MinMaxInput("Density");
+    private MinMaxInput densityBox = new MinMaxInput("Density", "Density parameter will be required to record during quality checks");
 
     private JFXCheckBox lorryTemp = new JFXCheckBox("Lorry temperature");
 
-    private MinMaxInput lorryTempBox = new MinMaxInput("Lorry temperature");
+    private MinMaxInput lorryTempBox = new MinMaxInput("Lorry temperature", "Min and Max values is required");
 
     private JFXCheckBox materialTemp = new JFXCheckBox("Material temperature");
 
-    private MinMaxInput materialTempBox = new MinMaxInput("Material temperature");
+    private MinMaxInput materialTempBox = new MinMaxInput("Material temperature", "Material temperature check\n min and max values will used during quality checks");
 
     private JFXCheckBox brix = new JFXCheckBox("Brix");
 
@@ -109,9 +114,14 @@ public class MaterialProfileController implements Initializable {
 
     private JFXCheckBox expiryDate = new JFXCheckBox("Expiry date");
 
+    private JFXCheckBox count = new JFXCheckBox("Material count");
+
+
 
     FileChooser fileChooser = new FileChooser();
 
+    @FXML
+    private Label paramLabel;
 
     @FXML
     private JFXMasonryPane masonryPane;
@@ -185,7 +195,6 @@ public class MaterialProfileController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
         addListItems();
 
         relateCheckBoxToNode();
@@ -210,11 +219,11 @@ public class MaterialProfileController implements Initializable {
     }
 
 
-    //  RADIO BUTTONS AND APPROPRIATE NODES
+    //  CHECKBOX'ES AND APPROPRIATE NODES
     private void addListItems() {
 
         paramList.getItems().addAll(density, lorryTemp, materialTemp, brix, pressure, length,
-                width, colorStage, headWeight, yield, variety, country, growerID, harvestDate, likeForLike,
+                width, colorStage, headWeight, yield, variety, country, count, growerID, harvestDate, likeForLike,
                 lotNumber, day, room, redTractorNumber, ggn, twa, healthMark, expiryDate);
     }
 
@@ -237,6 +246,7 @@ public class MaterialProfileController implements Initializable {
         addParamNode(country, countryBox());
         addParamNode(variety, varietyBox());
         addParamNode(twa, new InformationNode("TWA input will be required"));
+        addParamNode(count, new InformationNode("Material count will be required"));
         addParamNode(redTractorNumber, new InformationNode("RTA input will be required"));
         addParamNode(ggn, new InformationNode("GGN number will be required"));
         addParamNode(growerID, new InformationNode("Grower ID will be required"));
@@ -253,23 +263,26 @@ public class MaterialProfileController implements Initializable {
 
 
     private void addParamNode(JFXCheckBox radioButton, Node node) {
-
         radioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            minorBox.getMaxField().requestFocus();
             if (newValue) {
-                masonryPane.getChildren().add(node);
                 Platform.runLater(() -> scrollPane.requestLayout());
+                masonryPane.getChildren().add(node);
             }
             else {
                 masonryPane.getChildren().remove(node);
             }
+            scrollPane.requestFocus();
+
         });
+
     }
 
 
     private ParamListController countryBox() {
 
-        ParamListController box = new ParamListController("Countries");
-        MaterialCountryDao  dao = new MaterialCountryDao();
+        ParamListController    box = new ParamListController("Countries");
+        Dao<MaterialCountries> dao = new MaterialCountryDao();
 
         if (material != null) {
             String mCode = material.getMaterial().getMCode();
@@ -330,13 +343,13 @@ public class MaterialProfileController implements Initializable {
     }
 
 
-    private void showAlertWindow(ParamListController box){
+    private void showAlertWindow(ParamListController box) {
+
         final String HEADING = "Failed to add following entry:";
-        final String BODY = "'" +box.getText() +
+        final String BODY = "'" + box.getText() +
                             "'\nentry is ether to short (min 2 characters, excluding blank spaces) or input field was left blank";
         msg.continueAlert(saveBtn, HEADING, BODY);
     }
-
 
 
     //  DEFECTS BOXes
@@ -443,6 +456,9 @@ public class MaterialProfileController implements Initializable {
             if (specs.getExpiryDate() == 1) {
                 expiryDate.selectedProperty().setValue(true);
             }
+            if(specs.getCount() == 1){
+                count.selectedProperty().setValue(true);
+            }
 
         }
     }
@@ -460,6 +476,9 @@ public class MaterialProfileController implements Initializable {
 
         Materials mat = this.material.getMaterial();
         if (mat != null) {
+            if (mat.getName() != null && ! mat.getName().equalsIgnoreCase("")) {
+                paramLabel.setText(mat.getName() + " details");
+            }
 
             setDocLink(mat.getDocLink());
             if (mat.getMCode().length() > 2) {
@@ -502,19 +521,27 @@ public class MaterialProfileController implements Initializable {
 
     private void setImage(String path) {
 
-        if (path != null) {
-            try {
-                String url   = new File(path).toURI().toURL().toString();
-                Image  image = new Image(url);
-                materialImage.setImage(image);
+        String placeholder = "";
 
+        String url;
+        try {
+            placeholder = getClass().getResource("/images/missing_image_placeholder.jpg").toURI().toURL().toString();
+
+            if (path != null && path.length() > 20) {
+                url = new File(path).toURI().toURL().toString();
             }
-            catch (MalformedURLException | NullPointerException e) {
-
+            else {
+                url = getClass().getResource("/images/missing_image_placeholder.jpg").toURI().toURL().toString();
             }
 
         }
+        catch (MalformedURLException | NullPointerException | URISyntaxException e) {
+            System.out.println("Error at: MaterialProfileController.setImage()");
+            url = placeholder;
 
+        }
+        Image image = new Image(url);
+        materialImage.setImage(image);
     }
 
 
@@ -522,6 +549,7 @@ public class MaterialProfileController implements Initializable {
 
         shortDescription.clear();
         shortDescription.setText(description);
+
     }
 
 
@@ -550,6 +578,8 @@ public class MaterialProfileController implements Initializable {
             }
             catch (Exception e) {
                 System.out.println("Canceled adding file...");
+
+                e.printStackTrace();
             }
         });
         // opens file
@@ -557,31 +587,48 @@ public class MaterialProfileController implements Initializable {
 
         //SAVES MATERIAL DATA
         saveBtn.setOnAction(event -> {
-           saveMaterial();
+            saveMaterial();
             drawerController.loadList();
-
         });
         saveParamBtn.setOnAction(event -> saveSpec());
 
     }
 
-    private void saveMaterial(){
+
+    private void saveMaterial() {
+
+        boolean saved;
+        Label   heading;
+        Label   body;
         if (material != null) {
-            new MaterialsDao().update(generateMaterial());
+            Materials temp = generateMaterial();
+            saved = new MaterialsDao().update(temp);
+            body = new Label(temp.getName() + ": was updated");
         }
         else {
-            new MaterialsDao().save(generateMaterial());
+            Materials temp = generateMaterial();
+            saved = new MaterialsDao().save(generateMaterial());
+            body = new Label(temp.getName() + ": was saved");
         }
+        if (saved) {
+            heading = LabelWithIcons.largeCheckIconLabel("Success");
 
-        final String HEADING = "Error";
-        final String BODY = "Failed to validate specs provided, please ensure there is no underlying errors";
-        msg.continueAlert(saveParamBtn, HEADING, BODY);
+        }
+        else {
+            heading = LabelWithIcons.largeWarningIconLabel("Error");
+            body = new Label(
+                    "Failed to validate material details provided, please ensure there is no underlying errors" +
+                    "\n Most likely M code is used by another material");
+
+        }
+        msg.continueAlert(saveParamBtn, heading, body);
     }
+
 
     private Materials generateMaterial() {
 
         Materials mat = new Materials();
-        mat.setMCode(mCodeField.getText().toUpperCase().trim());
+        mat.setMCode(mCodeField.getText().trim().toUpperCase());
         if (shortDescription.getText() != null) {
             mat.setDescription(shortDescription.getText().toUpperCase().trim());
         }
@@ -592,35 +639,40 @@ public class MaterialProfileController implements Initializable {
         return mat;
     }
 
-    private void saveSpec(){
+
+    private void saveSpec() {
+
         MaterialSpecs specs = generateSpecs();
 
         if (specs == null) {
             final String HEADING = "Error";
-            final String BODY = "Failed to validate specs provided, please ensure there is no underlying errors";
+            final String BODY    = "Failed to validate specs provided, please ensure there is no underlying errors";
             msg.continueAlert(saveParamBtn, HEADING, BODY);
         }
 
         else {
             boolean b = new MaterialSpecsDao().save(specs);
-            if (!b) {
+            if (! b) {
                 boolean c = new MaterialSpecsDao().update(specs);
                 if (! c) {
                     final String HEADING = "Error";
-                    final String BODY = "Failed to save specs";
-                    msg.continueAlert(saveBtn, HEADING, BODY);
-                }else{
-                    final String HEADING = "Success";
-                    final String BODY = "Successfully updated specification records";
+                    final String BODY    = "Failed to save specs";
                     msg.continueAlert(saveBtn, HEADING, BODY);
                 }
-            }else{
+                else {
+                    final String HEADING = "Success";
+                    final String BODY    = "Successfully updated specification records";
+                    msg.continueAlert(saveBtn, HEADING, BODY);
+                }
+            }
+            else {
                 final String HEADING = "Success";
-                final String BODY = "Successfully saved specification records";
+                final String BODY    = "Successfully saved specification records";
                 msg.continueAlert(saveBtn, HEADING, BODY);
             }
         }
     }
+
 
     //checks for errors in specs fields, returns specs object if no errors recorded else returns null
     private MaterialSpecs generateSpecs() {
@@ -629,9 +681,10 @@ public class MaterialProfileController implements Initializable {
         boolean       error = false;
 
 
-        if(mCodeField.getText() != null){
+        if (mCodeField.getText() != null) {
             specs.setMCode(mCodeField.getText());
-        }else{
+        }
+        else {
             error = true;
         }
 
@@ -658,6 +711,7 @@ public class MaterialProfileController implements Initializable {
         specs.setCountry(boolToInt(country.isSelected()));
         specs.setVariety(boolToInt(variety.isSelected()));
         specs.setTwa(boolToInt(twa.isSelected()));
+        specs.setCount(boolToInt(count.isSelected()));
         specs.setHealthMark(boolToInt(healthMark.isSelected()));
         specs.setExpiryDate(boolToInt(expiryDate.isSelected()));
         specs.setGgn(boolToInt(ggn.isSelected()));
@@ -796,17 +850,16 @@ public class MaterialProfileController implements Initializable {
 
 
         if (! error) {
-            System.out.println("gerai");
             return specs;
         }
         else {
-            System.out.println("klaida");
             return null;
         }
 
     }
 
-//  changes bool to int // true = 1, false = 0
+
+    //  changes bool to int // true = 1, false = 0
     private int boolToInt(boolean b) {
 
         return b ? 1 : 0;

@@ -9,6 +9,8 @@ public class OpenFile {
     public static void openFile(String path){
 
         File file = new File(path);
+        System.out.println(file.getName());
+
         //first check if Desktop is supported by Platform or not
         if(! Desktop.isDesktopSupported()){
             System.out.println("Desktop is not supported");

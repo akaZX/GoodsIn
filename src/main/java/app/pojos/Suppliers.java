@@ -58,7 +58,7 @@ public class Suppliers extends RecursiveTreeObject<Suppliers> {
   @Override
   public String toString() {
 
-    return getSupplierName();
+    return getSupplierName() + "  " + getSupplierCode();
   }
 
 
@@ -72,7 +72,7 @@ public class Suppliers extends RecursiveTreeObject<Suppliers> {
       return false;
     }
     Suppliers suppliers = (Suppliers) o;
-    return supplierName.equals(suppliers.supplierName);
+    return (supplierCode+supplierName).equals(suppliers.supplierCode + suppliers.supplierName);
   }
 
 

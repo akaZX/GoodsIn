@@ -10,29 +10,33 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 
-
 import java.io.IOException;
 import java.util.List;
 
-public class ParamListController extends StackPane{
+public class ParamListController extends StackPane {
 
     @FXML
     public JFXButton removeBtn;
+
     @FXML
     JFXButton addBtn;
+
     @FXML
     JFXListView<Object> listView;
+
     @FXML
     Label selectedLabel;
+
     @FXML
     Label title;
+
     @FXML
     JFXTextField newEntry;
 
 
-
     public ParamListController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/StringList.fxml"));
+
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/ParamList.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
@@ -43,20 +47,20 @@ public class ParamListController extends StackPane{
         catch (IOException e) {
             e.printStackTrace();
         }
-        this.setStyle("-fx-background-color: #58b8ff; -fx-border-radius: 5 5 5 5; -fx-border-color: #0069a6;");
 
         listListeners();
 
     }
 
-    public ParamListController(String title){
+
+    public ParamListController(String title) {
+
         this();
         this.title.setText(title);
     }
 
 
-
-    private void listListeners(){
+    private void listListeners() {
 
         listView.setOnKeyPressed(event -> {
             if (listView.getSelectionModel().getSelectedItem() != null) {
@@ -79,40 +83,54 @@ public class ParamListController extends StackPane{
 
                     selectedLabel.setText(listView.getSelectionModel().getSelectedItem().toString());
                 }
-            }else {
+            }
+            else {
                 removeBtn.setDisable(true);
 
             }
         });
     }
 
-    public Object getSelectedItem(){
+
+    public Object getSelectedItem() {
 
         return listView.getSelectionModel().getSelectedItem();
     }
 
-    public <T> void reloadList(List<T> list){
+
+    public <T> void reloadList(List<T> list) {
+
         listView.getItems().removeAll();
         listView.getItems().addAll(list);
     }
 
-    public void setTitle(String title){
+
+    public void setTitle(String title) {
+
         this.title.setText(title);
     }
 
-    public String getText(){
+
+    public String getText() {
+
         return newEntry.getText();
     }
 
-    public void clearText(){
+
+    public void clearText() {
+
         newEntry.clear();
     }
 
-    public void clearList(){
+
+    public void clearList() {
+
         listView.getItems().clear();
     }
 
-    public void clearSelectedLabel(){
+
+    public void clearSelectedLabel() {
+
         selectedLabel.setText("");
     }
 

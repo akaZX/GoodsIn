@@ -2,14 +2,14 @@
 
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
-<fx:root maxHeight="150.0" maxWidth="175.0" minHeight="150.0" minWidth="175.0" prefHeight="150.0" prefWidth="175.0" type="StackPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="150.0" maxWidth="175.0" minHeight="150.0" minWidth="175.0" prefHeight="150.0" prefWidth="175.0" styleClass="rmt-param-box" type="StackPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane nodeOrientation="LEFT_TO_RIGHT">
         <columnConstraints>
@@ -46,4 +46,7 @@
          </children>
       </GridPane>
    </children>
+   <effect>
+      <DropShadow color="#00000080" />
+   </effect>
 </fx:root>

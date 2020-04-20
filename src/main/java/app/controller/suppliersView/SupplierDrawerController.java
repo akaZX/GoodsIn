@@ -4,6 +4,7 @@ import app.controller.sql.dao.SuppliersDao;
 import app.pojos.Suppliers;
 import com.jfoenix.controls.*;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
+import javafx.animation.Animation;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,13 +24,15 @@ import java.util.ResourceBundle;
 
 public class SupplierDrawerController implements Initializable {
 
-    List<Suppliers> list = new SuppliersDao().getAll();
+    List<Suppliers> list;
 
     @FXML
     private JFXListView<Suppliers> supplierListView = new JFXListView<>();
 
     @FXML
     private JFXButton addNewSupplier = new JFXButton();
+    @FXML
+    private JFXButton refreshBtn = new JFXButton();
 
     @FXML
     JFXTextField searchField;
@@ -40,20 +43,18 @@ public class SupplierDrawerController implements Initializable {
     @FXML
     private JFXHamburger hamburger;
 
-    private boolean aBoolean = true;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        supplierListView.setItems(FXCollections.observableArrayList(list));
-        addNewSupplier.setVisible(false);
-
+        loadList();
         nodesListeners();
-
-
     }
 
+    private void loadList(){
+        list = new SuppliersDao().getAll();
+        supplierListView.setItems(FXCollections.observableArrayList(list));
+    }
 
     private void nodesListeners() {
 
@@ -61,6 +62,12 @@ public class SupplierDrawerController implements Initializable {
         searchField.textProperty().addListener(
                 (ChangeListener) (observable, oldVal, newVal) -> searchSuppliers((String) oldVal, (String) newVal));
 
+
+        refreshBtn.setOnAction(event -> {
+            searchField.clear();
+
+
+        });
 
         // Adds listView cell formatter to show supp names and adds tooltip for each row
         supplierListView.setCellFactory(param -> new JFXListCell<Suppliers>() {
@@ -93,10 +100,14 @@ public class SupplierDrawerController implements Initializable {
 
 
     public void selected(JFXDrawersStack drawersStack, JFXDrawer leftDrawer) {
-
+        if(list.size() > 0){
+            supplierListView.getSelectionModel().selectFirst();
+            drawersStack.setContent(initializeSuppForm(false));
+        }
         HamburgerBasicCloseTransition burgerTask1 = new HamburgerBasicCloseTransition(hamburger);
 
-        burgerTask1.setRate(- 1);
+        burgerTask1.setRate(-1);
+
         hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             burgerTask1.setRate(burgerTask1.getRate() * - 1);
             burgerTask1.play();
@@ -118,6 +129,7 @@ public class SupplierDrawerController implements Initializable {
                 if (event.getButton() == MouseButton.PRIMARY) {
                     drawersStack.setContent(initializeSuppForm(false));
 
+
                 }
             }
         });
@@ -125,10 +137,7 @@ public class SupplierDrawerController implements Initializable {
 
 
     private void toggle(JFXDrawersStack drawersStack, JFXDrawer leftDrawer) {
-
-        addNewSupplier.setVisible(aBoolean);
         drawersStack.toggle(leftDrawer);
-        aBoolean = ! aBoolean;
     }
 
 
@@ -137,15 +146,15 @@ public class SupplierDrawerController implements Initializable {
         if (oldVal == null || (newVal.length() < oldVal.length())) {
             supplierListView.setItems(FXCollections.observableArrayList(list));
         }
-        ObservableList<Suppliers> subentries = FXCollections.observableArrayList();
+        ObservableList<Suppliers> results = FXCollections.observableArrayList();
         for (Suppliers entry : supplierListView.getItems()) {
 
             String entryText = entry.getSupplierName();
             if (entryText.toUpperCase().contains(newVal.toUpperCase().trim())) {
-                subentries.add(entry);
+                results.add(entry);
             }
         }
-        supplierListView.setItems(subentries);
+        supplierListView.setItems(results);
     }
 
 
@@ -172,9 +181,11 @@ public class SupplierDrawerController implements Initializable {
 
         SuppliersProfileController suppProfileController;
         if (bool) {
+            System.out.println("ne cia");
             suppProfileController = new SuppliersProfileController();
         }
         else {
+            System.out.println("cia");
             suppProfileController = new SuppliersProfileController(supplierListView.getSelectionModel().getSelectedItem());
         }
         return loadSupplierForm(suppProfileController);
