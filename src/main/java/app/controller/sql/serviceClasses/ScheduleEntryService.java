@@ -7,8 +7,6 @@ import app.model.ScheduleEntry;
 import app.pojos.ScheduleDetails;
 import app.pojos.SupplierOrders;
 import app.pojos.Suppliers;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -36,20 +34,21 @@ public class ScheduleEntryService {
     private static List<ScheduleEntry> getScheduleEntries(List<ScheduleDetails> orders) {
 
         List<ScheduleEntry>   entries = new ArrayList<>();
+        if(orders.size() > 0){
+            orders.forEach(i ->{
+                SupplierOrders order    = new SupplierOrderDao().getBy(i.getPo(), "po");
+                Suppliers      supplier = new SuppliersDao().get(order.getSuppCode());
+                ScheduleEntry  entry    = new ScheduleEntry();
+                entry.setDetails(i);
+                entry.setOrder(order);
+                entry.setSupplier(supplier);
+                entries.add(entry);
 
-        orders.forEach(i ->{
-            SupplierOrders order    = new SupplierOrderDao().getByPo(i.getPo());
-            Suppliers      supplier = new SuppliersDao().get(order.getSuppCode());
-            ScheduleEntry  entry    = new ScheduleEntry();
-            entry.setDetails(i);
-            entry.setOrder(order);
-            entry.setSupplier(supplier);
-            entries.add(entry);
+            });
+            entries.sort(Comparator.comparing(o -> o.getSupplier().getSupplierName()));
+        }
 
-        });
-        entries.sort(Comparator.comparing(o -> o.getSupplier().getSupplierName()));
         return entries;
     }
-
 
 }

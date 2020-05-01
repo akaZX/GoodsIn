@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root prefHeight="495.0" prefWidth="720.0" stylesheets="@../style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox layoutX="325.0" layoutY="146.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="555.0" prefWidth="300.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="200.0">
+                     <children>
+                        <Label styleClass="sched-form-label-top" text="Users:" />
+                     </children>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
+                  <JFXListView fx:id="listView" VBox.vgrow="SOMETIMES">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></JFXListView>
+                  <HBox alignment="BOTTOM_RIGHT" layoutX="10.0" layoutY="10.0" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" spacing="30.0">
+                     <children>
+                        <JFXButton onAction="#delete" text="Delete">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="REMOVE">
+                                 <styleClass>
+                                    <String fx:value="red-icon" />
+                                    <String fx:value="small-icon" />
+                                 </styleClass>
+                              </FontAwesomeIconView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton onAction="#add" text="Add">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="PLUS">
+                                 <styleClass>
+                                    <String fx:value="white-icon" />
+                                    <String fx:value="small-icon" />
+                                 </styleClass>
+                              </FontAwesomeIconView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" HBox.hgrow="SOMETIMES" />
+            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="SOMETIMES">
+               <children>
+                  <HBox alignment="CENTER_LEFT" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="533.0">
+                     <children>
+                        <Label fx:id="formLabel" styleClass="sched-form-label-top" text="New user" />
+                     </children>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
+                  <GridPane alignment="CENTER_LEFT" VBox.vgrow="SOMETIMES">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="10.0" prefWidth="30.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="10.0" prefWidth="20.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="200.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="120.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label styleClass="sched-form-label" text="Username:" GridPane.columnIndex="1" />
+                        <Label layoutX="40.0" layoutY="34.0" styleClass="sched-form-label" text="First name:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label layoutX="40.0" layoutY="100.0" styleClass="sched-form-label" text="Last name:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label layoutX="40.0" layoutY="166.0" styleClass="sched-form-label" text="Work email:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label layoutX="40.0" layoutY="232.0" styleClass="sched-form-label" text="Access rights:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <JFXTextField fx:id="usernameField" GridPane.columnIndex="3" />
+                        <JFXTextField fx:id="firstNameField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <JFXTextField fx:id="lastNameField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <JFXTextField fx:id="emailField" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <VBox spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                           <children>
+                              <JFXCheckBox fx:id="goodsInCb" text="Goods in" />
+                              <JFXCheckBox fx:id="rmtGoodsInCb" text="RMT - goods in" />
+                              <JFXCheckBox fx:id="rmtAdminCb" layoutX="10.0" layoutY="45.0" text="RMT - admin" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="15.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                           <children>
+                              <JFXCheckBox fx:id="securityCb" text="Security" />
+                              <JFXCheckBox fx:id="fruitCb" text="Fruit" />
+                           </children>
+                        </VBox>
+                        <Label layoutX="40.0" layoutY="119.0" styleClass="sched-form-label" text="Edit user profiles:" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <JFXCheckBox fx:id="adminCb" text=" " GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                     </children>
+                  </GridPane>
+                  <HBox alignment="BOTTOM_RIGHT" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" spacing="30.0" VBox.vgrow="SOMETIMES">
+                     <children>
+                        <JFXButton onAction="#save" text="Save">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="SAVE">
+                                 <styleClass>
+                                    <String fx:value="white-icon" />
+                                    <String fx:value="small-icon" />
+                                 </styleClass>
+                              </FontAwesomeIconView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</fx:root>

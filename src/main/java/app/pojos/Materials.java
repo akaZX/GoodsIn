@@ -72,7 +72,7 @@ public class Materials extends RecursiveTreeObject<Materials> {
   @Override
   public String toString() {
 
-    return getName();
+    return getMCode() + " - " +getName();
   }
 
 

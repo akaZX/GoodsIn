@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTogglePane?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root prefHeight="606.0" prefWidth="976.0" stylesheets="@../style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="14.0" layoutY="141.0" maxWidth="250.0" prefHeight="531.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label maxWidth="1.7976931348623157E308" styleClass="sched-form-label" stylesheets="@../style.css" text="Search criteria:" VBox.vgrow="ALWAYS" />
+            <VBox>
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="30.0">
+                     <children>
+                        <JFXRadioButton fx:id="dateRadio" text="Date" />
+                        <HBox HBox.hgrow="SOMETIMES" />
+                        <JFXRadioButton fx:id="poRadio" text="PO Number" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets right="-10.0" />
+               </padding>
+            </Separator>
+            <HBox alignment="CENTER_RIGHT" maxHeight="33.0" minHeight="33.0" prefHeight="33.0" prefWidth="219.0">
+               <children>
+                  <HBox fx:id="searchNodeBox" prefHeight="100.0" prefWidth="200.0" />
+                  <Label fx:id="searchLabel" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="10.0" lineSpacing="4.0" maxHeight="1.7976931348623157E308" prefHeight="30.0" prefWidth="30.0" styleClass="label-button">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SEARCH" size="24" styleClass="drawer-top-icon" wrappingWidth="24.785714149475098" />
+                     </graphic>
+                     <padding>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets right="-10.0" />
+               </padding>
+            </Separator>
+            <JFXListView fx:id="listView" prefHeight="389.0" prefWidth="219.0" VBox.vgrow="SOMETIMES" />
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="55.0" prefWidth="461.0">
+               <children>
+                  <JFXButton onAction="#sendReports" text="Send reports">
+                     <HBox.margin>
+                        <Insets bottom="15.0" right="10.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SEND_ALT">
+                           <styleClass>
+                              <String fx:value="white-icon" />
+                              <String fx:value="small-icon" />
+                           </styleClass>
+                        </FontAwesomeIconView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+      <Separator layoutX="236.0" layoutY="116.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="0.0" />
+      <JFXTogglePane layoutX="406.0" layoutY="201.0" prefHeight="70.0" prefWidth="77.0" />
+      <VBox layoutX="626.0" layoutY="178.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="255.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="96.0" prefWidth="721.0" VBox.vgrow="NEVER">
+               <children>
+                  <Label fx:id="topLabel" styleClass="sched-form-label-top" HBox.hgrow="SOMETIMES" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+               <children>
+                  <VBox prefHeight="505.0" prefWidth="533.0" HBox.hgrow="SOMETIMES">
+                     <children>
+                        <JFXListView fx:id="orderQaRecordsList" VBox.vgrow="SOMETIMES" />
+                        <Separator prefWidth="200.0" />
+                        <HBox alignment="BOTTOM_RIGHT" prefHeight="55.0" prefWidth="461.0">
+                           <children>
+                              <JFXButton fx:id="sendReportBtn" onAction="#sendSingleReport" text="Send report" visible="false">
+                                 <HBox.margin>
+                                    <Insets bottom="15.0" left="10.0" right="10.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="SEND">
+                                       <styleClass>
+                                          <String fx:value="white-icon" />
+                                          <String fx:value="small-icon" />
+                                       </styleClass>
+                                    </FontAwesomeIconView>
+                                 </graphic>
+                              </JFXButton>
+                              <HBox HBox.hgrow="SOMETIMES" />
+                              <JFXButton fx:id="saveBtn" layoutX="360.0" layoutY="15.0" onAction="#saveWeights" text="Save weights" visible="false">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="SAVE">
+                                       <styleClass>
+                                          <String fx:value="white-icon" />
+                                          <String fx:value="small-icon" />
+                                       </styleClass>
+                                    </FontAwesomeIconView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets bottom="15.0" right="10.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <VBox maxWidth="326.0" minWidth="150.0" prefHeight="507.0" prefWidth="326.0" HBox.hgrow="SOMETIMES">
+                     <children>
+                        <Label fx:id="qaRecordLabel" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" styleClass="sched-form-label" wrapText="true" VBox.vgrow="SOMETIMES">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label fx:id="qaRecordDetailsLabel" alignment="TOP_LEFT" contentDisplay="TOP" lineSpacing="2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" wrapText="true" VBox.vgrow="SOMETIMES">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</fx:root>

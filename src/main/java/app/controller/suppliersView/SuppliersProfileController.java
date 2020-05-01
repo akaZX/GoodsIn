@@ -6,6 +6,7 @@ import app.controller.sql.dao.SuppEmailsDao;
 import app.controller.sql.dao.SupplierMaterialsDao;
 import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
+import app.controller.utils.ValidateInput;
 import app.pojos.*;
 import com.jfoenix.controls.*;
 import com.jfoenix.validation.RegexValidator;
@@ -139,40 +140,12 @@ public class SuppliersProfileController implements Initializable {
 
     public void emailBox() {
 
-        newEmailField.setStyle(FX_LABEL_FLOAT_TRUE);
-
-        RegexValidator valid = new RegexValidator();
-
-        valid.setRegexPattern("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
-                              + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-
-        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.EXCLAMATION);
-        icon.setStyle("-fx-fill: red");
-        Label label = new Label("Invalid email!");
-        label.setGraphic(icon);
-        valid.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        icon.setStyleClass(ERROR);
-        valid.setIcon(label);
-        newEmailField.getValidators().add(valid);
-
-        this.doEmailValidate();
+        ValidateInput.emailBox(newEmailField);
 
     }
 
 
-    private void doEmailValidate() {
 
-        newEmailField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                newEmailField.validate();
-            }
-            if (oldValue) {
-                newEmailField.validate();
-            }
-        });
-
-
-    }
 
 
     private void loadMaterials() {

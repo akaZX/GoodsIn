@@ -1,19 +1,21 @@
 package app.pojos;
 
 
-import java.time.LocalDate;
+import app.controller.sql.dao.MaterialsDao;
+import com.google.gson.Gson;
+
+import java.time.LocalDateTime;
 
 public class RmtQaRecords {
 
-  private int rowid;
-  private String po;
-  private String mCode;
-  private String author;
-  private LocalDate date;
+  private int rowid ;
+  private String po  = "";
+  private String mCode = "";
+  private String author = "";
+  private String decision = "";
+  private LocalDateTime date;
   private RmtQaIntakeDetails details;
-  private String decision;
-  private double lorryTemp;
-  private double materialTemp;
+
 
 
   public int getRowid() {
@@ -64,13 +66,13 @@ public class RmtQaRecords {
   }
 
 
-  public LocalDate getDate() {
+  public LocalDateTime getDate() {
 
     return date;
   }
 
 
-  public void setDate(LocalDate date) {
+  public void setDate(LocalDateTime date) {
 
     this.date = date;
   }
@@ -100,43 +102,29 @@ public class RmtQaRecords {
   }
 
 
-  public double getLorryTemp() {
-
-    return lorryTemp;
-  }
-
-
-  public void setLorryTemp(double lorryTemp) {
-
-    this.lorryTemp = lorryTemp;
-  }
-
-
-  public double getMaterialTemp() {
-
-    return materialTemp;
-  }
-
-
-  public void setMaterialTemp(double materialTemp) {
-
-    this.materialTemp = materialTemp;
-  }
-
-
   @Override
   public String toString() {
+    return getmCode() + " - " + new MaterialsDao().get(getmCode()) + "\nDecision: " + getDecision();
+  }
 
-    return "RmtQaRecords{" +
-           "rowid=" + rowid +
-           ", po='" + po + '\'' +
-           ", mCode='" + mCode + '\'' +
-           ", author='" + author + '\'' +
-           ", date=" + date +
-           ", details=" + details +
-           ", decision='" + decision + '\'' +
-           ", lorryTemp=" + lorryTemp +
-           ", materialTemp=" + materialTemp +
-           '}';
+  public String toUpdateString(){
+    return "po='" + po +
+           "', m_code='" + mCode +
+           "', author='" + author +
+           "', date='" + date +
+           "', details_JSON='" + new Gson().toJson(details) +
+           "', decision='" + decision + "'";
+  }
+
+  public String saveString(){
+
+    return "'" + po +
+           "', '" + mCode +
+           "','" + author +
+           "', '" + date.toString() +
+           "', '" + new Gson().toJson(details) +
+           "', '" + decision + "'";
+
+
   }
 }

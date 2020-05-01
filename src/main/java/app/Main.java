@@ -1,6 +1,6 @@
 package app;
 
-import app.controller.schedule.GoodsInController;
+import app.controller.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage)throws Exception{
 
 
-        GoodsInController contr = new GoodsInController();
+        AppController contr = new AppController();
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("goodsInMenu.fxml"));
         loader.setController(contr);
@@ -41,8 +41,8 @@ public class Main extends Application {
         primaryStage.getScene().getStylesheets().add(css);
 
 
-        primaryStage.setMinHeight(850);
-        primaryStage.setMinWidth(1300);
+        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(1000);
         primaryStage.show();
     }
 

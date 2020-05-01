@@ -27,12 +27,12 @@ public class SupplierDrawerController implements Initializable {
     List<Suppliers> list;
 
     @FXML
-    private JFXListView<Suppliers> supplierListView = new JFXListView<>();
+    private JFXListView<Suppliers> supplierListView ;
 
     @FXML
-    private JFXButton addNewSupplier = new JFXButton();
+    private JFXButton addNewSupplier;
     @FXML
-    private JFXButton refreshBtn = new JFXButton();
+    private JFXButton refreshBtn;
 
     @FXML
     JFXTextField searchField;
@@ -85,7 +85,7 @@ public class SupplierDrawerController implements Initializable {
                     content.setText("");
                 }
                 else {
-                    setText(item.getSupplierName());
+                    setText(item.getSupplierCode() + " - " + item.getSupplierName());
                     content.setText("Supplier code: " + item.getSupplierCode() + " \n" + item.getSupplierName());
                     setTooltip(content);
                 }

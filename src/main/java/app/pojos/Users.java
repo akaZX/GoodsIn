@@ -7,7 +7,12 @@ public class Users {
   private String name;
   private String surname;
   private String email;
-  private long access;
+  private int goodsIn;
+  private int rmtGoodsIn;
+  private int security;
+  private int fruit;
+  private int admin;
+  private int rmtAdmin;
 
 
   public String getUsername() {
@@ -46,12 +51,67 @@ public class Users {
   }
 
 
-  public long getAccess() {
-    return access;
+  public boolean getGoodsIn() {
+    return goodsIn == 1;
   }
 
-  public void setAccess(long access) {
-    this.access = access;
+  public void setGoodsIn(int goodsIn) {
+    this.goodsIn = goodsIn;
   }
 
+
+  public boolean getRmtGoodsIn() {
+    return rmtGoodsIn == 1;
+  }
+
+  public void setRmtGoodsIn(int rmtGoodsIn) {
+    this.rmtGoodsIn = rmtGoodsIn;
+  }
+
+
+  public boolean getSecurity() {
+    return security == 1;
+  }
+
+  public void setSecurity(int security) {
+    this.security = security;
+  }
+
+
+  public boolean getFruit() {
+    return fruit == 1;
+  }
+
+  public void setFruit(int fruit) {
+    this.fruit = fruit;
+  }
+
+
+  public boolean getAdmin() {
+    return (admin == 1);
+  }
+
+  public void setAdmin(int admin) {
+    this.admin = admin;
+  }
+
+
+  public boolean getRmtAdmin() {
+    return rmtAdmin == 1;
+  }
+
+  public void setRmtAdmin(int rmtAdmin) {
+    this.rmtAdmin = rmtAdmin;
+  }
+
+
+
+
+
+  @Override
+  public String toString() {
+
+
+    return "Username: " + getUsername() + "\n" + getName() + " " + getSurname();
+  }
 }

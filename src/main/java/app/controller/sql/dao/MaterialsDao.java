@@ -2,7 +2,6 @@ package app.controller.sql.dao;
 
 import app.controller.sql.SQLiteJDBC;
 import app.pojos.Materials;
-import com.sun.istack.internal.localization.NullLocalizable;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.ResultSet;

@@ -1,6 +1,8 @@
 package app.pojos;
 
 
+import java.util.Objects;
+
 public class MaterialCountries {
 
   private String mCode;
@@ -58,5 +60,28 @@ public class MaterialCountries {
   @Override
   public String toString() {
     return getCountry();
+  }
+
+
+  @Override
+  public boolean equals(Object o) {
+
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    MaterialCountries that = (MaterialCountries) o;
+    return rowid == that.rowid &&
+           mCode.equals(that.mCode) &&
+           country.equals(that.country);
+  }
+
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(mCode, country, rowid);
   }
 }

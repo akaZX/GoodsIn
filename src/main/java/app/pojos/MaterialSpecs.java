@@ -78,7 +78,7 @@ public class MaterialSpecs {
 
     private int harvestDate;
 
-    private int likeForLike;
+    private int containerNo;
 
     private int lotNumber;
 
@@ -555,15 +555,15 @@ public class MaterialSpecs {
     }
 
 
-    public int getLikeForLike() {
+    public int getContainerNo() {
 
-        return likeForLike;
+        return containerNo;
     }
 
 
-    public void setLikeForLike(int likeForLike) {
+    public void setContainerNo(int containerNo) {
 
-        this.likeForLike = likeForLike;
+        this.containerNo = containerNo;
     }
 
 
@@ -715,14 +715,14 @@ public class MaterialSpecs {
                " , country= " + country +
                " , grower_id= " + growerId +
                " , harvest_date= " + harvestDate +
-               " , like_for_like= " + likeForLike +
+               " , container_no= " + containerNo +
                " , lot_number= " + lotNumber +
                " , day= " + day +
                " , room= " + room +
                " , rta_number= " + rtaNumber +
                " , ggn= " + ggn +
                " , twa= " + twa +
-               " , health_mark= "  + healthMark +
+               " , health_mark= " + healthMark +
                " , expiry_date= " + expiryDate +
                " , count=" + count;
     }
@@ -730,7 +730,7 @@ public class MaterialSpecs {
 
     public String saveString() {
 
-        return "'" + mCode  +
+        return "'" + mCode +
                "', " + density +
                " , " + minDensity +
                " , " + maxDensity +
@@ -768,7 +768,7 @@ public class MaterialSpecs {
                " , " + country +
                " , " + growerId +
                " , " + harvestDate +
-               " , " + likeForLike +
+               " , " + containerNo +
                " , " + lotNumber +
                " , " + day +
                " , " + room +

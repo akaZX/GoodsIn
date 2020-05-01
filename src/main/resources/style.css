@@ -112,7 +112,12 @@
 }
 
 .jfx-text-area, .text-area {
-    -fx-font-weight: BOLD;
+
+    -fx-font-size: 13px;
+}
+
+.jfx-text-area .scroll-pane:fitToWidth:fitToHeight .viewport .content .text{
+    -fx-line-spacing: 0.06em;
 }
 
 .jfx-text-field:error, .jfx-password-field:error, .jfx-text-area:error {
@@ -227,7 +232,7 @@
 }
 
 .jfx-list-cell:odd:selected > .jfx-rippler > StackPane, .jfx-list-cell:even:selected > .jfx-rippler > StackPane {
-    -fx-background-color: #acacac;
+    -fx-background-color: rgba(162, 158, 158, 0.29);
 }
 
 .jfx-list-cell {
@@ -261,7 +266,7 @@
 /*}*/
 
 .jfx-toggle-button {
-    -jfx-toggle-color: RED;
+    -jfx-toggle-color: BLUE;
 }
 
 .jfx-tool-bar {
@@ -444,7 +449,7 @@
 
 
 .jfx-button {
-    -fx-min-width: 40px;
+    /*-fx-min-width: 40px;*/
     /*-fx-min-height: 30px;*/
     /*-fx-pref-width: 130px;*/
     -fx-background-color: #003f77;
@@ -558,12 +563,20 @@
 /*Icons*/
 
 
-.refresh-icon{
-    -fx-fill: white;
-    -glyph-size: 17px;
-    -fx-font-size: 17px;
-
+.drawer-top-icon{
+    -fx-fill: #7a7aef;
+    -glyph-size: 24px;
+    -fx-font-size: 24px;
 }
+
+.label-button:hover > .drawer-top-icon {
+    -fx-fill: #1337f5;
+}
+.label-button:hover {
+    -fx-background-color: darkgray;
+}
+
+
 
 .white-icon{
     -fx-fill: white;
@@ -607,4 +620,15 @@
     -fx-faint-focus-color: #0026a122;
     -fx-border-color: #0026a1;
 }
+
+
+.list-view .jfx-list-cell:odd:selected .label,
+.list-view .jfx-list-cell:even:selected .label{
+    -fx-text-fill: black;
+}
+
+
+
+
+
 

@@ -1,18 +1,18 @@
 package app.controller.utils;
 
-import app.controller.rmt.materials.ParamListController;
+import app.controller.rmt.materials.nodes.ParamListController;
 import app.controller.sql.dao.Dao;
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Messages extends JFXAlert<String> {
-
 
 
 
@@ -80,7 +80,9 @@ public class Messages extends JFXAlert<String> {
     }
 
 
-    public void continueAlert(Node node, Label heading, Label body){
+
+
+    public void continueAlert(Node node, Node heading, Control body){
         JFXAlert<String> alert = new JFXAlert<>((Stage) node.getScene().getWindow());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(false);

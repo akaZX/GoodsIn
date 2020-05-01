@@ -2,8 +2,8 @@ package demos.GSONdemo;
 
 import app.pojos.RmtQaRecords;
 import com.google.gson.Gson;
-import java.time.LocalDate;
-import java.util.Arrays;
+
+import java.time.LocalDateTime;
 
 public class MainGSON {
 
@@ -13,7 +13,7 @@ public class MainGSON {
         atributes.setAuthor("asdassd");
 
 
-        atributes.setDate(LocalDate.now());
+        atributes.setDate(LocalDateTime.now());
         System.out.println("Before:" + atributes);
 
         Gson gson = new Gson();

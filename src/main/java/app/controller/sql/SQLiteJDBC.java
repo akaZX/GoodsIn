@@ -33,11 +33,10 @@ public class SQLiteJDBC {
             connection = ApacheConnPool.getConnection();
             assert connection != null;
             statement = connection.prepareStatement(query);
-            statement.executeUpdate();
+            int  updated = statement.executeUpdate();
+//            System.out.println("update : " + updated);
             close();
-
-            return true;
-
+            return (updated == 1);
         }
         catch (SQLException | NullPointerException e) {
             System.out.println("Error at: SQLiteJDBC.update():");
@@ -100,7 +99,7 @@ public class SQLiteJDBC {
         }
         catch (SQLException | NullPointerException e) {
             System.out.println("Error at: SQLiteJDBC.mainSelect():");
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
 
@@ -122,14 +121,14 @@ public class SQLiteJDBC {
             else {
                 statement.setString(1, (String) id);
             }
-            statement.executeUpdate();
+            int deleted = statement.executeUpdate();
             close();
 
-            return true;
+            return deleted == 1;
         }
         catch (SQLException | NullPointerException e) {
             System.out.println("Error at: SQLiteJDBC.delete():");
-            e.printStackTrace();
+//            e.printStackTrace();
             close();
 
             return false;

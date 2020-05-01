@@ -11,11 +11,15 @@ import java.util.List;
 
 public class SuppliersDao implements Dao<Suppliers> {
 
+    private final String TABLE = "SUPPLIERS";
+
     @Override
     public <R> Suppliers get(R id) {
+
+
         Suppliers supp = new Suppliers();
 
-        ResultSet rs = SQLiteJDBC.select("SUPPLIERS", "supp_code", id);
+        ResultSet rs = SQLiteJDBC.select(TABLE, "supp_code", id);
 
         try{
             while (rs.next()) {
@@ -24,9 +28,9 @@ public class SuppliersDao implements Dao<Suppliers> {
                 supp.setSupplierName(rs.getString("supp_name"));
 
             }
-            rs.close();
         }catch (NullPointerException | SQLException e){
             e.printStackTrace();
+            SQLiteJDBC.close();
         }
         SQLiteJDBC.close();
         return supp;
@@ -39,7 +43,7 @@ public class SuppliersDao implements Dao<Suppliers> {
         List<Suppliers> list = new ArrayList<>();
         Suppliers temp;
 
-        ResultSet rs    = SQLiteJDBC.selectAll("SUPPLIERS", "supp_name");
+        ResultSet rs    = SQLiteJDBC.selectAll(TABLE, "supp_name");
 
         try {
             while (rs.next()){
@@ -96,7 +100,7 @@ public class SuppliersDao implements Dao<Suppliers> {
 
     @Override
     public boolean delete(Suppliers suppliers) {
-       return SQLiteJDBC.delete("SUPPLIERS" , "supp_code", suppliers.getSupplierCode());
+       return SQLiteJDBC.delete(TABLE , "supp_code", suppliers.getSupplierCode());
     }
 
 

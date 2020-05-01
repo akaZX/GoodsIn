@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<fx:root maxWidth="250.0" minHeight="0.0" minWidth="0.0" prefWidth="250.0" stylesheets="@../../style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXListView fx:id="ordersList" layoutX="24.0" layoutY="41.0" maxWidth="230.0" minWidth="230.0" prefWidth="230.0" AnchorPane.bottomAnchor="55.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
+      <JFXButton buttonType="RAISED" layoutX="83.0" layoutY="700.0" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="0.0" onAction="#addNewOrder" prefHeight="30.0" text="New order" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <graphic>
+            <FontAwesomeIconView glyphName="PLUS" size="10">
+               <styleClass>
+                  <String fx:value="white-icon" />
+                  <String fx:value="small-icon" />
+               </styleClass>
+            </FontAwesomeIconView>
+         </graphic>
+      </JFXButton>
+      <HBox alignment="BOTTOM_LEFT" layoutX="13.0" layoutY="10.0" prefHeight="33.0" prefWidth="240.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <JFXDatePicker fx:id="datePicker">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </JFXDatePicker>
+            <HBox HBox.hgrow="ALWAYS" />
+            <Label fx:id="searchIcon" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="10.0" lineSpacing="4.0" maxHeight="1.7976931348623157E308" onMouseClicked="#search" onMouseEntered="#hover" prefHeight="30.0" prefWidth="30.0" styleClass="label-button">
+               <graphic>
+                  <FontAwesomeIconView glyphName="SEARCH" size="24" styleClass="drawer-top-icon" wrappingWidth="24.785714149475098" />
+               </graphic>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+      <JFXHamburger fx:id="hamburger" fillWidth="false" layoutX="78.0" layoutY="166.0" AnchorPane.rightAnchor="-35.0" AnchorPane.topAnchor="15.0" />
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</fx:root>

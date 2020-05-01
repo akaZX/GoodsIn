@@ -40,6 +40,10 @@
             <id>jcenter</id>
             <url>http://jcenter.bintray.com</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -167,8 +171,23 @@
             <version>2.8.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.ptnplanet</groupId>
+            <artifactId>Java-Naive-Bayes-Classifier</artifactId>
+            <version>1.0.7</version>
+        </dependency>
 
 
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.5</version>
+        </dependency>
     </dependencies>
 
 

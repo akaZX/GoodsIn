@@ -8,19 +8,19 @@ import javafx.scene.control.TextFormatter;
 
 public class TextFieldInput {
 
-    private final String MESSAGE ="Missing";
+    private static final String MESSAGE ="Missing";
 
-    private RequiredFieldValidator validator;
+    private static RequiredFieldValidator validator;
 
 
 
-    public void doubleTextField(JFXTextField field) {
+    public static void doubleTextField(JFXTextField field) {
 
         doubleField(field);
     }
 
 
-    public void doubleTextField(JFXTextField field, String validatorMessage) {
+    public static void doubleTextField(JFXTextField field, String validatorMessage) {
 
         doubleField(field);
         addValidation(field, validatorMessage);
@@ -28,7 +28,7 @@ public class TextFieldInput {
     }
 
 
-    public void doubleTextField(JFXTextField field, boolean defaultValidatorMessage) {
+    public static void doubleTextField(JFXTextField field, boolean defaultValidatorMessage) {
 
         if (defaultValidatorMessage) {
             doubleTextField(field, MESSAGE);
@@ -40,7 +40,7 @@ public class TextFieldInput {
     }
 
 
-    private void doubleField(JFXTextField field) {
+    private static void doubleField(JFXTextField field) {
 
         field.setTextFormatter(new TextFormatter<>(c -> {
             if (c.getControlNewText().length() > 0) {
@@ -59,15 +59,6 @@ public class TextFieldInput {
         }));
     }
 
-
-//    private void validateField(JFXTextField field, RequiredFieldValidator requiredFieldValidator) {
-//
-//        field.setValidators(requiredFieldValidator);
-//        field.textProperty().addListener((observable, oldValue, newValue) -> {
-//            field.validate();
-//        });
-//        field.validate();
-//    }
 
 
     public static void mainIntField(JFXTextField field) {
@@ -91,7 +82,7 @@ public class TextFieldInput {
     }
 
 
-    public void intField(JFXTextField field, String validatorMessage) {
+    public static void intField(JFXTextField field, String validatorMessage) {
 
         mainIntField(field);
         addValidation(field,validatorMessage);
@@ -99,7 +90,7 @@ public class TextFieldInput {
 
 
 
-    public void intField(JFXTextField field, boolean defaultValidatorMessage) {
+    public static void intField(JFXTextField field, boolean defaultValidatorMessage) {
 
         if (defaultValidatorMessage) {
             intField(field, MESSAGE);
@@ -110,16 +101,16 @@ public class TextFieldInput {
     }
 
 
-    public void addValidator(JFXTextField field) {
+    public static void addValidator(JFXTextField field) {
 
         addValidation(field, MESSAGE);
     }
-    public void addValidator(JFXTextField field, String message) {
+    public static void addValidator(JFXTextField field, String message) {
 
         addValidation(field, message);
     }
 
-    private void addValidation(JFXTextField field, String message) {
+    private static void addValidation(JFXTextField field, String message) {
         validator = new RequiredFieldValidator(message);
         field.setValidators(validator);
         field.textProperty().addListener(((observable, oldValue, newValue) -> {

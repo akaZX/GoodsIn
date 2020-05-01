@@ -7,15 +7,15 @@ import java.time.LocalDate;
 
 public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
 
-  private long rowid;
+  private int rowid;
   private String po;
   private String mCode;
-  private long lineNo;
-  private long deliveryNo;
+  private int lineNo;
+  private int deliveryNo;
   private LocalDate expectedDate;
   private double expectedQuantity;
   private double arrivedQuantity;
-  private long proteanEntry;
+  private int proteanEntry;
 
 
   public PoMaterials() {
@@ -23,7 +23,7 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
   }
 
 
-  public PoMaterials(long rowid, String po, String mCode, long lineNo, long deliveryNo, LocalDate expectedDate, double expectedQuantity, double arrivedQuantity) {
+  public PoMaterials(int rowid, String po, String mCode, int lineNo, int deliveryNo, LocalDate expectedDate, double expectedQuantity, double arrivedQuantity) {
 
     this.rowid = rowid;
     this.po = po;
@@ -45,11 +45,11 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
   }
 
 
-  public long getRowid() {
+  public int getRowid() {
     return rowid;
   }
 
-  public void setRowid(long rowid) {
+  public void setRowid(int rowid) {
     this.rowid = rowid;
   }
 
@@ -72,20 +72,20 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
   }
 
 
-  public long getLineNo() {
+  public int getLineNo() {
     return lineNo;
   }
 
-  public void setLineNo(long lineNo) {
+  public void setLineNo(int lineNo) {
     this.lineNo = lineNo;
   }
 
 
-  public long getDeliveryNo() {
+  public int getDeliveryNo() {
     return deliveryNo;
   }
 
-  public void setDeliveryNo(long deliveryNo) {
+  public void setDeliveryNo(int deliveryNo) {
     this.deliveryNo = deliveryNo;
   }
 
@@ -118,11 +118,11 @@ public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
   }
 
 
-  public long getProteanEntry() {
+  public int getProteanEntry() {
     return proteanEntry;
   }
 
-  public void setProteanEntry(long proteanEntry) {
+  public void setProteanEntry(int proteanEntry) {
     this.proteanEntry = proteanEntry;
   }
 

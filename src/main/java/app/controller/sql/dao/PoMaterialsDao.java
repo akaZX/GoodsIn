@@ -120,11 +120,11 @@ public class PoMaterialsDao implements Dao<PoMaterials> {
         mat.setArrivedQuantity(rs.getDouble("arrived_quantity"));
         mat.setMCode(rs.getString("m_code"));
         mat.setExpectedDate(LocalDate.parse(rs.getString("expected_date")));
-        mat.setLineNo(rs.getLong("line_no"));
-        mat.setProteanEntry(rs.getLong("protean_entry"));
+        mat.setLineNo(rs.getInt("line_no"));
+        mat.setProteanEntry(rs.getInt("protean_entry"));
         mat.setPo(rs.getString("po"));
-        mat.setRowid(rs.getLong("rowid"));
-        mat.setDeliveryNo(rs.getLong("delivery_no"));
+        mat.setRowid(rs.getInt("rowid"));
+        mat.setDeliveryNo(rs.getInt("delivery_no"));
         return mat;
     }
 }

@@ -35,10 +35,10 @@ public class SupplierOrderDao implements Dao<SupplierOrders> {
 
 
 
-    public <R> SupplierOrders getByPo(R id) {
+    public <R> SupplierOrders getBy(R id, String field) {
 
 
-        ResultSet      rs     = SQLiteJDBC.select(TABLE, "po", id);
+        ResultSet      rs     = SQLiteJDBC.select(TABLE, field, id);
         SupplierOrders orders = null;
         try {
             if (rs.next()) {
@@ -51,6 +51,7 @@ public class SupplierOrderDao implements Dao<SupplierOrders> {
         SQLiteJDBC.close();
         return orders;
     }
+
 
 
     @Override
@@ -77,6 +78,24 @@ public class SupplierOrderDao implements Dao<SupplierOrders> {
     public List<SupplierOrders> getAll(String param) {
 
         return null;
+    }
+
+    public  List<SupplierOrders> getAllBy(LocalDate date,  String field) {
+
+        List<SupplierOrders> list = new ArrayList<>();
+
+        ResultSet rs = SQLiteJDBC.select(TABLE, field, date);
+        try {
+            while (rs.next()) {
+
+                list.add(mapRsToObject(rs));
+            }
+        }
+        catch (NullPointerException | SQLException e) {
+            e.printStackTrace();
+        }
+        SQLiteJDBC.close();
+        return list;
     }
 
 

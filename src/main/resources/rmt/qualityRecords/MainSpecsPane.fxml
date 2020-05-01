@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root prefHeight="320.0" prefWidth="478.0" stylesheets="@../../style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="label" alignment="CENTER" fillHeight="false" maxWidth="1.7976931348623157E308" minHeight="75.0" prefHeight="75.0">
+               <children>
+                  <HBox HBox.hgrow="SOMETIMES" />
+                  <Label fx:id="topLabel" text="RMT quality records intake " wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font></Label>
+                  <HBox HBox.hgrow="SOMETIMES" />
+                  <JFXHamburger fx:id="rightHamburger">
+                     <HBox.margin>
+                        <Insets bottom="20.0" right="5.0" />
+                     </HBox.margin>
+                  </JFXHamburger>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="2.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets left="45.0" />
+               </padding>
+            </HBox>
+            <Separator maxHeight="3.0" VBox.vgrow="SOMETIMES" />
+            <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="SOMETIMES">
+               <VBox.margin>
+                  <Insets bottom="40.0" />
+               </VBox.margin>
+               <content>
+                  <GridPane fx:id="gridPane" vgap="10.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                     </rowConstraints>
+                  </GridPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+      <HBox fx:id="bottomButtons" layoutX="190.0" layoutY="191.0" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="13.0">
+         <children>
+            <JFXButton onAction="#removeRecord">
+               <graphic>
+                  <FontAwesomeIconView glyphName="MINUS">
+                     <styleClass>
+                        <String fx:value="red-icon" />
+                        <String fx:value="medium-icon" />
+                     </styleClass>
+                  </FontAwesomeIconView>
+               </graphic>
+            </JFXButton>
+            <JFXButton onAction="#addNewRecord">
+               <graphic>
+                  <FontAwesomeIconView glyphName="PLUS">
+                     <styleClass>
+                        <String fx:value="white-icon" />
+                        <String fx:value="medium-icon" />
+                     </styleClass>
+                  </FontAwesomeIconView>
+               </graphic>
+            </JFXButton>
+         </children>
+      </HBox>
+   </children>
+</fx:root>

@@ -1,5 +1,7 @@
 package app.pojos;
 
+import app.controller.sql.dao.SuppliersDao;
+
 import java.time.LocalDate;
 
 
@@ -89,4 +91,9 @@ public class SupplierOrders {
       }
     }
 
+
+    @Override
+    public String toString() {
+        return getPoNumber() + " - " + new SuppliersDao().get(getSuppCode()).getSupplierName();
+    }
 }

@@ -44,7 +44,7 @@ public class MainSupplierController implements Initializable {
 
             stackPane.getChildren().add(form);
 
-            leftDrawer.setDefaultDrawerSize(275);
+            leftDrawer.setDefaultDrawerSize(250);
             leftDrawer.setResizeContent(true);
             leftDrawer.setOverLayVisible(false);
             leftDrawer.setResizableOnDrag(false);
@@ -57,7 +57,7 @@ public class MainSupplierController implements Initializable {
 
             drawersStack.setContent(form);
             drawersStack.toggle(leftDrawer);
-            drawersStack.toggle(leftDrawer);
+
 
             String ID = "LEFT";
             leftDrawer.setId(ID);
