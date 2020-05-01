@@ -1,6 +1,7 @@
 package app.controller.suppliersView;
 
 import app.controller.sql.dao.SuppliersDao;
+import app.controller.suppliersView.newSupplier.NewSupplier;
 import app.pojos.Suppliers;
 import com.jfoenix.controls.*;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
@@ -31,8 +32,6 @@ public class SupplierDrawerController implements Initializable {
 
     @FXML
     private JFXButton addNewSupplier;
-    @FXML
-    private JFXButton refreshBtn;
 
     @FXML
     JFXTextField searchField;
@@ -44,6 +43,11 @@ public class SupplierDrawerController implements Initializable {
     private JFXHamburger hamburger;
 
 
+    @FXML
+    private void refresh(){
+        searchField.clear();
+        loadList();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -51,7 +55,8 @@ public class SupplierDrawerController implements Initializable {
         nodesListeners();
     }
 
-    private void loadList(){
+    public void loadList(){
+        supplierListView.getItems().clear();
         list = new SuppliersDao().getAll();
         supplierListView.setItems(FXCollections.observableArrayList(list));
     }
@@ -62,12 +67,6 @@ public class SupplierDrawerController implements Initializable {
         searchField.textProperty().addListener(
                 (ChangeListener) (observable, oldVal, newVal) -> searchSuppliers((String) oldVal, (String) newVal));
 
-
-        refreshBtn.setOnAction(event -> {
-            searchField.clear();
-
-
-        });
 
         // Adds listView cell formatter to show supp names and adds tooltip for each row
         supplierListView.setCellFactory(param -> new JFXListCell<Suppliers>() {
@@ -93,7 +92,6 @@ public class SupplierDrawerController implements Initializable {
         });
 
 
-        //Listens for mouse clicks
 
 
     }
@@ -116,7 +114,7 @@ public class SupplierDrawerController implements Initializable {
         });
 
 
-        addNewSupplier.setOnAction(event -> drawersStack.setContent(initializeSuppForm(true)));
+        addNewSupplier.setOnAction(event -> NewSupplier.addNewSupplier(this, addNewSupplier));
 
 
         supplierListView.setOnKeyPressed(event -> {
@@ -149,7 +147,7 @@ public class SupplierDrawerController implements Initializable {
         ObservableList<Suppliers> results = FXCollections.observableArrayList();
         for (Suppliers entry : supplierListView.getItems()) {
 
-            String entryText = entry.getSupplierName();
+            String entryText = entry.getSupplierName() + entry.getSupplierCode();
             if (entryText.toUpperCase().contains(newVal.toUpperCase().trim())) {
                 results.add(entry);
             }

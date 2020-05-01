@@ -1,6 +1,8 @@
 package app.pojos;
 
 
+import app.controller.sql.dao.MaterialsDao;
+
 public class SupplierMaterials {
 
     private int rowid;
@@ -9,7 +11,7 @@ public class SupplierMaterials {
 
     private String mCode;
 
-    private long palletWeight;
+    private int palletWeight;
 
 
     public int getRowid() {
@@ -48,14 +50,21 @@ public class SupplierMaterials {
     }
 
 
-    public long getPalletWeight() {
+    public int getPalletWeight() {
 
         return palletWeight;
     }
 
 
-    public void setPalletWeight(long palletWeight) {
+    public void setPalletWeight(int palletWeight) {
 
         this.palletWeight = palletWeight;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return new MaterialsDao().get(getmCode()).getName();
     }
 }

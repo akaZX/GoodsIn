@@ -14,14 +14,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root prefHeight="606.0" prefWidth="976.0" stylesheets="@../style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefHeight="454.0" prefWidth="727.0" stylesheets="@../style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox layoutX="14.0" layoutY="141.0" maxWidth="250.0" prefHeight="531.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label maxWidth="1.7976931348623157E308" styleClass="sched-form-label" stylesheets="@../style.css" text="Search criteria:" VBox.vgrow="ALWAYS" />
+            <Separator VBox.vgrow="SOMETIMES">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets right="-10.0" />
+               </padding>
+            </Separator>
             <VBox>
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="30.0">
+                  <HBox alignment="CENTER_LEFT" minHeight="30.0" prefHeight="30.0">
                      <children>
                         <JFXRadioButton fx:id="dateRadio" text="Date" />
                         <HBox HBox.hgrow="SOMETIMES" />
@@ -54,6 +62,11 @@
                </padding>
             </Separator>
             <JFXListView fx:id="listView" prefHeight="389.0" prefWidth="219.0" VBox.vgrow="SOMETIMES" />
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets right="-10.0" />
+               </padding>
+            </Separator>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="55.0" prefWidth="461.0">
                <children>
                   <JFXButton onAction="#sendReports" text="Send reports">
@@ -80,7 +93,7 @@
       <JFXTogglePane layoutX="406.0" layoutY="201.0" prefHeight="70.0" prefWidth="77.0" />
       <VBox layoutX="626.0" layoutY="178.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="255.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="96.0" prefWidth="721.0" VBox.vgrow="NEVER">
+            <HBox prefHeight="99.0" prefWidth="721.0" VBox.vgrow="NEVER">
                <children>
                   <Label fx:id="topLabel" styleClass="sched-form-label-top" HBox.hgrow="SOMETIMES" />
                </children>

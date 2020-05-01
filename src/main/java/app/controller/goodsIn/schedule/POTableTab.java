@@ -4,12 +4,15 @@ package app.controller.goodsIn.schedule;
 import app.controller.sql.SQLiteProteanClone;
 import app.controller.sql.dao.*;
 import app.controller.sql.serviceClasses.ScheduleEntryService;
+import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
 import app.controller.utils.ValidateInput;
 import app.model.ScheduleEntry;
 import app.view.table_columns.PoTableColumns;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -76,7 +79,7 @@ public class POTableTab {
         );
 
         toolbarMargins();
-        selectedDateLabel.getStyleClass().add("sched-form-label");
+        selectedDateLabel.getStyleClass().add("sched-table-top");
 
         toolBar.getItems().addAll(
                 selectedDateLabel,
@@ -139,6 +142,27 @@ public class POTableTab {
         //TODO change back to today's value
         dateField.setValue(LocalDate.of(2020,01,24));
         listAllRecords();
+        addIcons();
+    }
+
+
+
+    private void addIcons(){
+
+        addIcons(importEntries, FontAwesomeIcon.DATABASE);
+        addIcons(edit, FontAwesomeIcon.EDIT);
+        addIcons(listOrders, FontAwesomeIcon.LIST);
+        addIcons(addEntry, FontAwesomeIcon.PLUS);
+
+        addIcons(duplicateOrder, FontAwesomeIcon.COPY);
+        addIcons(build, FontAwesomeIcon.GEAR);
+
+
+
+        FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.REMOVE);
+        iconView.getStyleClass().addAll("red-icon", "small-icon");
+        deleteEntry.setGraphic(iconView);
+
     }
 
     //    adds action listeners for buttons and table rows
@@ -179,10 +203,10 @@ public class POTableTab {
                 ScheduleEntry record = table.getSelectionModel().getSelectedItem().getValue();
                 boolean b = new ScheduleDetailsDao().delete(table.getSelectionModel().getSelectedItem().getValue().getDetails());
                 if(b){
-                    msg.continueAlert(table, "Success", "Entry was deleted");
+                    msg.continueAlert(table, LabelWithIcons.largeCheckIconLabel("Success"), new Label("Entry was deleted"));
                 }else{
 
-                    msg.continueAlert(table, "Error", "Failed to delete following entry:\n" + record.getSupplier().getSupplierName() + " " + record.getOrder().getPoNumber());
+                    msg.continueAlert(table, LabelWithIcons.largeWarningIconLabel("Error"), new Label("Failed to delete following entry:\n" + record.getSupplier().getSupplierName() + " " + record.getOrder().getPoNumber()));
                 }
             }
             catch (NullPointerException ignored) {
@@ -196,7 +220,7 @@ public class POTableTab {
 
             }
             catch (NullPointerException e) {
-                msg.continueAlert(table, "Error", "No rows were selected.");
+                msg.continueAlert(table, LabelWithIcons.largeWarningIconLabel("Error"), new Label("No rows were selected"));
             }
             table.setRoot(populateTreeItems());
         });
@@ -216,21 +240,13 @@ public class POTableTab {
             JFXTreeTableRow<ScheduleEntry> row = new JFXTreeTableRow<>();
 
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 1 && (!row.isEmpty())) {
-                    try {
-                        ScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
-                        selectedDateLabel.setText(
-                                dateField.getValue().toString() + "  " + order.getSupplier().getSupplierName());
-                    }
-                    catch (Exception ignored) {
-                    }
-                }
+
                 if (event.getClickCount() == 2 && (! row.isEmpty())) {
                   loadRow();
                 }
             });
             row.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER && !row.isEmpty()) {
+                if (event.getCode() == KeyCode.ENTER && (!row.isEmpty())) {
                     loadRow();
                 }
             });
@@ -277,6 +293,17 @@ public class POTableTab {
             dateField.validate();
             return null;
         }
+    }
+
+
+    private void addIcons(JFXButton button, FontAwesomeIcon icon){
+
+        FontAwesomeIconView iconView = new FontAwesomeIconView(icon);
+
+        iconView.getStyleClass().addAll("white-icon", "small-icon");
+        button.setGraphic(iconView);
+
+
     }
 
 }

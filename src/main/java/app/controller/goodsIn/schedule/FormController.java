@@ -13,6 +13,8 @@ import app.view.table_columns.OrderDetailsColumns;
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +25,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -179,6 +182,7 @@ public class FormController  implements Initializable {
 
         initializeForm();
         initializeOrderDetailsTable();
+        addIcons();
 
         Platform.runLater(bays::requestFocus);
     }
@@ -495,17 +499,41 @@ public class FormController  implements Initializable {
         alert.setAnimation(JFXAlertAnimation.BOTTOM_ANIMATION);
         JFXDialogLayout layout = new JFXDialogLayout();
 
+
+
         try {
             StackPane pane = loader.load();
             pane.setMinSize(850, 700);
             layout.setBody(pane);
-            alert.setContent(layout)    ;
+            alert.setContent(layout);
             alert.show();
-
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void addIcons(){
+
+
+        addIcon(getArrivedTime, FontAwesomeIcon.CLOCK_ALT);
+        addIcon(getDepartedTime, FontAwesomeIcon.CLOCK_ALT);
+        addIcon(getBookedInTime, FontAwesomeIcon.CLOCK_ALT);
+        addIcon(submitForm, FontAwesomeIcon.SAVE);
+
+
+
+    }
+
+    private void addIcon(JFXButton button, FontAwesomeIcon icon){
+
+        FontAwesomeIconView iconView = new FontAwesomeIconView(icon);
+
+        iconView.getStyleClass().addAll("white-icon", "small-icon");
+        button.setGraphic(iconView);
+
+
 
     }
 

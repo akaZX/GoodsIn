@@ -4,17 +4,17 @@ package app.pojos;
 
 public class SuppNumbers {
 
-  private long rowid;
+  private int rowid;
   private String phoneNo;
   private String suppCode;
   private String details;
 
 
-  public long getRowid() {
+  public int getRowid() {
     return rowid;
   }
 
-  public void setRowid(long rowid) {
+  public void setRowid(int rowid) {
     this.rowid = rowid;
   }
 
@@ -45,4 +45,10 @@ public class SuppNumbers {
     this.details = details;
   }
 
+
+  @Override
+  public String toString() {
+
+    return getDetails() + " - " + getPhoneNo();
+  }
 }

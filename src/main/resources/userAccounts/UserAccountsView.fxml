@@ -35,9 +35,10 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></JFXListView>
+                  <Separator prefWidth="200.0" />
                   <HBox alignment="BOTTOM_RIGHT" layoutX="10.0" layoutY="10.0" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" spacing="30.0">
                      <children>
-                        <JFXButton onAction="#delete" text="Delete">
+                        <JFXButton onAction="#delete" text="Delete" HBox.hgrow="SOMETIMES">
                            <graphic>
                               <FontAwesomeIconView glyphName="REMOVE">
                                  <styleClass>
@@ -47,7 +48,7 @@
                               </FontAwesomeIconView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton onAction="#add" text="Add">
+                        <JFXButton onAction="#add" text="Add" HBox.hgrow="SOMETIMES">
                            <graphic>
                               <FontAwesomeIconView glyphName="PLUS">
                                  <styleClass>
@@ -89,8 +90,10 @@
                         <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="NEVER" />
                       <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="120.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="120.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="40.0" percentHeight="12.0" prefHeight="50.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -98,31 +101,34 @@
                         <Label layoutX="40.0" layoutY="34.0" styleClass="sched-form-label" text="First name:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label layoutX="40.0" layoutY="100.0" styleClass="sched-form-label" text="Last name:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label layoutX="40.0" layoutY="166.0" styleClass="sched-form-label" text="Work email:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label layoutX="40.0" layoutY="232.0" styleClass="sched-form-label" text="Access rights:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label layoutX="40.0" layoutY="232.0" styleClass="sched-form-label" text="Access rights:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <JFXTextField fx:id="usernameField" GridPane.columnIndex="3" />
                         <JFXTextField fx:id="firstNameField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                         <JFXTextField fx:id="lastNameField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                         <JFXTextField fx:id="emailField" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                        <VBox spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <VBox spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                            <children>
                               <JFXCheckBox fx:id="goodsInCb" text="Goods in" />
                               <JFXCheckBox fx:id="rmtGoodsInCb" text="RMT - goods in" />
                               <JFXCheckBox fx:id="rmtAdminCb" layoutX="10.0" layoutY="45.0" text="RMT - admin" />
                            </children>
                         </VBox>
-                        <VBox spacing="15.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                        <VBox spacing="15.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
                            <children>
                               <JFXCheckBox fx:id="securityCb" text="Security" />
                               <JFXCheckBox fx:id="fruitCb" text="Fruit" />
                            </children>
                         </VBox>
-                        <Label layoutX="40.0" layoutY="119.0" styleClass="sched-form-label" text="Edit user profiles:" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <JFXCheckBox fx:id="adminCb" text=" " GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                        <Label layoutX="40.0" layoutY="119.0" styleClass="sched-form-label" text="Edit user profiles:" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <JFXCheckBox fx:id="adminCb" text=" " GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                        <Separator prefWidth="200.0" GridPane.columnSpan="5" GridPane.hgrow="NEVER" GridPane.rowIndex="7" />
+                        <Separator maxHeight="3.0" GridPane.columnSpan="5" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
+                  <Separator prefWidth="200.0" />
                   <HBox alignment="BOTTOM_RIGHT" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" spacing="30.0" VBox.vgrow="SOMETIMES">
                      <children>
-                        <JFXButton onAction="#save" text="Save">
+                        <JFXButton onAction="#save" text="Save" HBox.hgrow="SOMETIMES">
                            <graphic>
                               <FontAwesomeIconView glyphName="SAVE">
                                  <styleClass>

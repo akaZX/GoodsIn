@@ -40,7 +40,7 @@ public class MaterialsDao implements Dao<Materials> {
     public List<Materials> getAll() {
 
         List<Materials> list = new ArrayList<>();
-        ResultSet       rs   = SQLiteJDBC.selectAll(TABLE, "m_code");
+        ResultSet       rs   = SQLiteJDBC.selectAll(TABLE, "name");
 
         try {
             while (rs.next()) {

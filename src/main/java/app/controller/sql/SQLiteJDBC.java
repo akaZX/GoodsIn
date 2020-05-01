@@ -124,7 +124,7 @@ public class SQLiteJDBC {
             int deleted = statement.executeUpdate();
             close();
 
-            return deleted == 1;
+            return (deleted == 1);
         }
         catch (SQLException | NullPointerException e) {
             System.out.println("Error at: SQLiteJDBC.delete():");

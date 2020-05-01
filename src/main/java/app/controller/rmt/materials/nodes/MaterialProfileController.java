@@ -833,7 +833,6 @@ public class MaterialProfileController implements Initializable {
 
     }
 
-
     //  changes bool to int // true = 1, false = 0
     private int boolToInt(boolean b) {
 

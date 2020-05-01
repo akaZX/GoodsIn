@@ -7,7 +7,9 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -16,18 +18,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="562.0" prefWidth="700.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="494.0" prefWidth="761.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="17.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="17.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="23.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="23.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="25.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="25.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
         </columnConstraints>
@@ -35,13 +40,14 @@
             <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" percentHeight="8.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="20.0" minHeight="20.0" percentHeight="8.0" prefHeight="20.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="3" GridPane.rowSpan="3">
+            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="4" GridPane.rowSpan="3">
                <children>
                   <Label maxWidth="1.7976931348623157E308" text="Emails">
                      <font>
@@ -51,66 +57,77 @@
                         <Insets bottom="10.0" />
                      </padding>
                   </Label>
+                  <Separator prefWidth="200.0" />
                   <JFXListView fx:id="emailsList" prefHeight="273.0" prefWidth="162.0" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
                   </JFXListView>
-                  <JFXButton fx:id="deleteEmail" text="Delete">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                     <graphic>
-                        <FontAwesomeIconView glyphName="REMOVE" size="15">
-                           <styleClass>
-                              <String fx:value="small-icon" />
-                              <String fx:value="red-icon" />
-                           </styleClass></FontAwesomeIconView>
-                     </graphic>
-                  </JFXButton>
-                  <VBox prefHeight="132.0" prefWidth="162.0" VBox.vgrow="NEVER">
+                  <VBox alignment="TOP_RIGHT" maxHeight="180.0" minHeight="180.0" prefHeight="180.0" prefWidth="100.0">
                      <children>
-                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="162.0" text="Add new email:">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
+                        <Separator prefWidth="200.0" />
+                        <JFXButton fx:id="deleteEmail" text="Delete">
                            <VBox.margin>
-                              <Insets top="5.0" />
+                              <Insets bottom="5.0" top="5.0" />
                            </VBox.margin>
-                        </Label>
-                        <JFXTextField fx:id="newEmailField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="162.0" promptText="Enter new email">
-                           <VBox.margin>
-                              <Insets bottom="15.0" top="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </JFXTextField>
-                        <HBox alignment="CENTER_RIGHT" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" prefHeight="60.0">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="REMOVE" size="15">
+                                 <styleClass>
+                                    <String fx:value="small-icon" />
+                                    <String fx:value="red-icon" />
+                                 </styleClass>
+                              </FontAwesomeIconView>
+                           </graphic>
+                        </JFXButton>
+                        <Separator prefWidth="200.0" />
+                        <VBox prefHeight="132.0" prefWidth="162.0" VBox.vgrow="NEVER">
                            <children>
-                              <JFXButton fx:id="saveNewEmail" text="Add">
-                                 <graphic>
-                                    <FontAwesomeIconView glyphName="PLUS" size="15">
-                                       <styleClass>
-                                          <String fx:value="small-icon" />
-                                          <String fx:value="green-icon" />
-                                       </styleClass></FontAwesomeIconView>
-                                 </graphic></JFXButton>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="162.0" text="Add new email:">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <JFXTextField fx:id="newEmailField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="162.0" promptText="Enter new email">
+                                 <VBox.margin>
+                                    <Insets bottom="15.0" top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </JFXTextField>
+                              <HBox alignment="CENTER_RIGHT" minHeight="40.0" prefHeight="50.0">
+                                 <children>
+                                    <JFXButton fx:id="saveNewEmail" text="Add">
+                                       <graphic>
+                                          <FontAwesomeIconView glyphName="PLUS" size="15">
+                                             <styleClass>
+                                                <String fx:value="small-icon" />
+                                                <String fx:value="white-icon" />
+                                             </styleClass>
+                                          </FontAwesomeIconView>
+                                       </graphic>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </VBox>
                      </children>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
                   </VBox>
+                  <Separator prefWidth="200.0" />
                </children>
             </VBox>
-            <Label fx:id="supplierName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+            <Label fx:id="supplierName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="3" GridPane.rowSpan="3">
+            <VBox alignment="TOP_RIGHT" GridPane.columnIndex="9" GridPane.rowIndex="4" GridPane.rowSpan="3">
                <children>
                   <Label maxWidth="1.7976931348623157E308" text="Phone numbers">
                      <font>
@@ -120,23 +137,33 @@
                         <Insets bottom="10.0" />
                      </padding>
                   </Label>
-                  <JFXListView fx:id="numbersList" prefHeight="158.0" prefWidth="146.0" VBox.vgrow="ALWAYS">
+                  <Separator prefWidth="200.0" />
+                  <JFXListView fx:id="numbersList" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
                   </JFXListView>
-                  <JFXButton fx:id="deletePhoneNumber" text="Delete">
+                  <Separator prefWidth="200.0" />
+                  <HBox alignment="CENTER_RIGHT">
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
-                     <graphic>
-                        <FontAwesomeIconView glyphName="REMOVE" size="15">
-                           <styleClass>
-                              <String fx:value="small-icon" />
-                              <String fx:value="red-icon" />
-                           </styleClass></FontAwesomeIconView>
-                     </graphic>
-                  </JFXButton>
+                     <children>
+                        <Label fx:id="contactLabel" styleClass="sched-form-label" HBox.hgrow="SOMETIMES" />
+                        <HBox HBox.hgrow="SOMETIMES" />
+                        <JFXButton fx:id="deletePhoneNumber" text="Delete" HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="REMOVE" size="15">
+                                 <styleClass>
+                                    <String fx:value="small-icon" />
+                                    <String fx:value="red-icon" />
+                                 </styleClass>
+                              </FontAwesomeIconView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
                   <VBox prefHeight="192.0" prefWidth="146.0" VBox.vgrow="NEVER">
                      <children>
                         <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="161.0" text="Add new phone number:">
@@ -147,7 +174,8 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </Label>
-                        <JFXTextField fx:id="newPhoneNumber" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="162.0" promptText="Enter new number">
+                        <Separator prefWidth="200.0" />
+                        <JFXTextField fx:id="newPhoneNumber" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Enter new number">
                            <padding>
                               <Insets top="5.0" />
                            </padding>
@@ -166,18 +194,19 @@
                               <Font size="13.0" />
                            </font>
                         </JFXTextField>
-                        <HBox alignment="CENTER_RIGHT" maxHeight="65.0" maxWidth="1.7976931348623157E308" minHeight="56.0" prefHeight="56.0" prefWidth="146.0">
+                        <HBox alignment="CENTER_RIGHT" minHeight="40.0" prefHeight="50.0">
                            <children>
                               <JFXButton fx:id="addContact" text="Add">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="PLUS" size="15">
                                        <styleClass>
                                           <String fx:value="small-icon" />
-                                          <String fx:value="green-icon" />
+                                          <String fx:value="white-icon" />
                                        </styleClass></FontAwesomeIconView>
                                  </graphic></JFXButton>
                            </children>
                         </HBox>
+                        <Separator prefWidth="200.0" />
                      </children>
                      <VBox.margin>
                         <Insets top="10.0" />
@@ -185,7 +214,7 @@
                   </VBox>
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.rowSpan="3">
+            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="4" GridPane.rowSpan="3">
                <children>
                   <Label maxWidth="1.7976931348623157E308" text="Supplier materials">
                      <font>
@@ -195,82 +224,126 @@
                         <Insets bottom="10.0" />
                      </padding>
                   </Label>
-                  <JFXListView fx:id="materialsList" prefHeight="292.0" prefWidth="216.0" VBox.vgrow="SOMETIMES" />
-                  <VBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="216.0">
+                  <Separator prefWidth="200.0" />
+                  <JFXListView fx:id="materialsList" prefHeight="292.0" prefWidth="216.0" VBox.vgrow="ALWAYS" />
+                  <VBox alignment="TOP_RIGHT" maxHeight="180.0" minHeight="180.0" prefHeight="180.0">
                      <children>
-                        <Label fx:id="materialLabel" maxWidth="1.7976931348623157E308" text="Label">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="216.0">
+                        <Separator prefWidth="200.0" />
+                        <HBox alignment="TOP_RIGHT">
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
                            <children>
-                              <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Avg weight:">
-                                 <graphic>
-                                    <JFXTextField fx:id="avgTextField" prefHeight="30.0" prefWidth="57.0">
-                                       <padding>
-                                          <Insets left="7.0" />
-                                       </padding>
-                                    </JFXTextField>
-                                 </graphic>
+                              <Label fx:id="materialLabel" maxWidth="1.7976931348623157E308">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
                               </Label>
                               <HBox HBox.hgrow="SOMETIMES" />
-                              <JFXButton fx:id="updateWeightBtn" text="Update">
+                              <JFXButton fx:id="deleteMaterial" minWidth="75.0" text="Delete">
                                  <graphic>
-                                    <FontAwesomeIconView glyphName="SAVE" size="15">
+                                    <FontAwesomeIconView glyphName="REMOVE" size="15">
                                        <styleClass>
                                           <String fx:value="small-icon" />
-                                          <String fx:value="white-icon" />
-                                       </styleClass></FontAwesomeIconView>
-                                 </graphic></JFXButton>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER_RIGHT" maxHeight="60.0" prefHeight="60.0" prefWidth="216.0">
-                     <children>
-                        <Label fx:id="materialName" maxWidth="1.7976931348623157E308" text="Add new material">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <HBox alignment="CENTER" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" prefHeight="60.0">
-                           <children>
-                              <JFXComboBox fx:id="materialsComboBox" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="137.0" HBox.hgrow="SOMETIMES" />
-                              <HBox HBox.hgrow="SOMETIMES" />
-                              <JFXButton fx:id="addMaterialBtn" text="Add" HBox.hgrow="ALWAYS">
-                                 <graphic>
-                                    <FontAwesomeIconView glyphName="PLUS" size="15">
-                                       <styleClass>
-                                          <String fx:value="small-icon" />
-                                          <String fx:value="green-icon" />
-                                       </styleClass></FontAwesomeIconView>
+                                          <String fx:value="red-icon" />
+                                       </styleClass>
+                                    </FontAwesomeIconView>
                                  </graphic>
                               </JFXButton>
                            </children>
                         </HBox>
+                        <Separator prefWidth="200.0" />
+                        <VBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="216.0">
+                           <children>
+                              <Label maxWidth="1.7976931348623157E308" text="Material average weight:">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Separator prefWidth="200.0" />
+                              <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="216.0" spacing="5.0">
+                                 <children>
+                                    <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Avg weight:">
+                                       <graphic>
+                                          <JFXTextField fx:id="avgTextField" prefHeight="30.0" prefWidth="57.0">
+                                             <padding>
+                                                <Insets left="7.0" />
+                                             </padding>
+                                          </JFXTextField>
+                                       </graphic>
+                                    </Label>
+                                    <HBox HBox.hgrow="SOMETIMES" />
+                                    <JFXButton fx:id="updateWeightBtn" text="Update">
+                                       <graphic>
+                                          <FontAwesomeIconView glyphName="SAVE" size="15">
+                                             <styleClass>
+                                                <String fx:value="small-icon" />
+                                                <String fx:value="white-icon" />
+                                             </styleClass>
+                                          </FontAwesomeIconView>
+                                       </graphic>
+                                    </JFXButton>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_RIGHT" maxHeight="60.0" prefHeight="60.0" prefWidth="216.0">
+                           <children>
+                              <Separator prefWidth="200.0" />
+                              <Label fx:id="materialName" maxWidth="1.7976931348623157E308" text="Add new material">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" minHeight="40.0" prefHeight="50.0" spacing="5.0">
+                                 <children>
+                                    <JFXComboBox fx:id="materialsComboBox" prefHeight="25.0" prefWidth="137.0" HBox.hgrow="SOMETIMES" />
+                                    <HBox HBox.hgrow="SOMETIMES" />
+                                    <JFXButton fx:id="addMaterialBtn" text="Add" HBox.hgrow="ALWAYS">
+                                       <graphic>
+                                          <FontAwesomeIconView glyphName="PLUS" size="15">
+                                             <styleClass>
+                                                <String fx:value="small-icon" />
+                                                <String fx:value="white-icon" />
+                                             </styleClass>
+                                          </FontAwesomeIconView>
+                                       </graphic>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
+                  <Separator prefWidth="200.0" />
                </children>
             </VBox>
-            <VBox prefHeight="90.0" prefWidth="248.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="2">
-               <children>
-                  <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" prefHeight="47.0" prefWidth="251.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label text="Supplier code:" />
-                        <HBox HBox.hgrow="SOMETIMES" />
-                        <JFXTextField prefHeight="30.0" prefWidth="125.0" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" prefHeight="47.0" prefWidth="251.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label text="Supplier name:" />
-                        <HBox HBox.hgrow="SOMETIMES" />
-                        <JFXTextField prefHeight="30.0" prefWidth="125.0" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="5" GridPane.rowIndex="3" GridPane.rowSpan="4" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="8" GridPane.rowIndex="4" GridPane.rowSpan="3" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.rowSpan="3">
+               <GridPane.margin>
+                  <Insets right="5.0" />
+               </GridPane.margin>
+            </Separator>
+            <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="10" GridPane.rowIndex="4" GridPane.rowSpan="3">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin>
+            </Separator>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" onMouseClicked="#changeName" styleClass="label-button" text="Change name" GridPane.columnIndex="9" GridPane.halignment="RIGHT" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="EDIT" styleClass="drawer-top-icon" />
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
          </children>
       </GridPane>
    </children>

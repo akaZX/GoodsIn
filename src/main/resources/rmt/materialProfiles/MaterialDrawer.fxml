@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -29,7 +30,7 @@
                </HBox.margin>
             </JFXTextField>
             <HBox HBox.hgrow="SOMETIMES" />
-            <Label fx:id="refreshIcon" alignment="CENTER" contentDisplay="CENTER" onMouseEntered="#hover" prefHeight="33.0" prefWidth="30.0" styleClass="label-button" HBox.hgrow="SOMETIMES">
+            <Label fx:id="refreshIcon" alignment="CENTER" contentDisplay="CENTER" minWidth="33.0" onMouseEntered="#hover" prefHeight="33.0" prefWidth="33.0" styleClass="label-button" HBox.hgrow="SOMETIMES">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="16" styleClass="drawer-top-icon" textAlignment="RIGHT" wrappingWidth="16.0" />
                </graphic>
@@ -39,12 +40,16 @@
             </Label>
          </children>
       </HBox>
-      <JFXButton fx:id="addNewMaterial" buttonType="RAISED" layoutX="83.0" layoutY="700.0" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="0.0" prefHeight="30.0" text="Add material" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+      <JFXButton fx:id="addNewMaterial" buttonType="RAISED" layoutX="83.0" layoutY="700.0" maxHeight="30.0" minHeight="30.0" minWidth="0.0" prefHeight="30.0" text="Add material" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <graphic>
-            <FontAwesomeIconView glyphName="PLUS" styleClass="white-icon" />
+            <FontAwesomeIconView glyphName="PLUS">
+               <styleClass>
+                  <String fx:value="white-icon" />
+                  <String fx:value="small-icon" />
+               </styleClass></FontAwesomeIconView>
          </graphic></JFXButton>
    </children>
    <opaqueInsets>

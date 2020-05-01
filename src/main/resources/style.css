@@ -363,20 +363,8 @@
     -fx-background-color: transparent;
 }
 
-.animated-option-button {
-    -fx-background-color: #F1F1F1;
-    -fx-background-radius: 50px;
-    -fx-pref-height: 50px;
-    -fx-pref-width: 50px;
-    -fx-min-width: -fx-pref-width;
-    -fx-max-width: -fx-pref-width;
-    -fx-min-height: -fx-pref-height;
-    -fx-max-height: -fx-pref-height;
-    -jfx-button-type: RAISED;
-}
-.animated-option-button .jfx-rippler{
-    -jfx-rippler-fill: rgb(113, 118, 114);
-}
+
+
 .sub-icon{
     -fx-fill: rgb(113, 118, 114);
 }
@@ -454,6 +442,8 @@
     /*-fx-pref-width: 130px;*/
     -fx-background-color: #003f77;
     -fx-text-fill: WHITE;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
     -jfx-button-type: RAISED;
 }
 
@@ -511,7 +501,12 @@
 
 
 .jfx-date-picker{
-    -jfx-default-color: #0069a6;
+    -jfx-default-color: #003f77;
+}
+.jfx-date-picker .jfx-button{
+    -fx-background-color: white;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
 }
 
 
@@ -547,7 +542,6 @@
 .sched-form-label-top {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-
 }
 
 
@@ -564,13 +558,15 @@
 
 
 .drawer-top-icon{
-    -fx-fill: #7a7aef;
+    -fx-fill: #6e6e73;
     -glyph-size: 24px;
     -fx-font-size: 24px;
+    -fx-font-family: "FontAwesome";
+
 }
 
 .label-button:hover > .drawer-top-icon {
-    -fx-fill: #1337f5;
+    -fx-fill: #0069a6;
 }
 .label-button:hover {
     -fx-background-color: darkgray;
@@ -582,24 +578,30 @@
     -fx-fill: white;
 }
 .red-icon{
-    -fx-fill: red;
+    -fx-fill: rgba(255, 0, 0, 0.89);
 }
 .green-icon{
     -fx-fill: green;
 }
 
 .small-icon{
-    -glyph-size: 14px;
-    -fx-font-size: 14px;
+    /*-glyph-size: 16px;*/
+    -fx-font-size: 16px;
+    -fx-font-family: "FontAwesome";
+
 }
 
 .medium-icon{
-    -glyph-size: 18px;
-    -fx-font-size: 18px;
+    /*-glyph-size: 18px;*/
+    -fx-font-size: 20px;
+    -fx-font-family: "FontAwesome";
+
 }
 .large-icon{
     -glyph-size: 24px;
     -fx-font-size: 24px;
+    -fx-font-family: "FontAwesome";
+
 }
 
 
@@ -626,6 +628,20 @@
 .list-view .jfx-list-cell:even:selected .label{
     -fx-text-fill: black;
 }
+
+.jfx-radio-button {
+    -jfx-selected-color: #0069a6;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.sched-table-top{
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+
 
 
 

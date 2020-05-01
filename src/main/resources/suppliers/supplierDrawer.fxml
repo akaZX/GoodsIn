@@ -5,33 +5,47 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="listas" maxWidth="250.0" minWidth="0.0" prefWidth="250.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <JFXButton fx:id="addNewSupplier" buttonType="RAISED" layoutX="83.0" layoutY="700.0" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="0.0" prefHeight="30.0" text="Add Supplier" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="65.0" />
+      <JFXButton fx:id="addNewSupplier" buttonType="RAISED" layoutX="83.0" layoutY="700.0" maxHeight="30.0" minHeight="30.0" minWidth="0.0" prefHeight="30.0" text="Add Supplier" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="10.0">
+         <graphic>
+            <FontAwesomeIconView glyphName="PLUS" size="14">
+               <styleClass>
+                  <String fx:value="white-icon" />
+                  <String fx:value="small-icon" />
+               </styleClass>
+            </FontAwesomeIconView>
+         </graphic></JFXButton>
       <JFXHamburger fx:id="hamburger" layoutX="58.0" layoutY="146.0" AnchorPane.rightAnchor="-35.0" AnchorPane.topAnchor="15.0">
          <rotationAxis>
             <Point3D z="15.0" />
          </rotationAxis>
       </JFXHamburger>
-      <JFXListView fx:id="supplierListView" layoutX="24.0" layoutY="41.0" maxWidth="230.0" minWidth="0.0" prefHeight="400.0" prefWidth="230.0" AnchorPane.bottomAnchor="60.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="41.0" />
-      <HBox alignment="CENTER_LEFT" layoutX="7.0" layoutY="-1.0" prefWidth="250.0" spacing="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+      <JFXListView fx:id="supplierListView" layoutX="24.0" layoutY="41.0" maxWidth="230.0" minWidth="0.0" prefHeight="400.0" prefWidth="230.0" AnchorPane.bottomAnchor="60.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="54.0" />
+      <HBox alignment="CENTER_LEFT" layoutX="7.0" layoutY="-1.0" prefWidth="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
          <children>
-            <JFXTextField fx:id="searchField" alignment="BOTTOM_LEFT" prefHeight="40.0" prefWidth="230.0" promptText="Search supplier">
+            <JFXTextField fx:id="searchField" alignment="BOTTOM_LEFT" prefHeight="40.0" prefWidth="180.0" promptText="Search supplier">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </JFXTextField>
-            <JFXButton fx:id="refreshBtn" contentDisplay="GRAPHIC_ONLY" graphicTextGap="1.0" prefHeight="30.0" prefWidth="39.0" styleClass="refresh-button" text=" ">
+            <HBox HBox.hgrow="SOMETIMES" />
+            <Label fx:id="refreshIcon" alignment="CENTER" contentDisplay="CENTER" minWidth="33.0" onMouseClicked="#refresh" prefHeight="33.0" prefWidth="33.0" styleClass="label-button">
                <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="16" styleClass="refresh-icon" textAlignment="RIGHT" wrappingWidth="16.0" />
+                  <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="0" styleClass="drawer-top-icon" textAlignment="RIGHT" wrappingWidth="16.0" />
                </graphic>
-            </JFXButton>
+               <padding>
+                  <Insets bottom="4.0" left="4.0" right="8.0" top="4.0" />
+               </padding>
+            </Label>
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
