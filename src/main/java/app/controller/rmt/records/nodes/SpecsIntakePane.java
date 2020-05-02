@@ -73,11 +73,15 @@ public class SpecsIntakePane extends AnchorPane {
 
     private final JFXComboBox<String> varietyCombo = new JFXComboBox<>();
 
+    private final YieldBox yieldBox = new YieldBox();
+
     Map<String, Node> map = new HashMap<>();
 
-    private RmtQaRecords intakeRecord ;
+    SpecsIntakePaneView parent;
 
-    private DecisionBox decisionBox = new DecisionBox();
+    private RmtQaRecords intakeRecord;
+
+    private final DecisionBox decisionBox = new DecisionBox();
 
     private MaterialSpecs specs;
 
@@ -97,8 +101,6 @@ public class SpecsIntakePane extends AnchorPane {
     private ParamBox headWeightBox;
 
     private DensityBox densityBox;
-
-    private final YieldBox yieldBox = new YieldBox();
 
     @FXML
     private JFXComboBox<String> decisionCombo;
@@ -193,7 +195,6 @@ public class SpecsIntakePane extends AnchorPane {
     @FXML
     private JFXComboBox<Integer> samplesComboBox;
 
-
     @FXML
     private TextArea commentsField;
 
@@ -220,7 +221,6 @@ public class SpecsIntakePane extends AnchorPane {
 
     @FXML
     private JFXButton showPopUpBtn;
-    SpecsIntakePaneView parent;
 
 
     public SpecsIntakePane(RmtQaRecords intakeRecord, SpecsIntakePaneView parent) {

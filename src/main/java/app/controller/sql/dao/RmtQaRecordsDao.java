@@ -17,13 +17,15 @@ public class RmtQaRecordsDao implements Dao<RmtQaRecords> {
 
     private static final String TABLE = "RMT_QA_RECORDS";
 
+
     @Override
     public <R> RmtQaRecords get(R id) {
-        RmtQaRecords record = null;
-        ResultSet resultSet = SQLiteJDBC.select(TABLE, "rowid", id);
+
+        RmtQaRecords record    = null;
+        ResultSet    resultSet = SQLiteJDBC.select(TABLE, "rowid", id);
         try {
             if (resultSet.next()) {
-                record =  mapRsToObject(resultSet);
+                record = mapRsToObject(resultSet);
             }
         }
         catch (SQLException e) {
@@ -40,7 +42,7 @@ public class RmtQaRecordsDao implements Dao<RmtQaRecords> {
 
         List<RmtQaRecords> list = new ArrayList<>();
 
-        ResultSet rs    = SQLiteJDBC.selectAll(TABLE, "po");
+        ResultSet rs = SQLiteJDBC.selectAll(TABLE, "po");
 
         return getRecords(list, rs);
     }
@@ -48,6 +50,7 @@ public class RmtQaRecordsDao implements Dao<RmtQaRecords> {
 
     @Override
     public List<RmtQaRecords> getAll(String param) {
+
         List<RmtQaRecords> list = new ArrayList<>();
 
         ResultSet rs = SQLiteJDBC.select(TABLE, "po", param);
@@ -57,29 +60,11 @@ public class RmtQaRecordsDao implements Dao<RmtQaRecords> {
     }
 
 
-    @Nullable
-    private List<RmtQaRecords> getRecords(List<RmtQaRecords> list, ResultSet rs) {
-
-        try {
-            while (rs.next()){
-                RmtQaRecords specs = mapRsToObject(rs);
-                list.add(specs);
-            }
-            rs.close();
-        }
-        catch (SQLException | NullPointerException e) {
-           return null;
-        }
-        SQLiteJDBC.close();
-        return list;
-    }
-
-
     @Override
     public boolean save(RmtQaRecords rmtQaRecords) {
 
         String fields = " po, m_code, author, date, details_JSON, decision ";
-        return SQLiteJDBC.insert(fields, rmtQaRecords.saveString(), TABLE );
+        return SQLiteJDBC.insert(fields, rmtQaRecords.saveString(), TABLE);
     }
 
 
@@ -87,7 +72,8 @@ public class RmtQaRecordsDao implements Dao<RmtQaRecords> {
     public boolean update(RmtQaRecords rmtQaRecords) {
 
         @Language("SQLite")
-        String sql = "UPDATE RMT_QA_RECORDS SET " + rmtQaRecords.toUpdateString() + " WHERE rowid=" + rmtQaRecords.getRowid() + "";
+        String sql = "UPDATE RMT_QA_RECORDS SET " + rmtQaRecords.toUpdateString() + " WHERE rowid=" +
+                     rmtQaRecords.getRowid() + "";
         return SQLiteJDBC.update(sql);
     }
 
@@ -98,7 +84,27 @@ public class RmtQaRecordsDao implements Dao<RmtQaRecords> {
         return SQLiteJDBC.delete(TABLE, "rowid", rmtQaRecords.getRowid());
     }
 
+
+    @Nullable
+    private List<RmtQaRecords> getRecords(List<RmtQaRecords> list, ResultSet rs) {
+
+        try {
+            while (rs.next()) {
+                RmtQaRecords specs = mapRsToObject(rs);
+                list.add(specs);
+            }
+            rs.close();
+        }
+        catch (SQLException | NullPointerException e) {
+            return null;
+        }
+        SQLiteJDBC.close();
+        return list;
+    }
+
+
     private RmtQaRecords mapRsToObject(ResultSet rs) throws SQLException {
+
         RmtQaRecords record = new RmtQaRecords();
         record.setRowid(rs.getInt("rowid"));
         record.setPo(rs.getString("po"));

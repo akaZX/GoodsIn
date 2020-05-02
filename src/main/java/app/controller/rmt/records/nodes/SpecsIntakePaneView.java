@@ -23,23 +23,23 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpecsIntakePaneView extends AnchorPane {
 
-    private Messages msg = new Messages();
-
-    private JFXDrawersStack drawersStack;
-    private JFXDrawer detailsDrawer;
-
     private final List<RmtQaRecords> records = new ArrayList<>();
 
+    private final Messages msg = new Messages();
+
+    private JFXDrawersStack drawersStack;
+
+    private JFXDrawer detailsDrawer;
 
     private PoMaterials poMaterial;
 
     private int minRows = 0;
+
     private int row = 0;
 
     @FXML
@@ -47,77 +47,19 @@ public class SpecsIntakePaneView extends AnchorPane {
 
     @FXML
     private GridPane gridPane;
+
     @FXML
     private ScrollPane scrollPane;
+
     @FXML
     private JFXHamburger rightHamburger;
+
     @FXML
     private HBox bottomButtons;
 
 
-    @FXML
-    private void addNewRecord() {
-
-        try {
-            if (new MaterialSpecsDao().get(poMaterial.getMCode())!= null) {
-                RmtQaRecords record = new RmtQaRecords();
-                record.setPo(poMaterial.getPo());
-                record.setmCode(poMaterial.getMCode());
-                gridPane.add(new SpecsIntakePane(record, this), 0, row);
-                row++;
-            }else {
-                msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Missing material specs"), new Label());
-
-            }
-        }
-        catch (Exception e) {
-            msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Select material"), new Label());
-        }
-    }
-
-    @FXML
-    private void removeRecord(ActionEvent event) {
-
-        if(minRows < row){
-
-            ObservableList<Node> childrens = gridPane.getChildren();
-            for(Node node : childrens) {
-                if(GridPane.getRowIndex(node) == (row - 1)) {
-                    SpecsIntakePane specsPane= (SpecsIntakePane)node;
-                    gridPane.getChildren().remove(specsPane);
-                    break;
-                }
-            }
-            if (row > 0) {
-                row--;
-            }
-            scrollPane.setContent(gridPane);
-        }else{
-            msg.continueAlert(
-                    this,
-                    LabelWithIcons.largeWarningIconLabel("Error"),
-                    new Label("Can not delete saved records from here,\n use delete button on intake form")
-            );
-        }
-
-    }
-
-    public SpecsIntakePaneView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/qualityRecords/MainSpecsPane.fxml"));
-            loader.setRoot(this);
-            loader.setController(this);
-            loader.load();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        showButtons(false);
-    }
-
-
-
     public SpecsIntakePaneView(PoMaterials poMaterial, JFXDrawersStack drawersStack, JFXDrawer detailsDrawer) {
+
         this();
         this.poMaterial = poMaterial;
         this.drawersStack = drawersStack;
@@ -138,12 +80,36 @@ public class SpecsIntakePaneView extends AnchorPane {
     }
 
 
-    private void setRightHamburger(){
-        rightHamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->{
-            Thread thread = new Thread(()->{
+    public SpecsIntakePaneView() {
 
-                Platform.runLater(()->{
-                     drawersStack.toggle(detailsDrawer);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/qualityRecords/MainSpecsPane.fxml"));
+            loader.setRoot(this);
+            loader.setController(this);
+            loader.load();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        showButtons(false);
+    }
+
+
+    private void showButtons(boolean show) {
+
+        bottomButtons.setVisible(show);
+        rightHamburger.setVisible(show);
+
+    }
+
+
+    private void setRightHamburger() {
+
+        rightHamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            Thread thread = new Thread(() -> {
+
+                Platform.runLater(() -> {
+                    drawersStack.toggle(detailsDrawer);
                 });
             });
             thread.setPriority(10);
@@ -152,35 +118,88 @@ public class SpecsIntakePaneView extends AnchorPane {
 
     }
 
-    private void setTopLabel(){
+
+    private void setTopLabel() {
 
         Suppliers suppliers = new SuppliersDao().get(new SupplierOrderDao().getBy(poMaterial.getPo(), "po").getSuppCode());
 
         String label = poMaterial.getPo() + " - " + suppliers.getSupplierName() +
-                "\n" + poMaterial.getMCode() + " - " + new MaterialsDao().get(poMaterial.getMCode()).getName();
+                       "\n" + poMaterial.getMCode() + " - " + new MaterialsDao().get(poMaterial.getMCode()).getName();
         topLabel.setText(label);
 
     }
 
-    private void loadSpecPanes(){
+
+    private void loadSpecPanes() {
 
         gridPane.getChildren().removeAll();
 
 
-                for(RmtQaRecords record : records) {
-                    gridPane.add(new SpecsIntakePane(record, this), 0, row);
-                    row++;
-                    minRows++;
-                    scrollPane.setContent(gridPane);
+        for (RmtQaRecords record : records) {
+            gridPane.add(new SpecsIntakePane(record, this), 0, row);
+            row++;
+            minRows++;
+            scrollPane.setContent(gridPane);
 
-                }
+        }
 
 //                System.out.println("Rows po visko: "+ minRows);
 
     }
 
 
-    public void load(PoMaterials poMaterial){
+    @FXML
+    private void addNewRecord() {
+
+        try {
+            if (new MaterialSpecsDao().get(poMaterial.getMCode()) != null) {
+                RmtQaRecords record = new RmtQaRecords();
+                record.setPo(poMaterial.getPo());
+                record.setmCode(poMaterial.getMCode());
+                gridPane.add(new SpecsIntakePane(record, this), 0, row);
+                row++;
+            }
+            else {
+                msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Missing material specs"), new Label());
+
+            }
+        }
+        catch (Exception e) {
+            msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Select material"), new Label());
+        }
+    }
+
+
+    @FXML
+    private void removeRecord(ActionEvent event) {
+
+        if (minRows < row) {
+
+            ObservableList<Node> childrens = gridPane.getChildren();
+            for (Node node : childrens) {
+                if (GridPane.getRowIndex(node) == (row - 1)) {
+                    SpecsIntakePane specsPane = (SpecsIntakePane) node;
+                    gridPane.getChildren().remove(specsPane);
+                    break;
+                }
+            }
+            if (row > 0) {
+                row--;
+            }
+            scrollPane.setContent(gridPane);
+        }
+        else {
+            msg.continueAlert(
+                    this,
+                    LabelWithIcons.largeWarningIconLabel("Error"),
+                    new Label("Can not delete saved records from here,\n use delete button on intake form")
+            );
+        }
+
+    }
+
+
+    public void load(PoMaterials poMaterial) {
 
 
         this.poMaterial = poMaterial;
@@ -195,15 +214,9 @@ public class SpecsIntakePaneView extends AnchorPane {
         loadSpecPanes();
     }
 
-    public void removeSpecsPane(SpecsIntakePane pane){
+
+    public void removeSpecsPane(SpecsIntakePane pane) {
+
         gridPane.getChildren().remove(pane);
-    }
-
-
-    private void showButtons(boolean show){
-
-        bottomButtons.setVisible(show);
-        rightHamburger.setVisible(show);
-
     }
 }

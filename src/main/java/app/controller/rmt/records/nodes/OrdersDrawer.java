@@ -5,17 +5,13 @@ import app.controller.sql.dao.SuppliersDao;
 import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
 import app.controller.utils.ValidateInput;
-import app.controller.utils.pdf.PDFFile;
 import app.pojos.SupplierOrders;
 import app.pojos.Suppliers;
-import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.*;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -26,13 +22,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.print.DocFlavor;
-import javax.swing.*;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 public class OrdersDrawer extends AnchorPane {
@@ -80,7 +71,7 @@ public class OrdersDrawer extends AnchorPane {
             e.printStackTrace();
         }
 
-        datePicker.setValue(LocalDate.of(2020, 1, 24));
+        datePicker.setValue(LocalDate.now());
 
         loadOrders(datePicker.getValue());
     }
@@ -92,7 +83,6 @@ public class OrdersDrawer extends AnchorPane {
         ordersList.setItems(FXCollections.observableArrayList(new SupplierOrderDao().getAllBy(date, "order_date")));
 
     }
-
 
     public void swap() {
 
@@ -153,8 +143,7 @@ public class OrdersDrawer extends AnchorPane {
     }
 
 
-
-    private void addNewOrderForm(){
+    private void addNewOrderForm() {
 
         JFXAlert<String> alert = new JFXAlert<>((Stage) this.getScene().getWindow());
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -164,8 +153,8 @@ public class OrdersDrawer extends AnchorPane {
         layout.setHeading(new Label("Add new order"));
 
 
-        Label supp = new Label("Supplier");
-        HBox spacer = new HBox();
+        Label supp   = new Label("Supplier");
+        HBox  spacer = new HBox();
         HBox.setHgrow(
                 spacer,
                 Priority.SOMETIMES
@@ -176,8 +165,7 @@ public class OrdersDrawer extends AnchorPane {
         HBox supplierBox = new HBox();
 //        supplierBox.setMinHeight(50);
         comboBox.setLabelFloat(true);
-        supplierBox.getChildren().addAll(supp, spacer,  comboBox);
-
+        supplierBox.getChildren().addAll(supp, spacer, comboBox);
 
 
         Label po = new Label("Po number");
@@ -195,7 +183,7 @@ public class OrdersDrawer extends AnchorPane {
 
         VBox box = new VBox();
         box.setSpacing(35);
-        Label infoLabel = new Label("PO date will be set at: "+ datePicker.getValue());
+        Label infoLabel = new Label("PO date will be set at: " + datePicker.getValue());
         box.getChildren().addAll(supplierBox, orderBox, infoLabel);
         layout.setBody(box);
         JFXButton continueBtn = new JFXButton("CONTINUE");
@@ -203,13 +191,13 @@ public class OrdersDrawer extends AnchorPane {
 
         continueBtn.setOnAction(e -> {
 
-            boolean save = true;
+            boolean save  = true;
             boolean saved = false;
 
-            if(!comboBox.validate()){
-               save= false;
+            if (! comboBox.validate()) {
+                save = false;
             }
-            if (!poField.validate()){
+            if (! poField.validate()) {
                 save = false;
             }
 
@@ -219,7 +207,7 @@ public class OrdersDrawer extends AnchorPane {
                 orders.setSuppCode(comboBox.getSelectionModel().getSelectedItem().getSupplierCode());
                 orders.setPoNumber(poField.getText().toUpperCase().trim().replaceAll("'", ""));
 
-                SupplierOrders exists =  new SupplierOrderDao().getBy(poField.getText().toUpperCase().trim().replaceAll("'", ""), "po");
+                SupplierOrders exists = new SupplierOrderDao().getBy(poField.getText().toUpperCase().trim().replaceAll("'", ""), "po");
 
                 System.out.println("exists: " + exists);
 
@@ -231,13 +219,14 @@ public class OrdersDrawer extends AnchorPane {
                 }
 
 
-                if (!saved) {
+                if (! saved) {
                     new SupplierOrderDao().save(orders);
                     alert.hideWithAnimation();
                     msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Order saved"), new Label(""));
 
                     loadOrders(datePicker.getValue());
-                }else{
+                }
+                else {
                     msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed to save order"), new Label(""));
                 }
             }
@@ -252,9 +241,6 @@ public class OrdersDrawer extends AnchorPane {
         alert.setContent(layout);
         alert.show();
     }
-
-
-
 
 
     public void setToggle(boolean toggleButton) {

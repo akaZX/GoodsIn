@@ -3,40 +3,52 @@ package app.pojos;
 
 public class SuppEmails {
 
-  private String suppCode;
-  private String email;
-  private int rowid;
+    private String suppCode;
+
+    private String email;
+
+    private int rowid;
 
 
-  public String getSuppCode() {
-    return suppCode;
-  }
+    public String getSuppCode() {
 
-  public void setSuppCode(String suppCode) {
-    this.suppCode = suppCode;
-  }
+        return suppCode;
+    }
 
 
-  public String getEmail() {
-    return email;
-  }
+    public void setSuppCode(String suppCode) {
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+        this.suppCode = suppCode;
+    }
 
 
-  public int getRowid() {
-    return rowid;
-  }
+    public int getRowid() {
 
-  public void setRowid(int rowid) {
-    this.rowid = rowid;
-  }
+        return rowid;
+    }
 
 
-  @Override
-  public String toString() {
-    return getEmail();
-  }
+    public void setRowid(int rowid) {
+
+        this.rowid = rowid;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return getEmail();
+    }
+
+
+    public String getEmail() {
+
+        return email;
+    }
+
+
+    public void setEmail(String email) {
+
+        this.email = email;
+    }
 }

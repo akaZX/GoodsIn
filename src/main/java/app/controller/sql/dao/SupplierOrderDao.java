@@ -34,26 +34,6 @@ public class SupplierOrderDao implements Dao<SupplierOrders> {
     }
 
 
-
-    public <R> SupplierOrders getBy(R id, String field) {
-
-
-        ResultSet      rs     = SQLiteJDBC.select(TABLE, field, id);
-        SupplierOrders orders = null;
-        try {
-            if (rs.next()) {
-                orders = mapRsToObject(rs);
-            }
-        }
-        catch (NullPointerException | SQLException e) {
-            e.printStackTrace();
-        }
-        SQLiteJDBC.close();
-        return orders;
-    }
-
-
-
     @Override
     public List<SupplierOrders> getAll() {
 
@@ -78,24 +58,6 @@ public class SupplierOrderDao implements Dao<SupplierOrders> {
     public List<SupplierOrders> getAll(String param) {
 
         return null;
-    }
-
-    public  List<SupplierOrders> getAllBy(LocalDate date,  String field) {
-
-        List<SupplierOrders> list = new ArrayList<>();
-
-        ResultSet rs = SQLiteJDBC.select(TABLE, field, date);
-        try {
-            while (rs.next()) {
-
-                list.add(mapRsToObject(rs));
-            }
-        }
-        catch (NullPointerException | SQLException e) {
-            e.printStackTrace();
-        }
-        SQLiteJDBC.close();
-        return list;
     }
 
 
@@ -133,5 +95,42 @@ public class SupplierOrderDao implements Dao<SupplierOrders> {
         order.setOrderDate(LocalDate.parse(rs.getString("order_date")));
         order.setRowId(rs.getInt("rowid"));
         return order;
+    }
+
+
+    public <R> SupplierOrders getBy(R id, String field) {
+
+
+        ResultSet      rs     = SQLiteJDBC.select(TABLE, field, id);
+        SupplierOrders orders = null;
+        try {
+            if (rs.next()) {
+                orders = mapRsToObject(rs);
+            }
+        }
+        catch (NullPointerException | SQLException e) {
+            e.printStackTrace();
+        }
+        SQLiteJDBC.close();
+        return orders;
+    }
+
+
+    public List<SupplierOrders> getAllBy(LocalDate date, String field) {
+
+        List<SupplierOrders> list = new ArrayList<>();
+
+        ResultSet rs = SQLiteJDBC.select(TABLE, field, date);
+        try {
+            while (rs.next()) {
+
+                list.add(mapRsToObject(rs));
+            }
+        }
+        catch (NullPointerException | SQLException e) {
+            e.printStackTrace();
+        }
+        SQLiteJDBC.close();
+        return list;
     }
 }

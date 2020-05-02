@@ -2,20 +2,17 @@ package app.controller.rmt.records.nodes;
 
 import app.controller.sql.dao.MaterialsDao;
 import app.controller.sql.dao.PoMaterialsDao;
-import app.controller.sql.dao.SupplierOrderDao;
-import app.controller.sql.dao.SuppliersDao;
+import app.controller.sql.dao.RmtQaRecordsDao;
 import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
 import app.controller.utils.ValidateInput;
-import app.model.Material;
 import app.pojos.Materials;
 import app.pojos.PoMaterials;
+import app.pojos.RmtQaRecords;
 import app.pojos.SupplierOrders;
-import app.pojos.Suppliers;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,8 +38,8 @@ public class OrderMaterialsDrawer extends AnchorPane {
 
     SupplierOrders orders;
 
-
-
+    @FXML
+    JFXToggleButton hide;
 
     private JFXDrawer leftDrawer = null;
 
@@ -54,10 +51,6 @@ public class OrderMaterialsDrawer extends AnchorPane {
 
     @FXML
     private JFXHamburger hamburger;
-
-    @FXML
-    JFXToggleButton hide;
-
 
     @FXML
     private JFXListView<PoMaterials> materialList;
@@ -94,19 +87,6 @@ public class OrderMaterialsDrawer extends AnchorPane {
     }
 
 
-    private void loadList() {
-
-        materialList.getItems().removeAll();
-
-        if (po != null) {
-            List<PoMaterials> list = new PoMaterialsDao().getAll(po);
-            materialList.setItems(FXCollections.observableArrayList(list));
-        }
-
-    }
-
-
-
     private void listEvents() {
 
         materialList.setCellFactory(param -> new JFXListCell<PoMaterials>() {
@@ -124,6 +104,20 @@ public class OrderMaterialsDrawer extends AnchorPane {
                     content.setText("");
                 }
                 else {
+                    List<RmtQaRecords> list  = new RmtQaRecordsDao().getAll(item.getPo());
+                    boolean            found = false;
+                    for (RmtQaRecords records : list) {
+                        if (records.getmCode().equalsIgnoreCase(item.getMCode())) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (! found) {
+                        setStyle("-fx-background-color: rgb(255,203,207)");
+                    }
+
+
                     setText(item.getMCode() + " - " + new MaterialsDao().get(item.getMCode()).getName());
                     content.setText(item.getMCode() + " - " + new MaterialsDao().get(item.getMCode()).getName());
                     setTooltip(content);
@@ -132,21 +126,22 @@ public class OrderMaterialsDrawer extends AnchorPane {
         });
 
 
-
         materialList.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if(materialList.getSelectionModel().getSelectedItem() != null) {
+                if (materialList.getSelectionModel().getSelectedItem() != null) {
                     loadMaterialRecords();
                 }
-        }});
+            }
+        });
         materialList.setOnMouseClicked(event -> {
-            if(materialList.getSelectionModel().getSelectedItem() != null) {
+            if (materialList.getSelectionModel().getSelectedItem() != null) {
                 if (event.getClickCount() == 2) {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         loadMaterialRecords();
                     }
                 }
-            }});
+            }
+        });
 
         hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (event -> {
             drawersStack.toggle(leftDrawer);
@@ -156,7 +151,7 @@ public class OrderMaterialsDrawer extends AnchorPane {
     }
 
 
-    private void loadMaterialRecords(){
+    private void loadMaterialRecords() {
 
 
         PoMaterials materials = materialList.getSelectionModel().getSelectedItem();
@@ -179,6 +174,18 @@ public class OrderMaterialsDrawer extends AnchorPane {
     }
 
 
+    private void loadList() {
+
+        materialList.getItems().removeAll();
+
+        if (po != null) {
+            List<PoMaterials> list = new PoMaterialsDao().getAll(po);
+            materialList.setItems(FXCollections.observableArrayList(list));
+        }
+
+    }
+
+
     @FXML
     private void goBack(MouseEvent event) {
 
@@ -195,23 +202,8 @@ public class OrderMaterialsDrawer extends AnchorPane {
     }
 
 
-
-
-    @FXML
-    private void deleteBtn(ActionEvent event) {
-
-        boolean deleted = new PoMaterialsDao().delete(materialList.getSelectionModel().getSelectedItem());
-        if (deleted) {
-            msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Material deleted"), new Label(""));
-        }else {
-            msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed to delete material"), new Label(""));
-        }
-        loadList();
-    }
-
-
-
     private void addNewMaterial() {
+
         JFXAlert<String> alert = new JFXAlert<>((Stage) this.getScene().getWindow());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(false);
@@ -229,14 +221,13 @@ public class OrderMaterialsDrawer extends AnchorPane {
         JFXComboBox<Materials> comboBox = new JFXComboBox<>();
         ValidateInput.requiredFieldValidation(comboBox, "Select material");
         comboBox.setItems(FXCollections.observableArrayList(new MaterialsDao().getAll()));
-        HBox materialBox= new HBox();
-        materialBox.getChildren().addAll(supp, spacer,  comboBox);
-
+        HBox materialBox = new HBox();
+        materialBox.getChildren().addAll(supp, spacer, comboBox);
 
 
         VBox box = new VBox();
         box.setSpacing(35);
-        Label infoLabel = new Label("PO number: "+ po);
+        Label infoLabel = new Label("PO number: " + po);
         box.getChildren().addAll(materialBox, infoLabel);
         layout.setBody(box);
         JFXButton continueBtn = new JFXButton("CONTINUE");
@@ -244,7 +235,7 @@ public class OrderMaterialsDrawer extends AnchorPane {
 
         continueBtn.setOnAction(e -> {
 
-            if(comboBox.validate()){
+            if (comboBox.validate()) {
                 Materials material = comboBox.getSelectionModel().getSelectedItem();
 
                 PoMaterials poMaterials = new PoMaterials();
@@ -262,7 +253,8 @@ public class OrderMaterialsDrawer extends AnchorPane {
                     msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Material added"), new Label(""));
                     loadList();
 
-                }else{
+                }
+                else {
                     msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed to add material"), new Label(""));
                 }
             }
@@ -274,6 +266,20 @@ public class OrderMaterialsDrawer extends AnchorPane {
         layout.setActions(continueBtn, cancel);
         alert.setContent(layout);
         alert.show();
+    }
+
+
+    @FXML
+    private void deleteBtn(ActionEvent event) {
+
+        boolean deleted = new PoMaterialsDao().delete(materialList.getSelectionModel().getSelectedItem());
+        if (deleted) {
+            msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Material deleted"), new Label(""));
+        }
+        else {
+            msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed to delete material"), new Label(""));
+        }
+        loadList();
     }
 
 }

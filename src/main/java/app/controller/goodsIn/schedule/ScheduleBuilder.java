@@ -40,13 +40,14 @@ public class ScheduleBuilder {
 
 
     public ScheduleBuilder(LocalDate date) {
+
         this.date = date;
         this.list = ScheduleEntryService.getDeliveriesFromDb(date);
         comparableList = ScheduleEntryService.getDeliveriesFromDb(date.minusDays(45), date);
     }
 
 
-    public void buildSchedule(Node node, POTableTab poTableTab){
+    public void buildSchedule(Node node, POTableTab poTableTab) {
 
         JFXAlert<String> alert = new JFXAlert<>((Stage) node.getScene().getWindow());
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -55,7 +56,7 @@ public class ScheduleBuilder {
         JFXDialogLayout layout = new JFXDialogLayout();
         layout.setHeading(LabelWithIcons.largeWarningIconLabel("Generate schedule for: " + date));
         layout.setBody(new Label("This operation will override existing entries data"));
-        JFXButton build = new JFXButton("CONTINUE");
+        JFXButton build  = new JFXButton("CONTINUE");
         JFXButton cancel = new JFXButton("CANCEL");
 
         build.setOnAction(e -> {
@@ -74,24 +75,26 @@ public class ScheduleBuilder {
 
     }
 
-    private void build(){
+
+    private void build() {
+
         list.forEach(scheduleEntry -> {
 
             List<ScheduleEntry> allSupplierEntries = new ArrayList<>();
 
-            comparableList.forEach(item->{
-                if(item.getSupplier().getSupplierCode().equalsIgnoreCase(scheduleEntry.getSupplier().getSupplierCode())){
+            comparableList.forEach(item -> {
+                if (item.getSupplier().getSupplierCode().equalsIgnoreCase(scheduleEntry.getSupplier().getSupplierCode())) {
                     allSupplierEntries.add(item);
                 }
             });
 
             if (allSupplierEntries.size() > 0) {
 
-                String haulier = getHaulier(scheduleEntry, allSupplierEntries);
-                String bay = getBay(allSupplierEntries, haulier);
-                int pallets = getPalletsCount(scheduleEntry);
-                int duration = getUnloadingTime(pallets);
-                LocalTime eta = getEta(haulier, allSupplierEntries);
+                String    haulier  = getHaulier(scheduleEntry, allSupplierEntries);
+                String    bay      = getBay(allSupplierEntries, haulier);
+                int       pallets  = getPalletsCount(scheduleEntry);
+                int       duration = getUnloadingTime(pallets);
+                LocalTime eta      = getEta(haulier, allSupplierEntries);
 
                 ScheduleDetails details = scheduleEntry.getDetails();
                 details.setHaulier(haulier);
@@ -106,7 +109,7 @@ public class ScheduleBuilder {
     }
 
 
-    private  LocalTime getEta(String haulier, List<ScheduleEntry> allSupplierEntries){
+    private LocalTime getEta(String haulier, List<ScheduleEntry> allSupplierEntries) {
 
         List<LocalTime> times = new ArrayList<>();
 
@@ -120,11 +123,10 @@ public class ScheduleBuilder {
     }
 
 
-    private  String getHaulier(ScheduleEntry scheduleEntry, List<ScheduleEntry> allSupplierEntries) {
+    private String getHaulier(ScheduleEntry scheduleEntry, List<ScheduleEntry> allSupplierEntries) {
 
 
         Classifier<String, String> hauliersClassification = new BayesClassifier<>();
-
 
 
         //maps hauliers to delivered materials for supplier
@@ -152,7 +154,7 @@ public class ScheduleBuilder {
     }
 
 
-    private  String getBay(List<ScheduleEntry> allSupplierEntries, String haulier){
+    private String getBay(List<ScheduleEntry> allSupplierEntries, String haulier) {
 
         List<String> bays = new ArrayList<>();
 
@@ -168,56 +170,10 @@ public class ScheduleBuilder {
     }
 
 
-    private  int getPalletsCount(ScheduleEntry entry){
-
-        final int DEFAULT_PALLET_WEIGHT = 1000;
-        int pallets = 0;
-
-        System.out.println(entry.getSupplier().getSupplierName());
-        List<PoMaterials>       list              = new PoMaterialsDao().getAll(entry.getOrder().getPoNumber());
-        List<SupplierMaterials> supplierMaterials = new SupplierMaterialsDao().getAll(entry.getSupplier().getSupplierCode());
-
-        for (PoMaterials poMaterials : list) {
-            for (SupplierMaterials supplierMaterial : supplierMaterials) {
-                if (supplierMaterial.getmCode().equalsIgnoreCase(poMaterials.getMCode())) {
-                    if (supplierMaterial.getPalletWeight() > 0) {
-                        pallets += BigDecimal.valueOf(
-                                poMaterials.getExpectedQuantity() / supplierMaterial.getPalletWeight()).setScale(0, RoundingMode.CEILING).intValue();
-
-                    }else{
-                        pallets += BigDecimal.valueOf(
-                                poMaterials.getExpectedQuantity() / DEFAULT_PALLET_WEIGHT).setScale(0, RoundingMode.CEILING).intValue();
-                    }
-                }
-            }
-        }
-
-        if(pallets > 28){
-            int counter = pallets / 28;
-            for (int i = 0; i < counter; i++) {
-                new ScheduleDetailsDao().save(entry.getDetails());
-            }
-            return 26;
-        }
-
-        return pallets;
-
-    }
-
-
-    private  int getUnloadingTime(int pallets) {
-
-        int duration = 20;
-        duration += pallets ;
-        return duration;
-
-    }
-
-
-    private  String getMostCommonString(Map<String, Long> map){
+    private String getMostCommonString(Map<String, Long> map) {
 
         String string = "";
-        long count = 0;
+        long   count  = 0;
 
         for (Map.Entry<String, Long> e : map.entrySet()) {
             String k = e.getKey();
@@ -234,6 +190,55 @@ public class ScheduleBuilder {
             }
         }
         return string;
+
+    }
+
+
+    private int getPalletsCount(ScheduleEntry entry) {
+
+        final int DEFAULT_PALLET_WEIGHT = 1000;
+        int       pallets               = 0;
+
+        System.out.println(entry.getSupplier().getSupplierName());
+        List<PoMaterials>       list              = new PoMaterialsDao().getAll(entry.getOrder().getPoNumber());
+        List<SupplierMaterials> supplierMaterials = new SupplierMaterialsDao().getAll(entry.getSupplier().getSupplierCode());
+
+        for (PoMaterials poMaterials : list) {
+            for (SupplierMaterials supplierMaterial : supplierMaterials) {
+                if (supplierMaterial.getmCode().equalsIgnoreCase(poMaterials.getMCode())) {
+                    if (supplierMaterial.getPalletWeight() > 0) {
+                        pallets += BigDecimal.valueOf(
+                                poMaterials.getExpectedQuantity() /
+                                supplierMaterial.getPalletWeight()).setScale(0, RoundingMode.CEILING).intValue();
+
+                    }
+                    else {
+                        pallets += BigDecimal.valueOf(
+                                poMaterials.getExpectedQuantity() /
+                                DEFAULT_PALLET_WEIGHT).setScale(0, RoundingMode.CEILING).intValue();
+                    }
+                }
+            }
+        }
+
+        if (pallets > 28) {
+            int counter = pallets / 28;
+            for (int i = 0; i < counter; i++) {
+                new ScheduleDetailsDao().save(entry.getDetails());
+            }
+            return 26;
+        }
+
+        return pallets;
+
+    }
+
+
+    private int getUnloadingTime(int pallets) {
+
+        int duration = 20;
+        duration += pallets;
+        return duration;
 
     }
 

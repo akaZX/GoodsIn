@@ -1,5 +1,6 @@
 package app.controller.rmt.materials.nodes;
 
+import app.controller.sql.dao.MaterialSpecsDao;
 import app.controller.sql.dao.MaterialsDao;
 import app.pojos.Materials;
 import com.jfoenix.controls.*;
@@ -10,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -26,10 +29,10 @@ public class MaterialListDrawerController implements Initializable {
     public List<Materials> list = null;
 
     @FXML
-    private JFXListView<Materials> listView = new JFXListView<>();
+    private JFXListView<Materials> listView;
 
     @FXML
-    private JFXButton addNewMaterial = new JFXButton();
+    private JFXButton addNewMaterial;
 
     @FXML
     private Label refreshIcon;
@@ -43,16 +46,32 @@ public class MaterialListDrawerController implements Initializable {
     @FXML
     private JFXHamburger hamburger;
 
+
     @FXML
-    private void hover(MouseEvent event){
+    private void hover(MouseEvent event) {
+
         refreshIcon.getStyleClass().add("label-button:hover");
     }
+
+
+    @FXML
+    private void deleteMaterial() {
+
+
+        if (listView.getSelectionModel().getSelectedItem() != null) {
+            MaterialsService.deleteMaterial(listView, this, listView.getSelectionModel().getSelectedItem());
+        }
+
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         loadList();
         nodesListeners();
+
+
     }
 
 
@@ -73,12 +92,7 @@ public class MaterialListDrawerController implements Initializable {
             searchField.clear();
             loadList();
         });
-//        refreshBtn.setOnAction(event -> {
-//
-//        });
-        // Adds listView cell formatter to show supp names and adds tooltip for each row
 
-        //Listens for mouse clicks
 
     }
 
@@ -87,7 +101,7 @@ public class MaterialListDrawerController implements Initializable {
 
         if (list.size() > 0) {
             listView.getSelectionModel().selectFirst();
-            drawersStack.setContent(initializeSuppForm(false));
+            drawersStack.setContent(initializeSuppForm());
         }
 
         hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
@@ -95,37 +109,63 @@ public class MaterialListDrawerController implements Initializable {
 
         });
 
-        addNewMaterial.setOnAction(event -> drawersStack.setContent(initializeSuppForm(true)));
+        addNewMaterial.setOnAction(event -> MaterialsService.addNewMaterial(addNewMaterial, this));
 
 
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                drawersStack.setContent(initializeSuppForm(false));
+                drawersStack.setContent(initializeSuppForm());
             }
         });
         listView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 if (event.getButton() == MouseButton.PRIMARY) {
-                    drawersStack.setContent(initializeSuppForm(false));
+                    drawersStack.setContent(initializeSuppForm());
 
                 }
             }
         });
+
+        listView.setCellFactory(this::materialsListCellFactory);
     }
 
+
+    private ListCell<Materials> materialsListCellFactory(ListView<Materials> param) {
+
+
+        return new JFXListCell<Materials>() {
+
+            @Override
+            protected void updateItem(Materials item, boolean empty) {
+
+                super.updateItem(item, empty);
+
+                if (item == null) {
+                    setText("");
+                }
+                else {
+                    if (new MaterialSpecsDao().get(item.getMCode()) == null) {
+                        setStyle("-fx-background-color: rgb(255,203,207)");
+                    }
+                }
+            }
+
+        };
+
+    }
 
 
     private AnchorPane loadMaterialForm(MaterialProfileController controller) {
 
-        FXMLLoader supplierForm = new FXMLLoader(
+        FXMLLoader form = new FXMLLoader(
                 getClass().getResource(
                         "/rmt/materialProfiles/MaterialProfileView.fxml"
                 )
         );
-        supplierForm.setController(controller);
+        form.setController(controller);
 
         try {
-            return supplierForm.load();
+            return form.load();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -134,15 +174,10 @@ public class MaterialListDrawerController implements Initializable {
     }
 
 
-    private AnchorPane initializeSuppForm(boolean bool) {
+    private AnchorPane initializeSuppForm() {
 
-        MaterialProfileController suppProfileController;
-        if (bool) {
-            suppProfileController = new MaterialProfileController(this);
-        }
-        else {
-            suppProfileController = new MaterialProfileController(listView.getSelectionModel().getSelectedItem(), this);
-        }
+        MaterialProfileController suppProfileController = new MaterialProfileController(listView.getSelectionModel().getSelectedItem(), this);
+
         return loadMaterialForm(suppProfileController);
     }
 

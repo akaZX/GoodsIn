@@ -828,10 +828,11 @@ public class RmtQaIntakeDetails {
                (lorryTemp == 0 ? "" : "Lorry temperature: " + lorryTemp + "C <br/>") +
                (materialTemp == 0 ? "" : "Material temperature: " + materialTemp + "C <br/>") +
                (density == 0.0 ? "" : "Density: " + density + "<br/>") +
-               ((brix != null && brix.size() > 0) ? "Brix:" + getDoubleListAverage(brix) + "<br/>": "") +
-               ((pressure != null && pressure.size() > 0) ? "Pressure: " + getDoubleListAverage(pressure) + " <br/>": "") +
-               ((length != null && length.size() > 0) ? "Length: " + getIntListAverage(length) + "mm" + " <br/>": "")  +
-               ((width != null && width.size() > 0) ? "Width: " + getIntListAverage(width) + "mm" + "<br/>": "")  +
+               ((brix != null && brix.size() > 0) ? "Brix:" + getDoubleListAverage(brix) + "<br/>" : "") +
+               ((pressure != null && pressure.size() > 0) ? "Pressure: " + getDoubleListAverage(pressure) +
+                                                            " <br/>" : "") +
+               ((length != null && length.size() > 0) ? "Length: " + getIntListAverage(length) + "mm" + " <br/>" : "") +
+               ((width != null && width.size() > 0) ? "Width: " + getIntListAverage(width) + "mm" + "<br/>" : "") +
                ((headWeight != null && headWeight.size() > 0) ? "Head weight: " + getIntListAverage(headWeight) +
                                                                 "g" : "");
 

@@ -34,6 +34,13 @@ public class ParamListController extends StackPane {
     JFXTextField newEntry;
 
 
+    public ParamListController(String title) {
+
+        this();
+        this.title.setText(title);
+    }
+
+
     public ParamListController() {
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/materialProfiles/ParamList.fxml"));
@@ -50,13 +57,6 @@ public class ParamListController extends StackPane {
 
         listListeners();
 
-    }
-
-
-    public ParamListController(String title) {
-
-        this();
-        this.title.setText(title);
     }
 
 

@@ -11,13 +11,13 @@ import java.net.URISyntaxException;
 
 public class FileUtil {
 
-    public static void openFile(String path){
+    public static void openFile(String path) {
 
         File file = new File(path);
         System.out.println(file.getName());
 
         //is Desktop supported
-        if(! Desktop.isDesktopSupported()){
+        if (! Desktop.isDesktopSupported()) {
             return;
         }
 
@@ -33,7 +33,7 @@ public class FileUtil {
     }
 
 
-    public  Image getImage(String path){
+    public Image getImage(String path) {
 
         String placeholder = "";
 
@@ -55,9 +55,6 @@ public class FileUtil {
         }
         return new Image(url);
     }
-
-
-
 
 
 }

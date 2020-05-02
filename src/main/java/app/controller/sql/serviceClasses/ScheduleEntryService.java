@@ -19,13 +19,7 @@ public class ScheduleEntryService {
     //gets entries and returns them in sorted list
     public static List<ScheduleEntry> getDeliveriesFromDb(LocalDate date1) {
 
-        List<ScheduleDetails> orders  = new ScheduleDetailsDao().getAllByDate(date1);
-        return getScheduleEntries(orders);
-    }
-
-    public static List<ScheduleEntry> getDeliveriesFromDb(LocalDate low, LocalDate high) {
-
-        List<ScheduleDetails> orders  = new ScheduleDetailsDao().getAllByDates(low, high);
+        List<ScheduleDetails> orders = new ScheduleDetailsDao().getAllByDate(date1);
         return getScheduleEntries(orders);
     }
 
@@ -33,9 +27,9 @@ public class ScheduleEntryService {
     @NotNull
     private static List<ScheduleEntry> getScheduleEntries(List<ScheduleDetails> orders) {
 
-        List<ScheduleEntry>   entries = new ArrayList<>();
-        if(orders.size() > 0){
-            orders.forEach(i ->{
+        List<ScheduleEntry> entries = new ArrayList<>();
+        if (orders.size() > 0) {
+            orders.forEach(i -> {
                 SupplierOrders order    = new SupplierOrderDao().getBy(i.getPo(), "po");
                 Suppliers      supplier = new SuppliersDao().get(order.getSuppCode());
                 ScheduleEntry  entry    = new ScheduleEntry();
@@ -49,6 +43,13 @@ public class ScheduleEntryService {
         }
 
         return entries;
+    }
+
+
+    public static List<ScheduleEntry> getDeliveriesFromDb(LocalDate low, LocalDate high) {
+
+        List<ScheduleDetails> orders = new ScheduleDetailsDao().getAllByDates(low, high);
+        return getScheduleEntries(orders);
     }
 
 }

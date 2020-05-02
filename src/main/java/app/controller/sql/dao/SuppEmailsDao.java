@@ -88,6 +88,15 @@ public class SuppEmailsDao implements Dao<SuppEmails> {
     }
 
 
+    private String stringOrNull(String string) {
+
+        return (string == null || (string.trim().equalsIgnoreCase("null") || string.isEmpty()) ? "NULL" : ("'" +
+                                                                                                           string +
+                                                                                                           "'"));
+
+    }
+
+
     private SuppEmails mapRsToObject(ResultSet rs) throws SQLException {
 
         SuppEmails email = new SuppEmails();
@@ -95,10 +104,6 @@ public class SuppEmailsDao implements Dao<SuppEmails> {
         email.setEmail(rs.getString("email"));
         email.setSuppCode(rs.getString("supp_code"));
         return email;
-    }
-    private String stringOrNull(String string) {
-        return (string == null || (string.trim().equalsIgnoreCase("null") || string.isEmpty()) ? "NULL" : ("'" + string + "'"));
-
     }
 
 }

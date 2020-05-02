@@ -13,8 +13,14 @@ import java.net.URL;
 
 public class Main extends Application {
 
+    public static void main(String[] args) {
+
+        launch(args);
+    }
+
+
     @Override
-    public void start(Stage primaryStage)throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
 
         AppController contr = new AppController();
@@ -37,9 +43,9 @@ public class Main extends Application {
         URL url = this.getClass().getResource("/style.css");
         if (url == null) {
             System.out.println("Resource not found. Aborting.");
-            System.exit(-1);
+            System.exit(- 1);
         }
-        String       css       = url.toExternalForm();
+        String css = url.toExternalForm();
 
         primaryStage.getScene().getStylesheets().add(css);
 
@@ -47,9 +53,5 @@ public class Main extends Application {
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(1000);
         primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

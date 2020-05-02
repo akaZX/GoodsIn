@@ -21,18 +21,25 @@ public class DensityBox extends VBox {
 
     @FXML
     private JFXTextField diam1;
+
     @FXML
     private JFXTextField diam2;
+
     @FXML
     private JFXTextField diam3;
+
     @FXML
     private JFXTextField diam4;
+
     @FXML
     private JFXTextField diam5;
+
     @FXML
     private JFXTextField densityField;
+
     @FXML
     private JFXTextField grossField;
+
     @FXML
     private Label densityLabel;
 
@@ -45,6 +52,11 @@ public class DensityBox extends VBox {
     };
 
 
+    public DensityBox(String min, String max) {
+
+        this();
+        setTooltip(min, max);
+    }
 
 
     public DensityBox() {
@@ -64,34 +76,19 @@ public class DensityBox extends VBox {
     }
 
 
-    public DensityBox(String min, String max) {
-        this();
-        setTooltip(min, max);
+    private void intFields() {
+
+        TextFieldInput.intField(diam1, "");
+        TextFieldInput.intField(diam2, "");
+        TextFieldInput.intField(diam3, "");
+        TextFieldInput.intField(diam4, "");
+        TextFieldInput.intField(diam5, "");
+        TextFieldInput.intField(grossField, true);
+        TextFieldInput.doubleTextField(densityField, "");
     }
 
 
-
-    private void intFields(){
-        textFieldInput.intField(diam1, "");
-        textFieldInput.intField(diam2, "");
-        textFieldInput.intField(diam3, "");
-        textFieldInput.intField(diam4, "");
-        textFieldInput.intField(diam5, "");
-        textFieldInput.intField(grossField, true);
-        textFieldInput.doubleTextField(densityField, "");
-    }
-
-    private void calculateDensity(){
-        try {
-            double avgHeadWeight = (double)getGrossWeight() / 5;
-            density = round(avgHeadWeight / ((double) getAverageDiameter()), 2);
-        }
-        catch (NumberFormatException e) {
-            density = 0;
-        }
-    }
-
-    private void addListeners(){
+    private void addListeners() {
 
         diam1.textProperty().addListener(LISTENER);
         diam2.textProperty().addListener(LISTENER);
@@ -104,12 +101,71 @@ public class DensityBox extends VBox {
 
 
     public void setTooltip(String min, String max) {
-        String msg = "Min density: " + min + "\nMax density: " + max;
+
+        String  msg     = "Min density: " + min + "\nMax density: " + max;
         Tooltip tooltip = new Tooltip(msg);
         densityLabel.setTooltip(tooltip);
     }
 
-    public void setDiameter(List<Integer> diameter){
+
+    private void calculateDensity() {
+
+        try {
+            double avgHeadWeight = (double) getGrossWeight() / 5;
+            density = round(avgHeadWeight / ((double) getAverageDiameter()), 2);
+        }
+        catch (NumberFormatException e) {
+            density = 0;
+        }
+    }
+
+
+    private int getAverageDiameter() {
+
+        return getTotalDiameter() / 5;
+    }
+
+
+    private int getTotalDiameter() {
+
+        return Integer.parseInt(diam1.getText()) + Integer.parseInt(diam2.getText()) +
+               Integer.parseInt(diam3.getText()) + Integer.parseInt(diam4.getText()) +
+               Integer.parseInt(diam5.getText());
+    }
+
+
+    public int getGrossWeight() {
+
+        try {
+            return Integer.parseInt(grossField.getText());
+        }
+        catch (NumberFormatException e) {
+//            System.out.println("Error at DensityBox.getGrossWeight()");
+        }
+        return 0;
+    }
+
+
+    public void setGrossWeight(int weight) {
+
+        grossField.setText(String.valueOf(weight));
+    }
+
+
+    //    https://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+    public static double round(double value, int places) {
+
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+
+    public void setDiameter(List<Integer> diameter) {
 
         if (diameter != null) {
             diam1.setText(String.valueOf(diameter.get(0)));
@@ -121,14 +177,8 @@ public class DensityBox extends VBox {
 
     }
 
-    private int getTotalDiameter(){
 
-        return Integer.parseInt(diam1.getText()) + Integer.parseInt(diam2.getText()) +
-               Integer.parseInt(diam3.getText()) + Integer.parseInt(diam4.getText()) +
-               Integer.parseInt(diam5.getText());
-    }
-
-    public List<Integer> getDiameters(){
+    public List<Integer> getDiameters() {
 
         List<Integer> list = new ArrayList<>();
         try {
@@ -146,38 +196,10 @@ public class DensityBox extends VBox {
         return list;
     }
 
-    private int getAverageDiameter(){
-        return getTotalDiameter() / 5;
-    }
 
+    public double getDensity() {
 
-    public void setGrossWeight(int weight){
-        grossField.setText(String.valueOf(weight));
-    }
-
-
-    public int getGrossWeight() {
-        try {
-            return Integer.parseInt(grossField.getText());
-        }
-        catch (NumberFormatException e) {
-//            System.out.println("Error at DensityBox.getGrossWeight()");
-        }
-        return 0;
-    }
-
-    public double getDensity(){
         return density;
-    }
-
-
-//    https://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
     }
 
 }

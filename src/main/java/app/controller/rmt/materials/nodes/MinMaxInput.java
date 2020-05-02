@@ -9,9 +9,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 
-import javax.tools.Tool;
 import java.io.IOException;
-import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class MinMaxInput extends StackPane {
@@ -27,6 +25,13 @@ public class MinMaxInput extends StackPane {
     private Label title;
 
     private Tooltip tooltip;
+
+
+    public MinMaxInput(String title) {
+
+        this();
+        this.title.setText(title);
+    }
 
 
     public MinMaxInput() {
@@ -46,20 +51,6 @@ public class MinMaxInput extends StackPane {
         setTooltips();
         validateRequired(this.getMinField());
         validateRequired(this.getMaxField());
-    }
-
-    public MinMaxInput(String title) {
-        this();
-        this.title.setText(title);
-    }
-
-    public MinMaxInput(String title, String tooltip){
-        this();
-        this.title.setText(title);
-        this.tooltip = new Tooltip(tooltip);
-        wrapTooltip();
-        this.title.setTooltip(this.tooltip);
-
     }
 
 
@@ -84,19 +75,67 @@ public class MinMaxInput extends StackPane {
         setNumericValidators(this.getMaxField());
     }
 
-    private void wrapTooltip(){
+
+    private static void setNumericValidators(JFXTextField field) {
+
+        Pattern                pattern   = Pattern.compile("\\d*|\\d+\\.\\d*");
+        TextFormatter<Pattern> formatter = new TextFormatter<>(change -> pattern.matcher(change.getControlNewText()).matches() ? change : null);
+
+        field.setTextFormatter(formatter);
+
+    }
+
+
+    public JFXTextField getMinField() {
+
+        return minField;
+    }
+
+
+    public JFXTextField getMaxField() {
+
+        return maxField;
+    }
+
+
+    public void setMaxField(JFXTextField maxField) {
+
+        this.maxField = maxField;
+    }
+
+
+    private void setTooltips() {
+
+        Tooltip minFieldTooltip = new Tooltip("Enter min value");
+        minField.setTooltip(minFieldTooltip);
+        Tooltip maxFieldTooltip = new Tooltip("Enter max value");
+        maxField.setTooltip(maxFieldTooltip);
+        Tooltip labelTooltip = new Tooltip("Input type :" + title.getText());
+        title.setTooltip(labelTooltip);
+    }
+
+
+    public MinMaxInput(String title, String tooltip) {
+
+        this();
+        this.title.setText(title);
+        this.tooltip = new Tooltip(tooltip);
+        wrapTooltip();
+        this.title.setTooltip(this.tooltip);
+
+    }
+
+
+    private void wrapTooltip() {
+
         tooltip.setPrefWidth(200);
         tooltip.setWrapText(true);
     }
 
 
-    private static void setNumericValidators(JFXTextField field) {
+    public int getMinInt() {
 
-        Pattern pattern = Pattern.compile("\\d*|\\d+\\.\\d*");
-        TextFormatter<Pattern> formatter = new TextFormatter<>(change -> pattern.matcher(change.getControlNewText()).matches() ? change : null);
-
-        field.setTextFormatter(formatter);
-
+        return (int) getMin();
     }
 
 
@@ -111,45 +150,32 @@ public class MinMaxInput extends StackPane {
     }
 
 
+    public void setMin(String min) {
+
+        minField.setText(min);
+    }
+
+
+    public int getMaxInt() {
+
+        return (int) getMax();
+    }
+
+
     public double getMax() {
 
         try {
             return Double.parseDouble(this.getMaxField().getText());
         }
         catch (NumberFormatException e) {
-           return 0;
+            return 0;
         }
     }
 
-    public int getMinInt() {
-
-        return (int)getMin();
-    }
-
-
-    public int getMaxInt() {
-
-        return (int)getMax();
-    }
-
-    public void setMin(String min) {
-
-        minField.setText(min);
-    }
 
     public void setMax(String max) {
 
         maxField.setText(max);
-    }
-
-    private void setTooltips() {
-
-        Tooltip minFieldTooltip = new Tooltip("Enter min value");
-        minField.setTooltip(minFieldTooltip);
-        Tooltip maxFieldTooltip = new Tooltip("Enter max value");
-        maxField.setTooltip(maxFieldTooltip);
-        Tooltip labelTooltip = new Tooltip("Input type :" + title.getText());
-        title.setTooltip(labelTooltip);
     }
 
 
@@ -159,27 +185,9 @@ public class MinMaxInput extends StackPane {
     }
 
 
-    public JFXTextField getMinField() {
-
-        return minField;
-    }
-
-
     public void disableMinField() {
 
         minField.setDisable(true);
-    }
-
-
-    public JFXTextField getMaxField() {
-
-        return maxField;
-    }
-
-
-    public void setMaxField(JFXTextField maxField) {
-
-        this.maxField = maxField;
     }
 
 

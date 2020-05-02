@@ -261,9 +261,9 @@
     -jfx-expanded: false;
 }
 
-/*.jfx-list-view .jfx-list-cell{*/
-/*    -fx-background-color: derive(#5ad5df, 0%);*/
-/*}*/
+.jfx-list-view .jfx-list-cell {
+    -fx-font-weight: bold;
+}
 
 .jfx-toggle-button {
     -jfx-toggle-color: BLUE;
@@ -569,7 +569,7 @@
     -fx-fill: #0069a6;
 }
 .label-button:hover {
-    -fx-background-color: darkgray;
+    -fx-background-color: #c6c6c6;
 }
 
 
@@ -601,7 +601,6 @@
     -glyph-size: 24px;
     -fx-font-size: 24px;
     -fx-font-family: "FontAwesome";
-
 }
 
 
@@ -611,7 +610,7 @@
 
 .rmt-param-box{
     -fx-background-color: #eaeaea;
-    -fx-border-color: #9B9D9B;
+    /*-fx-border-color: #9B9D9B;*/
 }
 
 .jfx-combo-box-small{
@@ -640,7 +639,6 @@
     -fx-font-weight: bold;
     -fx-text-fill: white;
 }
-
 
 
 

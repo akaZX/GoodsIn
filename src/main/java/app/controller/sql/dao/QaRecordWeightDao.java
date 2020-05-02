@@ -2,14 +2,13 @@ package app.controller.sql.dao;
 
 import app.controller.sql.SQLiteJDBC;
 import app.pojos.QaRecordWeight;
-import app.pojos.Suppliers;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class QaRecordWeightDao implements  Dao<QaRecordWeight> {
+public class QaRecordWeightDao implements Dao<QaRecordWeight> {
 
     private final String TABLE = "QA_RECORD_WEIGHT";
 
@@ -21,11 +20,12 @@ public class QaRecordWeightDao implements  Dao<QaRecordWeight> {
 
         ResultSet rs = SQLiteJDBC.select(TABLE, "rowid", id);
 
-        try{
+        try {
             while (rs.next()) {
                 rec = mapRSToObject(rs);
             }
-        }catch (NullPointerException | SQLException e){
+        }
+        catch (NullPointerException | SQLException e) {
             e.printStackTrace();
             SQLiteJDBC.close();
 
@@ -53,10 +53,12 @@ public class QaRecordWeightDao implements  Dao<QaRecordWeight> {
 
     @Override
     public boolean save(QaRecordWeight qaRecordWeight) {
-        String values = qaRecordWeight.getRowid() + ", " + qaRecordWeight.getBoxes() + ", " + qaRecordWeight.getWeight() +"" ;
+
+        String values =
+                qaRecordWeight.getRowid() + ", " + qaRecordWeight.getBoxes() + ", " + qaRecordWeight.getWeight() + "";
 
         @Language("SQLite")
-        String sql ="INSERT INTO " + TABLE + " (rowid, boxes, weight) VALUES(" + values + ")";
+        String sql = "INSERT INTO " + TABLE + " (rowid, boxes, weight) VALUES(" + values + ")";
         boolean save = SQLiteJDBC.update(sql);
 
         return save;
@@ -69,11 +71,12 @@ public class QaRecordWeightDao implements  Dao<QaRecordWeight> {
 
         String values = "boxes = " + qaRecordWeight.getBoxes() + ", weight =" + qaRecordWeight.getWeight();
         @Language("SQLite")
-        String sql = "Update " + TABLE + " set " + values + " Where rowid= " + qaRecordWeight.getRowid()+ "";
+        String sql = "Update " + TABLE + " set " + values + " Where rowid= " + qaRecordWeight.getRowid() + "";
 
-        if (!SQLiteJDBC.update(sql)){
+        if (! SQLiteJDBC.update(sql)) {
             return save(qaRecordWeight);
-        }else{
+        }
+        else {
             return true;
         }
 
@@ -83,11 +86,12 @@ public class QaRecordWeightDao implements  Dao<QaRecordWeight> {
     @Override
     public boolean delete(QaRecordWeight qaRecordWeight) {
 
-        return SQLiteJDBC.delete(TABLE , "rowid", qaRecordWeight.getRowid());
+        return SQLiteJDBC.delete(TABLE, "rowid", qaRecordWeight.getRowid());
     }
 
 
-    private QaRecordWeight mapRSToObject(ResultSet rs){
+    private QaRecordWeight mapRSToObject(ResultSet rs) {
+
         QaRecordWeight rec = new QaRecordWeight();
 
         try {

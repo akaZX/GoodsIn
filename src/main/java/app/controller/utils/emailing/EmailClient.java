@@ -3,7 +3,6 @@ package app.controller.utils.emailing;
 import app.controller.sql.dao.SuppEmailsDao;
 import app.pojos.SuppEmails;
 import app.pojos.SupplierOrders;
-import jdk.nashorn.internal.ir.SplitReturn;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -22,24 +21,26 @@ public class EmailClient {
     public static boolean sendEmailWithAttachement(String email, String psw, String filePath, String fileName, SupplierOrders supplierOrders) {
 
 
-
-
         //Get the session object
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "outlook.office365.com");
+
         props.put("mail.smtp.port", "587");
 
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
+
                     protected PasswordAuthentication getPasswordAuthentication() {
+
                         return new PasswordAuthentication(email.trim(), psw.trim());
                     }
                 });
 
         //Compose the message
         try {
+
             MimeMessage message = new MimeMessage(session);
 
 
@@ -48,16 +49,16 @@ public class EmailClient {
 
             List<SuppEmails> emails = new SuppEmailsDao().getAll(supplierOrders.getSuppCode());
 
-            if(emails.size() > 0 ) {
+            if (emails.size() > 0) {
 
-                emails.forEach(suppEmails ->{
+                emails.forEach(suppEmails -> {
                     try {
                         message.addRecipient(Message.RecipientType.TO, new InternetAddress(suppEmails.getEmail()));
                     }
                     catch (MessagingException e) {
                         e.printStackTrace();
                     }
-                } );
+                });
 
 
                 message.setSubject("QA report for: " + supplierOrders.getPoNumber());
@@ -82,7 +83,8 @@ public class EmailClient {
             }
 
             return false;
-        }catch (MessagingException e) {
+        }
+        catch (MessagingException e) {
 //            e.printStackTrace();
 
             System.out.println("Failed to send email");

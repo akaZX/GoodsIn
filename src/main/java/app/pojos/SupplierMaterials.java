@@ -38,18 +38,6 @@ public class SupplierMaterials {
     }
 
 
-    public String getmCode() {
-
-        return mCode;
-    }
-
-
-    public void setmCode(String mCode) {
-
-        this.mCode = mCode;
-    }
-
-
     public int getPalletWeight() {
 
         return palletWeight;
@@ -66,5 +54,17 @@ public class SupplierMaterials {
     public String toString() {
 
         return new MaterialsDao().get(getmCode()).getName();
+    }
+
+
+    public String getmCode() {
+
+        return mCode;
+    }
+
+
+    public void setmCode(String mCode) {
+
+        this.mCode = mCode;
     }
 }

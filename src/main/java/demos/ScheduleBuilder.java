@@ -1,24 +1,5 @@
 package demos;
 
-import app.controller.sql.dao.PoMaterialsDao;
-import app.controller.sql.dao.ScheduleDetailsDao;
-import app.controller.sql.dao.SupplierMaterialsDao;
-import app.controller.sql.serviceClasses.ScheduleEntryService;
-import app.model.ScheduleEntry;
-import app.pojos.PoMaterials;
-import app.pojos.ScheduleDetails;
-import app.pojos.SupplierMaterials;
-import de.daslaboratorium.machinelearning.classifier.Classifier;
-import de.daslaboratorium.machinelearning.classifier.bayes.BayesClassifier;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
-import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
-
 public class ScheduleBuilder {
 
 //

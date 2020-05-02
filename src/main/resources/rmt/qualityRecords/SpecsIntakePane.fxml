@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.*?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<fx:root maxHeight="602.0" maxWidth="1.7976931348623157E308" minHeight="600.0" prefHeight="602.0" prefWidth="1178.0" style="-fx-border-color: black;" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<fx:root maxHeight="602.0" maxWidth="1.7976931348623157E308" minHeight="598.0" prefHeight="598.0" prefWidth="1040.0"
+         style="-fx-border-color: black;" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171"
+         xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <StackPane layoutX="577.0" layoutY="10.0" prefHeight="592.0" prefWidth="601.0" styleClass="rmt-param-box" stylesheets="@../../style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane layoutX="577.0" layoutY="10.0" prefHeight="592.0" prefWidth="601.0" styleClass="rmt-param-box"
+                 stylesheets="@../../style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0">
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0"
+                  prefWidth="200.0">
                <children>
                   <HBox fillHeight="false" prefHeight="532.0" prefWidth="489.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <VBox maxHeight="1.7976931348623157E308" prefHeight="600.0" prefWidth="673.0" HBox.hgrow="ALWAYS">
+                        <VBox maxHeight="1.7976931348623157E308" prefHeight="600.0" prefWidth="673.0"
+                              HBox.hgrow="ALWAYS">
                            <children>
                               <HBox maxWidth="1.7976931348623157E308" prefHeight="362.0" prefWidth="487.0">
                                  <children>
@@ -106,16 +99,17 @@
                               </Separator>
                               <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <VBox maxWidth="360.0" minWidth="300.0" prefHeight="199.0" prefWidth="330.0" HBox.hgrow="SOMETIMES">
+                                    <VBox maxWidth="360.0" minWidth="270.0" prefHeight="199.0" prefWidth="330.0"
+                                          HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Label styleClass="sched-form-label" text="Additional parameters:" />
-                                          <Separator />
+                                          <Label styleClass="sched-form-label" text="Additional parameters:"/>
+                                          <Separator/>
                                           <ScrollPane fitToWidth="true" VBox.vgrow="SOMETIMES">
                                              <content>
-                                                <VBox fx:id="bottomLeftBox" />
+                                                <VBox fx:id="bottomLeftBox"/>
                                              </content>
                                              <VBox.margin>
-                                                <Insets />
+                                                <Insets/>
                                              </VBox.margin>
                                           </ScrollPane>
                                        </children>
@@ -497,7 +491,17 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                              <children>
-                                                <JFXButton fx:id="showPopUpBtn" prefWidth="91.0" text="Show PopUp" />
+                                                <JFXButton fx:id="showPopUpBtn" text="Show PopUp"
+                                                           HBox.hgrow="SOMETIMES">
+                                                   <graphic>
+                                                      <FontAwesomeIconView glyphName="ARROWS_ALT">
+                                                         <styleClass>
+                                                            <String fx:value="white-icon"/>
+                                                            <String fx:value="small-icon"/>
+                                                         </styleClass>
+                                                      </FontAwesomeIconView>
+                                                   </graphic>
+                                                </JFXButton>
                                              </children>
                                           </HBox>
                                        </children></VBox>

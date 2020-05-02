@@ -13,7 +13,9 @@ public class DecisionBox extends HBox {
     @FXML
     private Label label;
 
+
     public DecisionBox() {
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("rmt/qualityRecords/DecisionBox.fxml"));
             loader.setRoot(this);
@@ -27,14 +29,17 @@ public class DecisionBox extends HBox {
     }
 
 
-    public void setAccept(){
-        this.setStyle("-fx-background-color: #bbffad");
-        label.setText("Accept");
-    }
+    public void setReject() {
 
-    public void setReject(){
         this.setStyle("-fx-background-color: #f6cccc");
         label.setText("Reject");
+    }
+
+
+    public void setAccept() {
+
+        this.setStyle("-fx-background-color: #bbffad");
+        label.setText("Accept");
     }
 
 

@@ -4,21 +4,25 @@ import app.controller.sql.dao.MaterialsDao;
 import app.pojos.PoMaterials;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawersStack;
-import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class IntakePane  {
+public class IntakePane {
 
     private final String RIGHT = "RIGHT";
-
-    PoMaterials poMaterials;
 
     private final StackPane stackPane = new StackPane();
 
     private final JFXDrawersStack drawersStack = new JFXDrawersStack();
+
+    PoMaterials poMaterials;
+
+
+    public IntakePane(PoMaterials poMaterials) {
+
+        this();
+        this.poMaterials = poMaterials;
+        loadForm();
+    }
 
 
     public IntakePane() {
@@ -26,20 +30,12 @@ public class IntakePane  {
     }
 
 
-    public IntakePane(PoMaterials poMaterials) {
-        this();
-        this.poMaterials = poMaterials;
-        loadForm();
-    }
+    private void loadForm() {
 
-
-
-    private void loadForm(){
-
-        JFXDrawer           rightDrawer = new JFXDrawer();
-        MaterialDetailsDrawer        detailsDrawer = new MaterialDetailsDrawer(new MaterialsDao().get(poMaterials.getMCode()));
+        JFXDrawer             rightDrawer   = new JFXDrawer();
+        MaterialDetailsDrawer detailsDrawer = new MaterialDetailsDrawer(new MaterialsDao().get(poMaterials.getMCode()));
         rightDrawer.setSidePane(detailsDrawer);
-        SpecsIntakePaneView form       = new SpecsIntakePaneView(poMaterials, drawersStack, rightDrawer);
+        SpecsIntakePaneView form = new SpecsIntakePaneView(poMaterials, drawersStack, rightDrawer);
         rightDrawer.setId(RIGHT);
         rightDrawer.setDirection(JFXDrawer.DrawerDirection.RIGHT);
         stackPane.getChildren().add(form);
@@ -57,7 +53,9 @@ public class IntakePane  {
 
     }
 
-    public StackPane getPane(){
+
+    public StackPane getPane() {
+
         return stackPane;
     }
 }

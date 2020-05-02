@@ -3,6 +3,7 @@ package app.controller.sql.dao;
 import app.controller.sql.SQLiteJDBC;
 import app.pojos.Users;
 import org.intellij.lang.annotations.Language;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,11 +12,13 @@ import java.util.List;
 public class UsersDao implements Dao<Users> {
 
     private final String TABLE = "USERS";
+
+
     @Override
     public <R> Users get(R id) {
 
-        Users user = new Users();
-        ResultSet rs = SQLiteJDBC.select(TABLE, "username", id);
+        Users     user = new Users();
+        ResultSet rs   = SQLiteJDBC.select(TABLE, "username", id);
         try {
             while (rs.next()) {
                 user = rsToObject(rs);
@@ -23,8 +26,8 @@ public class UsersDao implements Dao<Users> {
             SQLiteJDBC.close();
         }
         catch (NullPointerException | SQLException exception) {
-            exception.printStackTrace();
-            SQLiteJDBC.close();
+//            exception.printStackTrace();
+//            SQLiteJDBC.close();
         }
 
         return user;
@@ -35,16 +38,16 @@ public class UsersDao implements Dao<Users> {
     public List<Users> getAll() {
 
         List<Users> list = new ArrayList<>();
-        ResultSet rs = SQLiteJDBC.selectAll(TABLE, "username");
+        ResultSet   rs   = SQLiteJDBC.selectAll(TABLE, "username");
 
         try {
-            while (rs.next()){
+            while (rs.next()) {
                 list.add(rsToObject(rs));
             }
             rs.close();
         }
         catch (SQLException | NullPointerException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         SQLiteJDBC.close();
         return list;
@@ -61,14 +64,16 @@ public class UsersDao implements Dao<Users> {
     @Override
     public boolean save(Users users) {
 
-        String values = "'"+ users.getUsername() + "', '"+ users.getName() + "','" +
+        String values = "'" + users.getUsername() + "', '" + users.getName() + "','" +
                         users.getSurname() + "','" + users.getEmail() + "', " + boolToInt(users.getGoodsIn()) + ", " +
-                        boolToInt(users.getRmtGoodsIn()) + ", " + boolToInt(users.getSecurity()) + ", " + boolToInt(users.getFruit()) +
-                         ", " +boolToInt(users.getAdmin()) + ", " + boolToInt(users.getRmtAdmin()) ;
+                        boolToInt(users.getRmtGoodsIn()) + ", " + boolToInt(users.getSecurity()) + ", " +
+                        boolToInt(users.getFruit()) +
+                        ", " + boolToInt(users.getAdmin()) + ", " + boolToInt(users.getRmtAdmin());
 
         @Language("SQLite")
-        String sql ="INSERT INTO " + TABLE +
-                    " (username, name, surname, email, goods_in, rmt_goods_in, security, fruit, admin, rmt_admin) VALUES(" + values + ")";
+        String sql = "INSERT INTO " + TABLE +
+                     " (username, name, surname, email, goods_in, rmt_goods_in, security, fruit, admin, rmt_admin) VALUES(" +
+                     values + ")";
         return SQLiteJDBC.update(sql);
 
     }
@@ -76,21 +81,22 @@ public class UsersDao implements Dao<Users> {
 
     @Override
     public boolean update(Users users) {
+
         @Language("SQLite")
         String sql = "Update " + TABLE + " set " + values(users) + " Where username= '" + users.getUsername() + "'";
-        System.out.println(sql);
+//        System.out.println(sql);
         return SQLiteJDBC.update(sql);
     }
 
 
     @Override
     public boolean delete(Users users) {
-        return SQLiteJDBC.delete(TABLE , "username", users.getUsername());
+
+        return SQLiteJDBC.delete(TABLE, "username", users.getUsername());
     }
 
 
-
-    private String values(Users users){
+    private String values(Users users) {
 
         return "name='" + users.getName() +
                "', surname='" + users.getSurname() +
@@ -104,7 +110,14 @@ public class UsersDao implements Dao<Users> {
     }
 
 
-    private Users rsToObject(ResultSet rs){
+    private int boolToInt(boolean bool) {
+
+        return (bool ? 1 : 0);
+    }
+
+
+    private Users rsToObject(ResultSet rs) {
+
         Users temp = new Users();
 
         try {
@@ -126,11 +139,6 @@ public class UsersDao implements Dao<Users> {
 
 
         return temp;
-    }
-
-    private int boolToInt(boolean bool){
-
-        return (bool ? 1 : 0);
     }
 
 }

@@ -53,6 +53,28 @@ public class SupplierOrders {
     }
 
 
+    public LocalDate getOrderDate() {
+
+        return orderDate;
+    }
+
+
+    public void setOrderDate(LocalDate orderDate) {
+
+        if (orderDate != null) {
+
+            this.orderDate = orderDate;
+        }
+    }
+
+
+    @Override
+    public String toString() {
+
+        return getPoNumber() + " - " + new SuppliersDao().get(getSuppCode()).getSupplierName();
+    }
+
+
     public String getSuppCode() {
 
         return suppCode;
@@ -74,26 +96,5 @@ public class SupplierOrders {
     public void setPoNumber(String poNumber) {
 
         this.poNumber = poNumber;
-    }
-
-
-    public LocalDate getOrderDate() {
-
-        return orderDate;
-    }
-
-
-    public void setOrderDate(LocalDate orderDate) {
-
-      if (orderDate != null) {
-
-        this.orderDate = orderDate;
-      }
-    }
-
-
-    @Override
-    public String toString() {
-        return getPoNumber() + " - " + new SuppliersDao().get(getSuppCode()).getSupplierName();
     }
 }

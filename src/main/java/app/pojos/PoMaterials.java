@@ -7,142 +7,175 @@ import java.time.LocalDate;
 
 public class PoMaterials extends RecursiveTreeObject<PoMaterials> {
 
-  private int rowid;
-  private String po;
-  private String mCode;
-  private int lineNo;
-  private int deliveryNo;
-  private LocalDate expectedDate;
-  private double expectedQuantity;
-  private double arrivedQuantity;
-  private int proteanEntry;
+    private int rowid;
+
+    private String po;
+
+    private String mCode;
+
+    private int lineNo;
+
+    private int deliveryNo;
+
+    private LocalDate expectedDate;
+
+    private double expectedQuantity;
+
+    private double arrivedQuantity;
+
+    private int proteanEntry;
 
 
-  public PoMaterials() {
+    public PoMaterials() {
 
-  }
-
-
-  public PoMaterials(int rowid, String po, String mCode, int lineNo, int deliveryNo, LocalDate expectedDate, double expectedQuantity, double arrivedQuantity) {
-
-    this.rowid = rowid;
-    this.po = po;
-    this.mCode = mCode;
-    this.lineNo = lineNo;
-    this.deliveryNo = deliveryNo;
-    this.expectedDate = expectedDate;
-    this.expectedQuantity = expectedQuantity;
-    this.arrivedQuantity = arrivedQuantity;
-  }
+    }
 
 
-  public PoMaterials(String po, String mCode, double expectedQuantity, double arrivedQuantity) {
+    public PoMaterials(int rowid, String po, String mCode, int lineNo, int deliveryNo, LocalDate expectedDate, double expectedQuantity, double arrivedQuantity) {
 
-    this.po = po;
-    this.mCode = mCode;
-    this.expectedQuantity = expectedQuantity;
-    this.arrivedQuantity = arrivedQuantity;
-  }
-
-
-  public int getRowid() {
-    return rowid;
-  }
-
-  public void setRowid(int rowid) {
-    this.rowid = rowid;
-  }
+        this.rowid = rowid;
+        this.po = po;
+        this.mCode = mCode;
+        this.lineNo = lineNo;
+        this.deliveryNo = deliveryNo;
+        this.expectedDate = expectedDate;
+        this.expectedQuantity = expectedQuantity;
+        this.arrivedQuantity = arrivedQuantity;
+    }
 
 
-  public String getPo() {
-    return po;
-  }
+    public PoMaterials(String po, String mCode, double expectedQuantity, double arrivedQuantity) {
 
-  public void setPo(String po) {
-    this.po = po;
-  }
-
-
-  public String getMCode() {
-    return mCode;
-  }
-
-  public void setMCode(String mCode) {
-    this.mCode = mCode;
-  }
+        this.po = po;
+        this.mCode = mCode;
+        this.expectedQuantity = expectedQuantity;
+        this.arrivedQuantity = arrivedQuantity;
+    }
 
 
-  public int getLineNo() {
-    return lineNo;
-  }
+    public int getRowid() {
 
-  public void setLineNo(int lineNo) {
-    this.lineNo = lineNo;
-  }
+        return rowid;
+    }
 
 
-  public int getDeliveryNo() {
-    return deliveryNo;
-  }
+    public void setRowid(int rowid) {
 
-  public void setDeliveryNo(int deliveryNo) {
-    this.deliveryNo = deliveryNo;
-  }
+        this.rowid = rowid;
+    }
 
 
-  public LocalDate getExpectedDate() {
-    return expectedDate;
-  }
+    public String getPo() {
 
-  public void setExpectedDate(LocalDate expectedDate) {
-
-    this.expectedDate = expectedDate;
-  }
+        return po;
+    }
 
 
-  public double getExpectedQuantity() {
-    return expectedQuantity;
-  }
+    public void setPo(String po) {
 
-  public void setExpectedQuantity(double expectedQuantity) {
-    this.expectedQuantity = expectedQuantity;
-  }
+        this.po = po;
+    }
 
 
-  public double getArrivedQuantity() {
-    return arrivedQuantity;
-  }
+    public String getMCode() {
 
-  public void setArrivedQuantity(double arrivedQuantity) {
-    this.arrivedQuantity = arrivedQuantity;
-  }
+        return mCode;
+    }
 
 
-  public int getProteanEntry() {
-    return proteanEntry;
-  }
+    public void setMCode(String mCode) {
 
-  public void setProteanEntry(int proteanEntry) {
-    this.proteanEntry = proteanEntry;
-  }
+        this.mCode = mCode;
+    }
 
 
-  @Override
-  public String toString() {
+    public int getLineNo() {
 
-    return "PoMaterials{" +
-           "rowid=" + rowid +
-           ", po='" + po + '\'' +
-           ", mCode='" + mCode + '\'' +
-           ", lineNo=" + lineNo +
-           ", deliveryNo=" + deliveryNo +
-           ", expectedDate=" + expectedDate +
-           ", expectedQuantity=" + expectedQuantity +
-           ", arrivedQuantity=" + arrivedQuantity +
-           ", proteanEntry=" + proteanEntry +
-           '}';
-  }
+        return lineNo;
+    }
 
+
+    public void setLineNo(int lineNo) {
+
+        this.lineNo = lineNo;
+    }
+
+
+    public int getDeliveryNo() {
+
+        return deliveryNo;
+    }
+
+
+    public void setDeliveryNo(int deliveryNo) {
+
+        this.deliveryNo = deliveryNo;
+    }
+
+
+    public LocalDate getExpectedDate() {
+
+        return expectedDate;
+    }
+
+
+    public void setExpectedDate(LocalDate expectedDate) {
+
+        this.expectedDate = expectedDate;
+    }
+
+
+    public double getExpectedQuantity() {
+
+        return expectedQuantity;
+    }
+
+
+    public void setExpectedQuantity(double expectedQuantity) {
+
+        this.expectedQuantity = expectedQuantity;
+    }
+
+
+    public double getArrivedQuantity() {
+
+        return arrivedQuantity;
+    }
+
+
+    public void setArrivedQuantity(double arrivedQuantity) {
+
+        this.arrivedQuantity = arrivedQuantity;
+    }
+
+
+    public int getProteanEntry() {
+
+        return proteanEntry;
+    }
+
+
+    public void setProteanEntry(int proteanEntry) {
+
+        this.proteanEntry = proteanEntry;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return "PoMaterials{" +
+               "rowid=" + rowid +
+               ", po='" + po + '\'' +
+               ", mCode='" + mCode + '\'' +
+               ", lineNo=" + lineNo +
+               ", deliveryNo=" + deliveryNo +
+               ", expectedDate=" + expectedDate +
+               ", expectedQuantity=" + expectedQuantity +
+               ", arrivedQuantity=" + arrivedQuantity +
+               ", proteanEntry=" + proteanEntry +
+               '}';
+    }
 
 
 }

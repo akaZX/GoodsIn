@@ -35,7 +35,8 @@ public class QAReportHTML {
                 html.append(recordData(records));
             }
 
-        }else{
+        }
+        else {
             return null;
         }
 

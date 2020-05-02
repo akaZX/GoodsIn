@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,6 +17,7 @@ public class MainMaterialProfileController implements Initializable {
 
     @FXML
     StackPane stackPane;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,7 +51,6 @@ public class MainMaterialProfileController implements Initializable {
 
             drawersStack.setContent(form);
             drawersStack.toggle(leftDrawer);
-
 
 
             String ID = "LEFT";

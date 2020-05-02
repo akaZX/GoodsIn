@@ -12,18 +12,19 @@ import javafx.scene.control.TreeTableColumn;
 public class SuppliersTableColumns {
 
 
+    public static JFXTreeTableColumn<Suppliers, String> getNameCol(JFXTreeTableView<Suppliers> table) {
 
-    public static JFXTreeTableColumn<Suppliers,String> getNameCol(JFXTreeTableView<Suppliers> table){
         JFXTreeTableColumn<Suppliers, String> nameCol = new JFXTreeTableColumn<>();
 
         Label columnLabel = new Label("Supplier Name");
         columnLabel.setTooltip(new Tooltip("Supplier name"));
         nameCol.setGraphic(columnLabel);
 
-        nameCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Suppliers, String> param) ->{
-            if(nameCol.validateValue(param)) {
+        nameCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<Suppliers, String> param) -> {
+            if (nameCol.validateValue(param)) {
                 return new SimpleStringProperty(param.getValue().getValue().getSupplierName());
-            } else {
+            }
+            else {
                 return nameCol.getComputedValue(param);
             }
         });

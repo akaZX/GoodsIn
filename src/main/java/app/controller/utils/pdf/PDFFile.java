@@ -19,7 +19,7 @@ import java.util.Map;
 public class PDFFile {
 
 
-    public static Map<String, String> createPDFFile(String email, String password, String po, Map<String, String> map) {
+    public static void createPDFFile(String email, String password, String po, Map<String, String> map) {
 
 
         SupplierOrders supplierOrders = new SupplierOrderDao().getBy(po, "po");
@@ -59,7 +59,6 @@ public class PDFFile {
                         map.put(supplierOrders.getPoNumber(), "No emails found");
                     }
 
-                    return map;
 
                 }
                 catch (IOException e) {
@@ -79,7 +78,6 @@ public class PDFFile {
             map.put(supplierOrders.getPoNumber(), "No material records found");
         }
 
-        return map;
 
     }
 

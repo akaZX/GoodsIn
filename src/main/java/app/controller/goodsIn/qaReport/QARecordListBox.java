@@ -19,13 +19,26 @@ public class QARecordListBox extends HBox {
 
     @FXML
     private Label leftLabel;
+
     @FXML
     private JFXTextField weightField;
+
     @FXML
     private JFXTextField boxField;
 
 
+    public QARecordListBox(RmtQaRecords record) {
+
+        this();
+        this.record = record;
+
+        setLeftLabel();
+        loadWeight();
+    }
+
+
     public QARecordListBox() {
+
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("goodsIn/QARecordBox.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -44,51 +57,22 @@ public class QARecordListBox extends HBox {
     }
 
 
-    public QARecordListBox(RmtQaRecords record) {
-        this();
-        this.record = record;
-
-        setLeftLabel();
-        loadWeight();
-    }
-
-    private void setLeftLabel(){
-        leftLabel.setText(new MaterialsDao().get(record.getmCode()).getName() + "\nDecision: " + record.getDecision());
-    }
-
-    public String getDecision(){
-        return record.getDecision();
-    }
-
-    public RmtQaRecords getRecord(){
-        return record;
-    }
-
-    private void intFields(){
+    private void intFields() {
 
         TextFieldInput.mainIntField(boxField);
-        TextFieldInput.doubleTextField(weightField,false);
-    }
-
-    public int getBoxes(){
-
-        return Integer.parseInt(boxField.getText());
-    }
-
-    private void setBox(int boxes){
-        boxField.setText(String.valueOf(boxes));
-    }
-
-    public double getWeight(){
-        return Double.parseDouble(weightField.getText());
+        TextFieldInput.doubleTextField(weightField, false);
     }
 
 
-    private void setWeight(double weight) {
-        weightField.setText(String.valueOf(weight));
+    private void setLeftLabel() {
+
+        leftLabel.setText(
+                record.getmCode() + " - " + new MaterialsDao().get(record.getmCode()).getName() + "\nDecision: " +
+                record.getDecision());
     }
 
-    private void loadWeight(){
+
+    private void loadWeight() {
 
         QaRecordWeight weight = new QaRecordWeightDao().get(record.getRowid());
         if (weight != null) {
@@ -96,6 +80,24 @@ public class QARecordListBox extends HBox {
             setBox(weight.getBoxes());
         }
 
+    }
+
+
+    private void setBox(int boxes) {
+
+        boxField.setText(String.valueOf(boxes));
+    }
+
+
+    public String getDecision() {
+
+        return record.getDecision();
+    }
+
+
+    public RmtQaRecords getRecord() {
+
+        return record;
     }
 
 
@@ -108,5 +110,23 @@ public class QARecordListBox extends HBox {
         weight.setBoxes(getBoxes());
 
         return new QaRecordWeightDao().update(weight);
+    }
+
+
+    public int getBoxes() {
+
+        return Integer.parseInt(boxField.getText());
+    }
+
+
+    public double getWeight() {
+
+        return Double.parseDouble(weightField.getText());
+    }
+
+
+    private void setWeight(double weight) {
+
+        weightField.setText(String.valueOf(weight));
     }
 }

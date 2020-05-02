@@ -15,8 +15,8 @@ import javafx.stage.Stage;
 public class Messages extends JFXAlert<String> {
 
 
+    public <T> void materialProfileControllerSaveMessage(ParamListController box, Dao<T> dao, Object obj, String mCode) {
 
-    public <T> void materialProfileControllerSaveMessage(ParamListController box, Dao<T> dao, Object obj, String mCode){
         JFXAlert<String> alert = new JFXAlert<>((Stage) box.getScene().getWindow());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(false);
@@ -44,7 +44,8 @@ public class Messages extends JFXAlert<String> {
         alert.show();
     }
 
-    public <T> void materialProfileControllerDelete(ParamListController box, Dao<T> dao, String mCode){
+
+    public <T> void materialProfileControllerDelete(ParamListController box, Dao<T> dao, String mCode) {
 
         JFXAlert<String> alert = new JFXAlert<>((Stage) box.getScene().getWindow());
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -74,15 +75,15 @@ public class Messages extends JFXAlert<String> {
         alert.show();
     }
 
+
     public void continueAlert(Node node, String heading, String body) {
 
         continueAlert(node, new Label(heading), new Label(body));
     }
 
 
+    public void continueAlert(Node node, Node heading, Control body) {
 
-
-    public void continueAlert(Node node, Node heading, Control body){
         JFXAlert<String> alert = new JFXAlert<>((Stage) node.getScene().getWindow());
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(false);
@@ -99,5 +100,6 @@ public class Messages extends JFXAlert<String> {
         alert.setContent(layout);
         alert.show();
     }
+
 
 }

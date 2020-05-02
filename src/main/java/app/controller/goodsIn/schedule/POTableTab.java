@@ -2,7 +2,7 @@ package app.controller.goodsIn.schedule;
 
 
 import app.controller.sql.SQLiteProteanClone;
-import app.controller.sql.dao.*;
+import app.controller.sql.dao.ScheduleDetailsDao;
 import app.controller.sql.serviceClasses.ScheduleEntryService;
 import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
@@ -29,13 +29,6 @@ import java.time.LocalDate;
 
 public class POTableTab {
 
-
-    public POTableTab() {
-
-    }
-
-
-    private Messages msg = new Messages();
 
     private final Tab tab = new Tab("Orders List");
 
@@ -65,12 +58,20 @@ public class POTableTab {
 
     private final ToolBar toolBar = new ToolBar();
 
-    private Node[] nodes = {
+    private final Messages msg = new Messages();
+
+    private final Node[] nodes = {
             selectedDateLabel, dateField, listOrders, importEntries,
             edit, addEntry, deleteEntry, duplicateOrder
     };
 
-    public Tab createTable() {
+
+    public POTableTab() {
+
+    }
+
+
+    public Tab createTable(boolean security) {
 
         final Pane leftSpacer = new Pane();
         HBox.setHgrow(
@@ -80,6 +81,7 @@ public class POTableTab {
 
         toolbarMargins();
         selectedDateLabel.getStyleClass().add("sched-table-top");
+
 
         toolBar.getItems().addAll(
                 selectedDateLabel,
@@ -94,15 +96,20 @@ public class POTableTab {
                 build
         );
 
+        //removes items if user has only security permissions
+        if (security) {
+            toolBar.getItems().removeAll(build, importEntries, deleteEntry);
+        }
+
         toolBar.setPadding(new Insets(10, 35, 10, 35));
 
 
-        ValidateInput.requiredFieldValidation(dateField,"Missing date!");
+        ValidateInput.requiredFieldValidation(dateField, "Missing date!");
 
         bPane.setTop(toolBar);
         bPane.setCenter(table);
 
-        dateField.setValue(LocalDate.of(2020, 1, 24));
+        dateField.setValue(LocalDate.now());
 
         pane.getChildren().addAll(bPane);
         tab.setContent(pane);
@@ -119,9 +126,10 @@ public class POTableTab {
 
         for (Node node : nodes
         ) {
-            HBox.setMargin(node, new Insets(0,5,0,5));
+            HBox.setMargin(node, new Insets(0, 5, 0, 5));
         }
     }
+
 
     private void addColumnsToTable() {
 
@@ -130,7 +138,7 @@ public class POTableTab {
         table.columnResizePolicyProperty();
         boolean b = table.getColumns().addAll(tableColumns.supplierCol(), tableColumns.poCol(),
                 tableColumns.haulierCol(), tableColumns.expectedETACol(), tableColumns.bayCol(),
-                tableColumns.unloadingTimeCol(), tableColumns.palletsCol(),tableColumns.commentsCol() ,
+                tableColumns.unloadingTimeCol(), tableColumns.palletsCol(), tableColumns.commentsCol(),
                 tableColumns.arrivedCol(), tableColumns.departedCol(),
                 tableColumns.bookedInCol(), tableColumns.registrationCol());
 
@@ -138,16 +146,16 @@ public class POTableTab {
         table.setEditable(false);
     }
 
-    private void initialListLoad(){
+
+    private void initialListLoad() {
         //TODO change back to today's value
-        dateField.setValue(LocalDate.of(2020,01,24));
+        dateField.setValue(LocalDate.now());
         listAllRecords();
         addIcons();
     }
 
 
-
-    private void addIcons(){
+    private void addIcons() {
 
         addIcons(importEntries, FontAwesomeIcon.DATABASE);
         addIcons(edit, FontAwesomeIcon.EDIT);
@@ -158,28 +166,28 @@ public class POTableTab {
         addIcons(build, FontAwesomeIcon.GEAR);
 
 
-
         FontAwesomeIconView iconView = new FontAwesomeIconView(FontAwesomeIcon.REMOVE);
         iconView.getStyleClass().addAll("red-icon", "small-icon");
         deleteEntry.setGraphic(iconView);
 
     }
 
+
     //    adds action listeners for buttons and table rows
     private void tableListeners() {
 
         //TODO prideti likusias knopkes
 
-        listOrders.setOnAction(event ->listAllRecords());
+        listOrders.setOnAction(event -> listAllRecords());
 
         importEntries.setOnAction(event -> {
             Thread thread = new Thread(() -> {
                 SQLiteProteanClone.getOrderDetailsFromProtean(dateField.getValue());
-                Platform.runLater(()->{
+                Platform.runLater(() -> {
                     table.setRoot(populateTreeItems());
                 });
             });
-               thread.start();
+            thread.start();
 
         });
 
@@ -201,12 +209,15 @@ public class POTableTab {
 
             try {
                 ScheduleEntry record = table.getSelectionModel().getSelectedItem().getValue();
-                boolean b = new ScheduleDetailsDao().delete(table.getSelectionModel().getSelectedItem().getValue().getDetails());
-                if(b){
+                boolean       b      = new ScheduleDetailsDao().delete(table.getSelectionModel().getSelectedItem().getValue().getDetails());
+                if (b) {
                     msg.continueAlert(table, LabelWithIcons.largeCheckIconLabel("Success"), new Label("Entry was deleted"));
-                }else{
+                }
+                else {
 
-                    msg.continueAlert(table, LabelWithIcons.largeWarningIconLabel("Error"), new Label("Failed to delete following entry:\n" + record.getSupplier().getSupplierName() + " " + record.getOrder().getPoNumber()));
+                    msg.continueAlert(table, LabelWithIcons.largeWarningIconLabel("Error"), new Label(
+                            "Failed to delete following entry:\n" + record.getSupplier().getSupplierName() + " " +
+                            record.getOrder().getPoNumber()));
                 }
             }
             catch (NullPointerException ignored) {
@@ -242,11 +253,11 @@ public class POTableTab {
             row.setOnMouseClicked(event -> {
 
                 if (event.getClickCount() == 2 && (! row.isEmpty())) {
-                  loadRow();
+                    loadRow();
                 }
             });
             row.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER && (!row.isEmpty())) {
+                if (event.getCode() == KeyCode.ENTER && (! row.isEmpty())) {
                     loadRow();
                 }
             });
@@ -254,7 +265,8 @@ public class POTableTab {
         });
     }
 
-    public void listAllRecords(){
+
+    public void listAllRecords() {
 
         try {
             table.setRoot(populateTreeItems());
@@ -266,18 +278,23 @@ public class POTableTab {
         selectedDateLabel.setText(String.valueOf(dateField.getValue()));
     }
 
-    private void loadRow(){
+
+    private void loadRow() {
+
         ScheduleEntry order = table.getSelectionModel().getSelectedItem().getValue();
         loadOrderForm(order, dateField);
     }
 
+
     //loads delivery form with order details
     private void loadOrderForm(ScheduleEntry order, Node node) {
+
         FormController contr;
         if (order == null) {
             contr = new FormController(node, this);
-        }else{
-             contr  = new FormController(order, node, this);
+        }
+        else {
+            contr = new FormController(order, node, this);
         }
         contr.displayForm(table);
 
@@ -285,10 +302,12 @@ public class POTableTab {
 
 
     public TreeItem<ScheduleEntry> populateTreeItems() {
-        if(dateField.getValue() != null){
+
+        if (dateField.getValue() != null) {
             dateField.resetValidation();
             return new RecursiveTreeItem<>(FXCollections.observableArrayList(ScheduleEntryService.getDeliveriesFromDb(dateField.getValue())), RecursiveTreeObject::getChildren);
-        }else{
+        }
+        else {
             msg.continueAlert(table, "Error", "Date field is left blank or date format is incorrect.\nIt should be in dd/mm/yyyy form. ");
             dateField.validate();
             return null;
@@ -296,7 +315,7 @@ public class POTableTab {
     }
 
 
-    private void addIcons(JFXButton button, FontAwesomeIcon icon){
+    private void addIcons(JFXButton button, FontAwesomeIcon icon) {
 
         FontAwesomeIconView iconView = new FontAwesomeIconView(icon);
 

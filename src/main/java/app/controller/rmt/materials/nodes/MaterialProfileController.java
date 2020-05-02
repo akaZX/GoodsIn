@@ -1,9 +1,9 @@
 package app.controller.rmt.materials.nodes;
 
 import app.controller.sql.dao.*;
+import app.controller.utils.FileUtil;
 import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
-import app.controller.utils.FileUtil;
 import app.model.Material;
 import app.pojos.MaterialCountries;
 import app.pojos.MaterialSpecs;
@@ -28,92 +28,92 @@ import java.util.ResourceBundle;
 public class MaterialProfileController implements Initializable {
 
 
+    FileChooser fileChooser = new FileChooser();
+
+    @FXML
+    ScrollPane scrollPane;
+
     private String imagePath;
 
     private Material material = null;
 
-    private MaterialListDrawerController drawerController;
+    private final MaterialListDrawerController drawerController;
 
-    private Messages msg = new Messages();
+    private final Messages msg = new Messages();
 
+    private final MinMaxInput majorBox = new MinMaxInput("Major Foreign bodies", "Glass/Wood/Plastic\nAllergen\nChemicals\nHeavy soiling\nInsects/pests");
 
-    private MinMaxInput majorBox = new MinMaxInput("Major Foreign bodies", "Glass/Wood/Plastic\nAllergen\nChemicals\nHeavy soiling\nInsects/pests");
+    private final MinMaxInput minorBox = new MinMaxInput("Non-Critical Defects", "Dry/Dehydrated\nDiscoloured/Scarring\nHarvest or Handling damage\nBrowning/Translucency\nWater spotting");
 
-    private MinMaxInput minorBox = new MinMaxInput("Non-Critical Defects", "Dry/Dehydrated\nDiscoloured/Scarring\nHarvest or Handling damage\nBrowning/Translucency\nWater spotting");
+    private final MinMaxInput criticalBox = new MinMaxInput("Critical Quality Defects", "Slimy\nExcessively wet\nSpongy/Pithy\nPest damage/Disease\nBreakdown/Mould");
 
-    private MinMaxInput criticalBox = new MinMaxInput("Critical Quality Defects", "Slimy\nExcessively wet\nSpongy/Pithy\nPest damage/Disease\nBreakdown/Mould");
+    private final JFXCheckBox density = new JFXCheckBox("Density");
 
-    private JFXCheckBox density = new JFXCheckBox("Density");
+    private final MinMaxInput densityBox = new MinMaxInput("Density", "Density parameter will be required to record during quality checks");
 
-    private MinMaxInput densityBox = new MinMaxInput("Density", "Density parameter will be required to record during quality checks");
+    private final JFXCheckBox lorryTemp = new JFXCheckBox("Lorry temperature");
 
-    private JFXCheckBox lorryTemp = new JFXCheckBox("Lorry temperature");
+    private final MinMaxInput lorryTempBox = new MinMaxInput("Lorry temperature", "Min and Max values is required");
 
-    private MinMaxInput lorryTempBox = new MinMaxInput("Lorry temperature", "Min and Max values is required");
+    private final JFXCheckBox materialTemp = new JFXCheckBox("Material temperature");
 
-    private JFXCheckBox materialTemp = new JFXCheckBox("Material temperature");
+    private final MinMaxInput materialTempBox = new MinMaxInput("Material temperature", "Material temperature check\n min and max values will used during quality checks");
 
-    private MinMaxInput materialTempBox = new MinMaxInput("Material temperature", "Material temperature check\n min and max values will used during quality checks");
+    private final JFXCheckBox brix = new JFXCheckBox("Brix");
 
-    private JFXCheckBox brix = new JFXCheckBox("Brix");
+    private final MinMaxInput brixBox = new MinMaxInput("Brix");
 
-    private MinMaxInput brixBox = new MinMaxInput("Brix");
+    private final JFXCheckBox pressure = new JFXCheckBox("Pressure");
 
-    private JFXCheckBox pressure = new JFXCheckBox("Pressure");
+    private final MinMaxInput pressureBox = new MinMaxInput("Pressure");
 
-    private MinMaxInput pressureBox = new MinMaxInput("Pressure");
+    private final JFXCheckBox length = new JFXCheckBox("Length");
 
-    private JFXCheckBox length = new JFXCheckBox("Length");
+    private final MinMaxInput lengthBox = new MinMaxInput("Length");
 
-    private MinMaxInput lengthBox = new MinMaxInput("Length");
+    private final JFXCheckBox width = new JFXCheckBox("Width");
 
-    private JFXCheckBox width = new JFXCheckBox("Width");
+    private final MinMaxInput widthBox = new MinMaxInput("Width");
 
-    private MinMaxInput widthBox = new MinMaxInput("Width");
+    private final JFXCheckBox colorStage = new JFXCheckBox("Color stage");
 
-    private JFXCheckBox colorStage = new JFXCheckBox("Color stage");
+    private final MinMaxInput colorStageBox = new MinMaxInput("Color stage");
 
-    private MinMaxInput colorStageBox = new MinMaxInput("Color stage");
+    private final JFXCheckBox headWeight = new JFXCheckBox("Head weight");
 
-    private JFXCheckBox headWeight = new JFXCheckBox("Head weight");
+    private final MinMaxInput headWeightBox = new MinMaxInput("Head weight");
 
-    private MinMaxInput headWeightBox = new MinMaxInput("Head weight");
+    private final JFXCheckBox yield = new JFXCheckBox("Yield");
 
-    private JFXCheckBox yield = new JFXCheckBox("Yield");
+    private final MinMaxInput yieldBox = new MinMaxInput("Yield");
 
-    private MinMaxInput yieldBox = new MinMaxInput("Yield");
+    private final JFXCheckBox variety = new JFXCheckBox("Variety");
 
-    private JFXCheckBox variety = new JFXCheckBox("Variety");
+    private final JFXCheckBox country = new JFXCheckBox("Country");
 
-    private JFXCheckBox country = new JFXCheckBox("Country");
+    private final JFXCheckBox growerID = new JFXCheckBox("Grower ID");
 
-    private JFXCheckBox growerID = new JFXCheckBox("Grower ID");
+    private final JFXCheckBox harvestDate = new JFXCheckBox("Harvest date");
 
-    private JFXCheckBox harvestDate = new JFXCheckBox("Harvest date");
+    private final JFXCheckBox lotNumber = new JFXCheckBox("Lot number");
 
-    private JFXCheckBox lotNumber = new JFXCheckBox("Lot number");
+    private final JFXCheckBox day = new JFXCheckBox("Day");
 
-    private JFXCheckBox day = new JFXCheckBox("Day");
+    private final JFXCheckBox room = new JFXCheckBox("Room");
 
-    private JFXCheckBox room = new JFXCheckBox("Room");
+    private final JFXCheckBox containerNo = new JFXCheckBox("Container number");
 
-    private JFXCheckBox containerNo = new JFXCheckBox("Container number");
+    private final JFXCheckBox redTractorNumber = new JFXCheckBox("RTA number");
 
-    private JFXCheckBox redTractorNumber = new JFXCheckBox("RTA number");
+    private final JFXCheckBox ggn = new JFXCheckBox("GGN number");
 
-    private JFXCheckBox ggn = new JFXCheckBox("GGN number");
+    private final JFXCheckBox twa = new JFXCheckBox("TWA");
 
-    private JFXCheckBox twa = new JFXCheckBox("TWA");
+    private final JFXCheckBox healthMark = new JFXCheckBox("Health mark");
 
-    private JFXCheckBox healthMark = new JFXCheckBox("Health mark");
+    private final JFXCheckBox expiryDate = new JFXCheckBox("Expiry date");
 
-    private JFXCheckBox expiryDate = new JFXCheckBox("Expiry date");
-
-    private JFXCheckBox count = new JFXCheckBox("Material count");
-
-
-
-    FileChooser fileChooser = new FileChooser();
+    private final JFXCheckBox count = new JFXCheckBox("Material count");
 
     @FXML
     private Label paramLabel;
@@ -148,25 +148,20 @@ public class MaterialProfileController implements Initializable {
     @FXML
     private JFXButton saveParamBtn;
 
+    @FXML
+    private JFXTextField documentPathField;
 
     @FXML
-    private JFXTextField documentPathField = new JFXTextField();
+    private JFXTextField mCodeField;
 
     @FXML
-    private JFXTextField mCodeField = new JFXTextField();
+    private JFXTextField materialNameField;
 
     @FXML
-    private JFXTextField materialNameField = new JFXTextField();
+    private JFXTextArea shortDescription;
 
     @FXML
-    private JFXTextArea shortDescription = new JFXTextArea();
-
-
-    @FXML
-    private ImageView materialImage = new ImageView();
-
-    @FXML
-    ScrollPane scrollPane;
+    private ImageView materialImage;
 
 
     public MaterialProfileController(MaterialListDrawerController drawer) {
@@ -184,6 +179,7 @@ public class MaterialProfileController implements Initializable {
         this.material.setMaterial(new MaterialsDao().get(materials.getMCode()));
         this.material.setSpecs(new MaterialSpecsDao().get(materials.getMCode()));
         imagePath = this.material.getMaterial().getImagePath();
+
     }
 
 
@@ -257,8 +253,9 @@ public class MaterialProfileController implements Initializable {
     }
 
 
-    private void addParamNode(JFXCheckBox radioButton, Node node) {
-        radioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+    private void addParamNode(JFXCheckBox checkBox, Node node) {
+
+        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             minorBox.getMaxField().requestFocus();
             if (newValue) {
                 Platform.runLater(() -> scrollPane.requestLayout());
@@ -307,6 +304,15 @@ public class MaterialProfileController implements Initializable {
     }
 
 
+    private void showAlertWindow(ParamListController box) {
+
+        final String HEADING = "Failed to add following entry:";
+        final String BODY = "'" + box.getText() +
+                            "'\nentry is ether to short (min 2 characters, excluding blank spaces) or input field was left blank";
+        msg.continueAlert(saveBtn, HEADING, BODY);
+    }
+
+
     private ParamListController varietyBox() {
 
         ParamListController  box = new ParamListController("Varieties");
@@ -335,15 +341,6 @@ public class MaterialProfileController implements Initializable {
         }
 
         return box;
-    }
-
-
-    private void showAlertWindow(ParamListController box) {
-
-        final String HEADING = "Failed to add following entry:";
-        final String BODY = "'" + box.getText() +
-                            "'\nentry is ether to short (min 2 characters, excluding blank spaces) or input field was left blank";
-        msg.continueAlert(saveBtn, HEADING, BODY);
     }
 
 
@@ -451,7 +448,7 @@ public class MaterialProfileController implements Initializable {
             if (specs.getExpiryDate() == 1) {
                 expiryDate.selectedProperty().setValue(true);
             }
-            if(specs.getCount() == 1){
+            if (specs.getCount() == 1) {
                 count.selectedProperty().setValue(true);
             }
 
@@ -469,6 +466,7 @@ public class MaterialProfileController implements Initializable {
     //  LOADS MATERIAL DATA
     private void loadMaterialDetails() {
 
+
         Materials mat = this.material.getMaterial();
         if (mat != null) {
             if (mat.getName() != null && ! mat.getName().equalsIgnoreCase("")) {
@@ -483,16 +481,6 @@ public class MaterialProfileController implements Initializable {
             setMatName(mat.getName());
             setImage(mat.getImagePath());
             setShortDescription(mat.getDescription());
-        }
-
-    }
-
-
-    private void setDocLink(String docLink) {
-
-        if (docLink != null) {
-            documentPathField.clear();
-            documentPathField.setText(docLink);
         }
     }
 
@@ -511,12 +499,6 @@ public class MaterialProfileController implements Initializable {
         if (name != null) {
             materialNameField.setText(name);
         }
-    }
-
-
-    private void setImage(String path) {
-
-        materialImage.setImage(new FileUtil().getImage(path));
     }
 
 
@@ -554,7 +536,7 @@ public class MaterialProfileController implements Initializable {
             catch (Exception e) {
                 System.out.println("Canceled adding file...");
 
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         });
         // opens file
@@ -567,6 +549,21 @@ public class MaterialProfileController implements Initializable {
         });
         saveParamBtn.setOnAction(event -> saveSpec());
 
+    }
+
+
+    private void setDocLink(String docLink) {
+
+        if (docLink != null) {
+            documentPathField.clear();
+            documentPathField.setText(docLink);
+        }
+    }
+
+
+    private void setImage(String path) {
+
+        materialImage.setImage(new FileUtil().getImage(path));
     }
 
 
@@ -622,7 +619,7 @@ public class MaterialProfileController implements Initializable {
         if (specs == null) {
             final String HEADING = "Error";
             final String BODY    = "Failed to validate specs provided, please ensure there is no underlying errors";
-            msg.continueAlert(saveParamBtn, HEADING, BODY);
+            msg.continueAlert(saveParamBtn, LabelWithIcons.largeWarningIconLabel(HEADING), new Label(BODY));
         }
 
         else {
@@ -632,18 +629,18 @@ public class MaterialProfileController implements Initializable {
                 if (! c) {
                     final String HEADING = "Error";
                     final String BODY    = "Failed to save specs";
-                    msg.continueAlert(saveBtn, HEADING, BODY);
+                    msg.continueAlert(saveParamBtn, LabelWithIcons.largeWarningIconLabel(HEADING), new Label(BODY));
                 }
                 else {
                     final String HEADING = "Success";
                     final String BODY    = "Successfully updated specification records";
-                    msg.continueAlert(saveBtn, HEADING, BODY);
+                    msg.continueAlert(saveParamBtn, LabelWithIcons.largeCheckIconLabel(HEADING), new Label(BODY));
                 }
             }
             else {
                 final String HEADING = "Success";
                 final String BODY    = "Successfully saved specification records";
-                msg.continueAlert(saveBtn, HEADING, BODY);
+                msg.continueAlert(saveParamBtn, LabelWithIcons.largeCheckIconLabel(HEADING), new Label(BODY));
             }
         }
     }
@@ -832,6 +829,7 @@ public class MaterialProfileController implements Initializable {
         }
 
     }
+
 
     //  changes bool to int // true = 1, false = 0
     private int boolToInt(boolean b) {

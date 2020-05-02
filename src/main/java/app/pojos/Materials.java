@@ -4,88 +4,107 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 public class Materials extends RecursiveTreeObject<Materials> {
 
-  private String mCode;
-  private String name;
-  private String description;
-  private String docLink;
-  private String imagePath;
-  private long visible;
+    private String mCode;
+
+    private String name;
+
+    private String description;
+
+    private String docLink;
+
+    private String imagePath;
+
+    private long visible;
 
 
-  public String getMCode() {
-    return mCode;
-  }
+    public String getDescription() {
 
-  public void setMCode(String mCode) {
-    this.mCode = mCode;
-  }
+        return description;
+    }
 
 
-  public String getName() {
-    return name;
-  }
+    public void setDescription(String description) {
 
-  public void setName(String name) {
-    this.name = name;
-  }
+        this.description = description;
+    }
 
 
-  public String getDescription() {
-    return description;
-  }
+    public String getDocLink() {
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+        return docLink;
+    }
 
 
-  public String getDocLink() {
-    return docLink;
-  }
+    public void setDocLink(String docLink) {
 
-  public void setDocLink(String docLink) {
-    this.docLink = docLink;
-  }
+        this.docLink = docLink;
+    }
 
 
-  public long getVisible() {
-    return visible;
-  }
+    public long getVisible() {
 
-  public void setVisible(long visible) {
-    this.visible = visible;
-  }
+        return visible;
+    }
 
 
-  public String getImagePath() {
+    public void setVisible(long visible) {
 
-    return imagePath;
-  }
-
-
-  public void setImagePath(String imagePath) {
-
-    this.imagePath = imagePath;
-  }
+        this.visible = visible;
+    }
 
 
-  @Override
-  public String toString() {
+    public String getImagePath() {
 
-    return getMCode() + " - " +getName();
-  }
-
+        return imagePath;
+    }
 
 
-  public String toStrings() {
+    public void setImagePath(String imagePath) {
 
-    return "Materials{" +
-           "mCode='" + mCode + '\'' +
-           ", name='" + name + '\'' +
-           ", description='" + description + '\'' +
-           ", docLink='" + docLink + '\'' +
-           ", imagePath='" + imagePath + '\'' +
-           ", visible=" + visible +
-           '}';
-  }
+        this.imagePath = imagePath;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return getMCode() + " - " + getName();
+    }
+
+
+    public String getMCode() {
+
+        return mCode;
+    }
+
+
+    public void setMCode(String mCode) {
+
+        this.mCode = mCode;
+    }
+
+
+    public String getName() {
+
+        return name;
+    }
+
+
+    public void setName(String name) {
+
+        this.name = name;
+    }
+
+
+    public String toStrings() {
+
+        return "Materials{" +
+               "mCode='" + mCode + '\'' +
+               ", name='" + name + '\'' +
+               ", description='" + description + '\'' +
+               ", docLink='" + docLink + '\'' +
+               ", imagePath='" + imagePath + '\'' +
+               ", visible=" + visible +
+               '}';
+    }
 }

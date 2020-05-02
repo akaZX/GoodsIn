@@ -8,123 +8,132 @@ import java.time.LocalDateTime;
 
 public class RmtQaRecords {
 
-  private int rowid ;
-  private String po  = "";
-  private String mCode = "";
-  private String author = "";
-  private String decision = "";
-  private LocalDateTime date;
-  private RmtQaIntakeDetails details;
+    private int rowid;
+
+    private String po = "";
+
+    private String mCode = "";
+
+    private String author = "";
+
+    private String decision = "";
+
+    private LocalDateTime date;
+
+    private RmtQaIntakeDetails details;
 
 
+    public int getRowid() {
 
-  public int getRowid() {
-
-    return rowid;
-  }
-
-
-  public void setRowid(int rowid) {
-
-    this.rowid = rowid;
-  }
+        return rowid;
+    }
 
 
-  public String getPo() {
+    public void setRowid(int rowid) {
 
-    return po;
-  }
-
-
-  public void setPo(String po) {
-
-    this.po = po;
-  }
+        this.rowid = rowid;
+    }
 
 
-  public String getmCode() {
+    public String getPo() {
 
-    return mCode;
-  }
-
-
-  public void setmCode(String mCode) {
-
-    this.mCode = mCode;
-  }
+        return po;
+    }
 
 
-  public String getAuthor() {
+    public void setPo(String po) {
 
-    return author;
-  }
-
-
-  public void setAuthor(String author) {
-
-    this.author = author;
-  }
+        this.po = po;
+    }
 
 
-  public LocalDateTime getDate() {
+    public String getAuthor() {
 
-    return date;
-  }
-
-
-  public void setDate(LocalDateTime date) {
-
-    this.date = date;
-  }
+        return author;
+    }
 
 
-  public RmtQaIntakeDetails getDetails() {
+    public void setAuthor(String author) {
 
-    return details;
-  }
-
-
-  public void setDetails(RmtQaIntakeDetails details) {
-
-    this.details = details;
-  }
+        this.author = author;
+    }
 
 
-  public String getDecision() {
+    public LocalDateTime getDate() {
 
-    return decision;
-  }
-
-
-  public void setDecision(String decision) {
-
-    this.decision = decision;
-  }
+        return date;
+    }
 
 
-  @Override
-  public String toString() {
-    return getmCode() + " - " + new MaterialsDao().get(getmCode()) + "\nDecision: " + getDecision();
-  }
+    public void setDate(LocalDateTime date) {
 
-  public String toUpdateString(){
-    return "po='" + po +
-           "', m_code='" + mCode +
-           "', author='" + author +
-           "', date='" + date +
-           "', details_JSON='" + new Gson().toJson(details) +
-           "', decision='" + decision + "'";
-  }
-
-  public String saveString(){
-
-    return "'" + po +
-           "', '" + mCode +
-           "','" + author +
-           "', '" + date.toString() +
-           "', '" + new Gson().toJson(details) +
-           "', '" + decision + "'";
+        this.date = date;
+    }
 
 
-  }
+    public RmtQaIntakeDetails getDetails() {
+
+        return details;
+    }
+
+
+    public void setDetails(RmtQaIntakeDetails details) {
+
+        this.details = details;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return getmCode() + " - " + new MaterialsDao().get(getmCode()) + "\nDecision: " + getDecision();
+    }
+
+
+    public String getmCode() {
+
+        return mCode;
+    }
+
+
+    public void setmCode(String mCode) {
+
+        this.mCode = mCode;
+    }
+
+
+    public String getDecision() {
+
+        return decision;
+    }
+
+
+    public void setDecision(String decision) {
+
+        this.decision = decision;
+    }
+
+
+    public String toUpdateString() {
+
+        return "po='" + po +
+               "', m_code='" + mCode +
+               "', author='" + author +
+               "', date='" + date +
+               "', details_JSON='" + new Gson().toJson(details) +
+               "', decision='" + decision + "'";
+    }
+
+
+    public String saveString() {
+
+        return "'" + po +
+               "', '" + mCode +
+               "','" + author +
+               "', '" + date.toString() +
+               "', '" + new Gson().toJson(details) +
+               "', '" + decision + "'";
+
+
+    }
 }

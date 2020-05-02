@@ -23,7 +23,7 @@ public class MaterialsDao implements Dao<Materials> {
 
         try {
             while (rs.next()) {
-               supp = mapRsToObject(rs);
+                supp = mapRsToObject(rs);
 
             }
             rs.close();
@@ -82,7 +82,8 @@ public class MaterialsDao implements Dao<Materials> {
 
         @Language("SQLite")
         String values = "name= '" + materials.getName() + "', description=" + stringOrNull(materials.getDescription()) +
-                        ", doc_link=" + stringOrNull(materials.getDocLink()) + ", image_path=" + stringOrNull(materials.getImagePath()) + "";
+                        ", doc_link=" + stringOrNull(materials.getDocLink()) + ", image_path=" +
+                        stringOrNull(materials.getImagePath()) + "";
         @Language("SQLite")
         String sql = "Update MATERIALS set " + values + " Where m_code= '" + materials.getMCode() + "'";
         return SQLiteJDBC.update(sql);
@@ -92,7 +93,16 @@ public class MaterialsDao implements Dao<Materials> {
     @Override
     public boolean delete(Materials materials) {
 
-       return SQLiteJDBC.delete(TABLE, "m_code", materials.getMCode());
+        return SQLiteJDBC.delete(TABLE, "m_code", materials.getMCode());
+    }
+
+
+    private String stringOrNull(String string) {
+
+        return (string == null || (string.trim().equalsIgnoreCase("null") || string.isEmpty()) ? "NULL" : ("'" +
+                                                                                                           string +
+                                                                                                           "'"));
+
     }
 
 
@@ -105,11 +115,5 @@ public class MaterialsDao implements Dao<Materials> {
         temp.setDocLink(rs.getString("doc_link"));
         temp.setImagePath(rs.getString("image_path"));
         return temp;
-    }
-
-
-    private String stringOrNull(String string) {
-        return (string == null || (string.trim().equalsIgnoreCase("null") || string.isEmpty()) ? "NULL" : ("'" + string + "'"));
-
     }
 }

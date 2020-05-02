@@ -71,7 +71,7 @@ public class PoMaterialsDao implements Dao<PoMaterials> {
 
         boolean update = SQLiteJDBC.update(sql);
         if (! update) {
-            return  update(poMaterials);
+            return update(poMaterials);
         }
         return update;
     }
