@@ -8,98 +8,111 @@
 </head>
 <style>
 
-    th.rotate {
-        height:90px;
-        position:relative;
+    .top-column {
+        float: left;
+        width: 50%;
     }
 
-    th.rotate > div {
-        transform: rotate(90deg);
-        position: relative;
-        left: -20px;
-        /*right: 10px;*/
-        top: 0;
-        /*bottom: 10px;*/
-        margin: auto;
-
-
+    /* Clear floats after the columns */
+    .row{
+        display: flex;
+    }
+    .top-label{
+        font-weight: bold;
+        font-size: 2.2em;
     }
 
 </style>
 <body>
 
+
 <div class="container">
-    <h2>Table</h2>
-    <p>The .table-responsive class creates a responsive table which will scroll horizontally on small devices (under 768px). When viewing on anything larger than 768px wide, there is no difference:</p>
+
+    <div class="row">
+        <div class="top-column">
+            <p class ="top-label">BAKKAVOR SALADS BOURNE</p>
+            <h3>Raw Material Quality Assessment Report</h3>
+        </div>
+
+        <div class="top-column" align="right">
+            <img src="src/main/resources/images/bakkavor_log.jpeg" height="60" width="250"/>
+        </div>
+
+    </div>
+    <hr>
+    <div class="row">
+        <div style="float: left; width: 50%">
+            <h3> Supplier name</h3>
+        </div>
+        <div style="float: left; width: 25%">
+            <h3> PO</h3>
+        </div>
+        <div style="float: left; width: 25%">
+            <h3> date</h3>
+        </div>
+    </div>
+    <h2>asas</h2>
+
+
+    <br/>
+
+
     <div class="table-responsive">
+
         <table class="table table-bordered table-striped">
             <thead>
             <tr>
-                <th class="rotate">
-                    <div><span>Column and  asd asd asd</span></div>
-                </th>
-                <th class="rotate">
-                    <div><span>Firstname</span></div>
-                </th>
-                <th>Lastname</th>
-                <th>Age</th>
-                <th>City</th>
-                <th>Country</th>
-                <th>#</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Age</th>
-                <th>City</th>
-                <th>Country</th>
+                <th style="width: 25%">Material information</th>
+                <th style="width: 15%">Test results</th>
+                <th style="width: 25%">Defects/Foreign bodies</th>
+                <th style="width: 20%">Comments</th>
+                <th style="width: 15%">Arrived</th>
 
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1asd</td>
-                <td>Anna</td>
+            <tr class="success">
+
+                <td >Anna</td>
                 <td>Pitt</td>
                 <td>35</td>
                 <td>New York</td>
-                <td>USA</td>
-                <td>1asd</td>
-                <td>Anna</td>
-                <td>Pitt</td>
-                <td>35</td>
-                <td>New York</td>
-                <td>USA</td>
+                <td style="width: 20%">
+                    <div>
+                        <table style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th style="width: 50%">Weight</th>
+                                <th style="width: 50%">Boxes</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>90</td>
+                                <td>999</td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </td>
             </tr>
-            <tr>
-                <td>1asd</td>
-                <td>Anna</td>
-                <td>Pitt</td>
-                <td>35</td>
-                <td>New York</td>
-                <td>USA</td>
-                <td>1asd</td>
-                <td>Anna</td>
-                <td>Pitt</td>
-                <td>35</td>
-                <td>New York</td>
-                <td>USA</td>
-            </tr>
-            <tr>
-                <td>1asd</td>
-                <td>Anna</td>
-                <td>Pitt</td>
-                <td>35</td>
-                <td>New York</td>
-                <td>USA</td>
-                <td>1asd</td>
-                <td>Anna</td>
-                <td>Pitt</td>
-                <td>35</td>
-                <td>New York</td>
-                <td>USA</td>
-            </tr>
+
+
+
             </tbody>
         </table>
     </div>
+</div>
+<br/>
+<br/>
+<div>
+    <hr>
+    <p>Any rejections will be disposed of after 48 hours unless collected or instructed otherwise.</p>
+    <p>All weight queries must be made within 24 hours of receiving this QA report.</p>
+    <hr>
+    <p>This report supersedes any previously received for this PO number prior to the date and time below:</p>
 </div>
 
 </body>

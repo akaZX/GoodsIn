@@ -11,38 +11,44 @@ import java.util.List;
 
 public class SuppliersDao implements Dao<Suppliers> {
 
+    private final String TABLE = "SUPPLIERS";
+
+
     @Override
     public <R> Suppliers get(R id) {
+
+
         Suppliers supp = new Suppliers();
 
-        ResultSet rs = SQLiteJDBC.select("SUPPLIERS", "supp_code", id);
+        ResultSet rs = SQLiteJDBC.select(TABLE, "supp_code", id);
 
-        try{
+        try {
             while (rs.next()) {
                 supp.setRowID(rs.getInt("rowid"));
                 supp.setSupplierCode(rs.getString("supp_code"));
                 supp.setSupplierName(rs.getString("supp_name"));
 
             }
-            rs.close();
-        }catch (NullPointerException | SQLException e){
+        }
+        catch (NullPointerException | SQLException e) {
             e.printStackTrace();
+            SQLiteJDBC.close();
         }
         SQLiteJDBC.close();
         return supp;
     }
 
 
-
     @Override
     public List<Suppliers> getAll() {
-        List<Suppliers> list = new ArrayList<>();
-        Suppliers temp;
 
-        ResultSet rs    = SQLiteJDBC.selectAll("SUPPLIERS", "supp_name");
+        List<Suppliers> list = new ArrayList<>();
+        Suppliers       temp;
+
+        ResultSet rs = SQLiteJDBC.selectAll(TABLE, "supp_name");
 
         try {
-            while (rs.next()){
+            while (rs.next()) {
 
                 temp = new Suppliers();
                 temp.setRowID(rs.getInt("rowid"));
@@ -71,12 +77,12 @@ public class SuppliersDao implements Dao<Suppliers> {
     @Override
     public boolean save(Suppliers suppliers) {
 
-        String values = "" + suppliers.getSupplierName() + "', '" + suppliers.getSupplierCode() +"" ;
+        String values = "" + suppliers.getSupplierName() + "', '" + suppliers.getSupplierCode() + "";
 
         @Language("SQLite")
-        String sql ="INSERT INTO SUPPLIERS (supp_name, supp_code) VALUES('" + values.toUpperCase() + "')";
+        String sql = "INSERT INTO SUPPLIERS (supp_name, supp_code) VALUES('" + values.toUpperCase() + "')";
         boolean save = SQLiteJDBC.update(sql);
-        if(!save){
+        if (! save) {
             update(suppliers);
         }
         return save;
@@ -88,7 +94,7 @@ public class SuppliersDao implements Dao<Suppliers> {
 
         String values = "supp_name = '" + suppliers.getSupplierName() + "'";
         @Language("SQLite")
-        String sql = "Update suppliers set " + values + " Where supp_code= '" + suppliers.getSupplierCode()+ "'";
+        String sql = "Update suppliers set " + values + " Where supp_code= '" + suppliers.getSupplierCode() + "'";
         return SQLiteJDBC.update(sql);
 
     }
@@ -96,9 +102,9 @@ public class SuppliersDao implements Dao<Suppliers> {
 
     @Override
     public boolean delete(Suppliers suppliers) {
-       return SQLiteJDBC.delete("SUPPLIERS" , "supp_code", suppliers.getSupplierCode());
-    }
 
+        return SQLiteJDBC.delete(TABLE, "supp_code", suppliers.getSupplierCode());
+    }
 
 
 }

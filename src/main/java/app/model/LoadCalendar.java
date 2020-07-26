@@ -1,20 +1,21 @@
 package app.model;
 
 
-
-import app.controller.schedule.CalendarViewController;
+import app.controller.goodsIn.schedule.CalendarViewController;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.view.CalendarView;
 import javafx.application.Platform;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.StackPane;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public  class LoadCalendar {
+public class LoadCalendar {
 
 
-    public static Tab loadCalendar(StackPane calendarPane, Tab calendarTab){
+    public static Tab loadCalendar(StackPane calendarPane, Tab calendarTab) {
+
         final CalendarView calendarView = new CalendarView();
         calendarView.setShowAddCalendarButton(false);
         calendarView.setShowDeveloperConsole(true);
@@ -29,8 +30,10 @@ public  class LoadCalendar {
         CalendarViewController.initializeCalendars(calendarView, bay01, bay02, bay03, bay04, calendarPane, calendarTab);
 
         Thread updateTimeThread = new Thread("Calendar: Update Time Thread") {
+
             public void run() {
-                while(true) {
+
+                while (true) {
                     Platform.runLater(() -> {
                         calendarView.setToday(LocalDate.now());
                         calendarView.setTime(LocalTime.now());
@@ -38,7 +41,8 @@ public  class LoadCalendar {
 
                     try {
                         sleep(999999L);
-                    } catch (InterruptedException var2) {
+                    }
+                    catch (InterruptedException var2) {
                         var2.printStackTrace();
                     }
                 }

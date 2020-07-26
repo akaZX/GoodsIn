@@ -1,9 +1,10 @@
 package app.view.custom_nodes;
 
 
+import app.controller.utils.ValidateInput;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
-import com.sun.org.apache.xpath.internal.objects.XNull;
+import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
@@ -14,14 +15,18 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class DateTimeInput extends HBox {
 
-@FXML private JFXDatePicker date;
-@FXML private JFXTextField hours;
-@FXML private JFXTextField minutes;
+    @FXML
+    private JFXDatePicker date;
+
+    @FXML
+    private JFXTextField hours;
+
+    @FXML
+    private JFXTextField minutes;
 
 
     public DateTimeInput() {
@@ -32,41 +37,53 @@ public class DateTimeInput extends HBox {
 
         try {
             fxmlLoader.load();
-        } catch (IOException exception) {
+        }
+        catch (IOException exception) {
             throw new RuntimeException(exception);
         }
         formatTextFields(hours, 23);
         formatTextFields(minutes, 59);
+
+        ValidateInput.requiredFieldValidation(date, "Missing date", true, true);
+
     }
+
 
     private void formatTextFields(JFXTextField field, int limit) {
 
+        ValidateInput.requiredFieldValidation(field, " ", true, true);
+
+        field.setValidators(new RequiredFieldValidator());
 //TODO patvarkyti kad leistu ivesti valandas su vienu skaicium
-        field.textProperty().addListener((observable, oldValue, newValue) ->{
-            if(oldValue.length()> newValue.length()){
+        field.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue.length() > newValue.length()) {
                 field.setText(newValue);
 
-            }else{
-                if (newValue.length() == 1){
-                    if(newValue.matches("[\\d]")){
-                        if (Integer.parseInt(field.getText()) > limit / 10){
+            }
+            else {
+                if (newValue.length() == 1) {
+                    if (newValue.matches("[\\d]")) {
+                        if (Integer.parseInt(field.getText()) > limit / 10) {
                             field.setText(oldValue);
                         }
                         return;
-                    }else{
+                    }
+                    else {
                         field.setText(oldValue);
                     }
                 }
-                if(newValue.length() == 2){
+                if (newValue.length() == 2) {
 
-                    if(newValue.matches("[\\d]{2}")){
-                        if(Integer.parseInt(field.getText()) > limit){
+                    if (newValue.matches("[\\d]{2}")) {
+                        if (Integer.parseInt(field.getText()) > limit) {
                             field.setText(oldValue);
-                        }else{
+                        }
+                        else {
                             Robot robot = null;
                             try {
                                 robot = new Robot();
-                            } catch (AWTException e) {
+                            }
+                            catch (AWTException e) {
                                 e.printStackTrace();
                             }
                             assert robot != null;
@@ -74,7 +91,8 @@ public class DateTimeInput extends HBox {
                             robot.keyRelease(KeyEvent.VK_TAB);
                         }
 
-                    }else{
+                    }
+                    else {
                         field.setText(oldValue);
                     }
                 }
@@ -84,71 +102,101 @@ public class DateTimeInput extends HBox {
         //for validating input and leaving it in two digit format
         field.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
             if (! newPropertyValue) {
-                System.out.println("out of focus");
+                if (field.getText().length() == 1) {
+                    field.setText("0" + field.getText());
+                }
             }
+
         });
+
 
     }
 
 
+    public LocalDateTime getLocalDateTime() {
 
-    public LocalDateTime getLocalDateTime(){
         LocalDateTime time = null;
 
-        if(!hours.getText().equalsIgnoreCase("") && !minutes.getText().equalsIgnoreCase("")){
-            try{
-                LocalDate date = this.date.getValue();
-                int hour = Integer.parseInt(hours.getText());
-                int minute = Integer.parseInt(minutes.getText());
+        if (! hours.getText().equalsIgnoreCase("") && ! minutes.getText().equalsIgnoreCase("")) {
+            try {
+                LocalDate date   = this.date.getValue();
+                int       hour   = Integer.parseInt(hours.getText());
+                int       minute = Integer.parseInt(minutes.getText());
                 time = date.atTime(hour, minute);
 
-            }catch (NumberFormatException e){
+            }
+            catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
 
 
-
         return time;
     }
 
-    public void setCurrentTime(){
-        LocalTime time = LocalTime.now();
-        int hour = time.getHour();
-        int minute = time.getMinute();
 
-        hours.setText(String.valueOf(hour));
-        minutes.setText(String.valueOf(minute));
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+
+        date.setValue(localDateTime.toLocalDate());
+        hours.setText(((localDateTime.getHour() < 10) ? ("0" + localDateTime.getHour()) : "" +
+                                                                                                          localDateTime.getHour()));
+        minutes.setText(((localDateTime.getMinute() < 10) ? ("0" + localDateTime.getMinute()) : "" +
+                                                                                                localDateTime.getMinute()));
+    }
+
+
+    public void setCurrentTime() {
+
+        LocalDateTime time         = LocalDateTime.now();
+        int           hour         = time.getHour();
+        int           minute       = time.getMinute();
+        String        hourString   = hour < 10 ? "0" + hour : "" + hour;
+        String        minuteString = minute < 10 ? "0" + minute : "" + minute;
+        System.out.println("minute: " + minuteString);
+
+        hours.setText(hourString);
+
+        minutes.setText(minuteString);
         date.setValue(LocalDate.now());
     }
 
 
-    public LocalTime getLocalTime(){
-        return  LocalTime.of(getHours(), getMinutes());
+    public LocalTime getLocalTime() {
+
+        return LocalTime.of(getHours(), getMinutes());
     }
 
-    public LocalDate getLocalDate(){
-        return date.getValue();
-    }
 
-    public int getHours(){
+    public int getHours() {
 
         return Integer.parseInt(hours.getText());
     }
 
-    public int getMinutes(){
+
+    public int getMinutes() {
+
         int minutes = Integer.parseInt(this.minutes.getText());
         return minutes;
     }
 
-    public void setDate(LocalDate date){
+
+    public LocalDate getLocalDate() {
+
+        return date.getValue();
+    }
+
+
+    public void setDate(LocalDate date) {
+
         this.date.setValue(date);
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime){
-        date.setValue(localDateTime.toLocalDate());
-        hours.setText(((localDateTime.getHour() <10 )? "0"+localDateTime.getHour(): ""+localDateTime.getHour()));
-        minutes.setText(((localDateTime.getMinute() <10 )? "0"+localDateTime.getMinute(): ""+localDateTime.getMinute()));
+
+    public void validateInput() {
+
+        date.validate();
+        minutes.validate();
+        hours.validate();
     }
 
 

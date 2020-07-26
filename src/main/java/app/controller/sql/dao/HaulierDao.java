@@ -12,6 +12,8 @@ import java.util.List;
 public class HaulierDao implements Dao<Hauliers> {
 
     private static final String TABLE = "HAULIERS";
+
+
     @Override
     public <R> Hauliers get(R id) {
 
@@ -23,7 +25,7 @@ public class HaulierDao implements Dao<Hauliers> {
     public List<Hauliers> getAll() {
 
         List<Hauliers> list = new ArrayList<>();
-        ResultSet rs = SQLiteJDBC.selectAll(TABLE, "name");
+        ResultSet      rs   = SQLiteJDBC.selectAll(TABLE, "name");
         try {
             while (rs.next()) {
                 list.add(new Hauliers(rs.getString("name")));
@@ -47,6 +49,7 @@ public class HaulierDao implements Dao<Hauliers> {
 
     @Override
     public boolean save(Hauliers hauliers) {
+
         @Language("SQLite")
         String sql =
                 "INSERT INTO HAULIERS(name) VALUES('"
@@ -57,6 +60,7 @@ public class HaulierDao implements Dao<Hauliers> {
 
     @Override
     public boolean update(Hauliers hauliers) {
+
         return false;
     }
 

@@ -3,29 +3,30 @@ package app.pojos;
 
 public class Hauliers {
 
-  private String name;
+    private String name;
 
 
-  public Hauliers(String name) {
+    public Hauliers(String name) {
 
-    this.name = name;
-  }
-
-
-  public String getName() {
-    return name;
-  }
+        this.name = name;
+    }
 
 
+    @Override
+    public String toString() {
 
-  public void setName(String name) {
-    this.name = name;
-  }
+        return getName();
+    }
 
 
-  @Override
-  public String toString() {
+    public String getName() {
 
-    return getName();
-  }
+        return name;
+    }
+
+
+    public void setName(String name) {
+
+        this.name = name;
+    }
 }

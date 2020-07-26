@@ -68,7 +68,8 @@ public class SuppNumbersDao implements Dao<SuppNumbers> {
     public boolean save(SuppNumbers suppNumbers) {
 
         String values =
-                "'" + suppNumbers.getPhoneNo() + "', " + suppNumbers.getSuppCode() + "', " + suppNumbers.getDetails() +
+                "'" + suppNumbers.getPhoneNo() + "', '" + suppNumbers.getSuppCode() + "', '" +
+                suppNumbers.getDetails() +
                 "'";
         String fields = "phone_no, supp_code, details";
         return SQLiteJDBC.insert(fields, values, TABLE);

@@ -27,6 +27,7 @@ public class ScheduleDetailsDao implements Dao<ScheduleDetails> {
 
     @Override
     public List<ScheduleDetails> getAll() {
+
         return null;
     }
 
@@ -35,42 +36,13 @@ public class ScheduleDetailsDao implements Dao<ScheduleDetails> {
     public List<ScheduleDetails> getAll(String param) {
 
         List<ScheduleDetails> list = new ArrayList<>();
-        ResultSet rs = SQLiteJDBC.select(TABLE, "po", param);
-        try{
+        ResultSet             rs   = SQLiteJDBC.select(TABLE, "po", param);
+        try {
             while (rs.next()) {
                 list.add(mapRsToObject(rs));
             }
-        }catch (SQLException ignored){}
-        SQLiteJDBC.close();
-        return list;
-    }
-
-
-     public List<ScheduleDetails> getAllByDate(LocalDate param) {
-
-        List<ScheduleDetails> list = new ArrayList<>();
-        ResultSet rs = SQLiteJDBC.select(TABLE, "order_date", param);
-        try{
-            while (rs.next()) {
-                list.add(mapRsToObject(rs));
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
         }
-        SQLiteJDBC.close();
-        return list;
-    }
-
-    public List<ScheduleDetails> getAllByDates(LocalDate high, LocalDate low) {
-
-        List<ScheduleDetails> list = new ArrayList<>();
-        ResultSet rs = SQLiteJDBC.select(TABLE, "eta", high, low);
-        try{
-            while (rs.next()) {
-                list.add(mapRsToObject(rs));
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
+        catch (SQLException ignored) {
         }
         SQLiteJDBC.close();
         return list;
@@ -82,37 +54,21 @@ public class ScheduleDetailsDao implements Dao<ScheduleDetails> {
 
         String values =
                 "'" + scheduleDetails.getPo() +
-                "', "+ (scheduleDetails.getOrderDate() == null ? "NULL" : "'" + scheduleDetails.getOrderDate() + "'") +
+                "', " + (scheduleDetails.getOrderDate() == null ? "NULL" : "'" + scheduleDetails.getOrderDate() + "'") +
                 ", " + stringOrNull(scheduleDetails.getBay()) +
                 ", " + scheduleDetails.getPallets() +
                 ", " + scheduleDetails.getDuration() +
-                ", " + stringOrNull(scheduleDetails.getHaulier()).toUpperCase()+
+                ", " + stringOrNull(scheduleDetails.getHaulier()).toUpperCase() +
                 ", " + stringOrNull(scheduleDetails.getComments()) +
                 ", " + stringOrNull(scheduleDetails.getRegistrationNo()) +
                 ", " + saveDateStrings(scheduleDetails);
 
         @Language("SQLite")
-        String  sql = " INSERT INTO SCHEDULE_DETAILS " +
-                      "(po, order_date, bay, pallets, duration, haulier, comments, reg_no, eta, arrived, order_date, departed, booked_in)" +
-                      " VALUES (" + values.toUpperCase() + ");";
+        String sql = " INSERT INTO SCHEDULE_DETAILS " +
+                     "(po, order_date, bay, pallets, duration, haulier, comments, reg_no, eta, arrived, order_date, departed, booked_in)" +
+                     " VALUES (" + values.toUpperCase() + ");";
 
         return SQLiteJDBC.update(sql);
-    }
-
-
-    public boolean saveFromProtean(ScheduleDetails scheduleDetails){
-        String values =
-                "'" + scheduleDetails.getPo() +
-                "', '"+ (scheduleDetails.getOrderDate() == null ? "" : scheduleDetails.getOrderDate()) +
-                "'" ;
-
-        @Language("SQLite")
-        String  sql = " INSERT INTO SCHEDULE_DETAILS " +
-                      "(po, order_date)" +
-                      " VALUES (" + values.toUpperCase() + ");";
-
-        return SQLiteJDBC.update(sql);
-
     }
 
 
@@ -140,18 +96,20 @@ public class ScheduleDetailsDao implements Dao<ScheduleDetails> {
 
     @Override
     public boolean delete(ScheduleDetails scheduleDetails) {
-         return SQLiteJDBC.delete(TABLE , "rowid", scheduleDetails.getRowid());
+
+        return SQLiteJDBC.delete(TABLE, "rowid", scheduleDetails.getRowid());
     }
 
 
     // works out if date/time variables are null and assigns appropriate strings to be used for SQL query
-    private String updateDateStrings(ScheduleDetails scheduleDetails){
+    private String updateDateStrings(ScheduleDetails scheduleDetails) {
 
-        String eta = (scheduleDetails.getEta() == null ? "NULL" : "'" + scheduleDetails.getEta() + "'" );
-        String arrived = (scheduleDetails.getArrived() == null ? "NULL" : "'" + scheduleDetails.getArrived() + "'" );
-        String departed = (scheduleDetails.getDeparted() == null ? "NULL" : "'" + scheduleDetails.getDeparted() + "'" );
-        String bookedIn = (scheduleDetails.getBookedIn() == null ? "NULL" : "'" + scheduleDetails.getBookedIn() + "'" );
-        String orderDate = (scheduleDetails.getEta() == null ? "NULL" : "'" + scheduleDetails.getEta().toLocalDate() + "'" );
+        String eta      = (scheduleDetails.getEta() == null ? "NULL" : "'" + scheduleDetails.getEta() + "'");
+        String arrived  = (scheduleDetails.getArrived() == null ? "NULL" : "'" + scheduleDetails.getArrived() + "'");
+        String departed = (scheduleDetails.getDeparted() == null ? "NULL" : "'" + scheduleDetails.getDeparted() + "'");
+        String bookedIn = (scheduleDetails.getBookedIn() == null ? "NULL" : "'" + scheduleDetails.getBookedIn() + "'");
+        String orderDate = (
+                scheduleDetails.getEta() == null ? "NULL" : "'" + scheduleDetails.getEta().toLocalDate() + "'");
 
         return " eta=" + eta +
                ", arrived=" + arrived +
@@ -160,16 +118,27 @@ public class ScheduleDetailsDao implements Dao<ScheduleDetails> {
                ", order_date=" + orderDate;
     }
 
-    private String saveDateStrings(ScheduleDetails scheduleDetails){
 
-        String eta = (scheduleDetails.getEta() == null ? "NULL, " : "'" + scheduleDetails.getEta() + "', " );
-        String arrived = (scheduleDetails.getArrived() == null ? "NULL, " : "'" + scheduleDetails.getArrived() + "', " );
-        String orderDate = (scheduleDetails.getEta() == null ? "NULL, " : "'" + scheduleDetails.getEta().toLocalDate()+ "', " );
-        String departed = (scheduleDetails.getDeparted() == null ? "NULL, " : "'" + scheduleDetails.getDeparted() + "', " );
-        String bookedIn = (scheduleDetails.getBookedIn() == null ? "NULL" : "'" + scheduleDetails.getBookedIn() + "'" );
+    private String saveDateStrings(ScheduleDetails scheduleDetails) {
 
-        return eta + arrived + orderDate + departed + bookedIn ;
+        String eta = (scheduleDetails.getEta() == null ? "NULL, " : "'" + scheduleDetails.getEta() + "', ");
+        String arrived = (
+                scheduleDetails.getArrived() == null ? "NULL, " : "'" + scheduleDetails.getArrived() + "', ");
+        String orderDate = (
+                scheduleDetails.getEta() == null ? "NULL, " : "'" + scheduleDetails.getEta().toLocalDate() + "', ");
+        String departed = (
+                scheduleDetails.getDeparted() == null ? "NULL, " : "'" + scheduleDetails.getDeparted() + "', ");
+        String bookedIn = (scheduleDetails.getBookedIn() == null ? "NULL" : "'" + scheduleDetails.getBookedIn() + "'");
+
+        return eta + arrived + orderDate + departed + bookedIn;
     }
+
+
+    private String stringOrNull(String s) {
+
+        return (s == null ? "NULL" : "'" + s + "'");
+    }
+
 
     private ScheduleDetails mapRsToObject(ResultSet rs) throws SQLException {
 
@@ -183,8 +152,55 @@ public class ScheduleDetailsDao implements Dao<ScheduleDetails> {
 
     }
 
-    private String stringOrNull(String s){
-       return (s == null ? "NULL" : "'" + s + "'");
+
+    public List<ScheduleDetails> getAllByDate(LocalDate param) {
+
+        List<ScheduleDetails> list = new ArrayList<>();
+        ResultSet             rs   = SQLiteJDBC.select(TABLE, "order_date", param);
+        try {
+            while (rs.next()) {
+                list.add(mapRsToObject(rs));
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        SQLiteJDBC.close();
+        return list;
+    }
+
+
+    public List<ScheduleDetails> getAllByDates(LocalDate high, LocalDate low) {
+
+        List<ScheduleDetails> list = new ArrayList<>();
+        ResultSet             rs   = SQLiteJDBC.select(TABLE, "eta", high, low);
+        try {
+            while (rs.next()) {
+                list.add(mapRsToObject(rs));
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        SQLiteJDBC.close();
+        return list;
+    }
+
+
+    public boolean saveFromProtean(ScheduleDetails scheduleDetails) {
+
+        String values =
+                "'" + scheduleDetails.getPo() +
+                "', '" + (scheduleDetails.getOrderDate() == null ? "" : scheduleDetails.getOrderDate()) +
+                "'";
+
+        @Language("SQLite")
+        String sql = " INSERT INTO SCHEDULE_DETAILS " +
+                     "(po, order_date)" +
+                     " VALUES (" + values.toUpperCase() + ");";
+
+        return SQLiteJDBC.update(sql);
+
     }
 
 

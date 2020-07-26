@@ -16,11 +16,11 @@ public class MaterialCountryDao implements Dao<MaterialCountries> {
     @Override
     public <R> MaterialCountries get(R id) {
 
-        ResultSet resultSet = SQLiteJDBC.select(TABLE, "rowid", id);
-        MaterialCountries country = null;
+        ResultSet         resultSet = SQLiteJDBC.select(TABLE, "rowid", id);
+        MaterialCountries country   = null;
         try {
             if (resultSet.next()) {
-                country =  mapRsToObject(resultSet);
+                country = mapRsToObject(resultSet);
             }
             resultSet.close();
         }
@@ -72,6 +72,7 @@ public class MaterialCountryDao implements Dao<MaterialCountries> {
 
     @Override
     public boolean update(MaterialCountries materialCountries) {
+
         return false;
     }
 

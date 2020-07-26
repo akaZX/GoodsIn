@@ -1,64 +1,145 @@
 package app.pojos;
 
+import org.intellij.lang.annotations.Language;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 
 //THIS CLASS WILL BE STORED AS JSON STRING IN DATABASE
 public class RmtQaIntakeDetails {
 
-
     private int yield;
+
     private int yieldGross;
+
     private int yieldNet;
-    private String comments = "";
+
+    private double lorryTemp;
+
+    private double materialTemp;
+
     private double density;
+
     private int densityGrossWeight;
-    private List<Integer> densityNetWeight;
+
+    private List<Integer> densityDiameters;
+
     private List<Double> brix;
+
     private List<Double> pressure;
-    private List<Integer> length ;
+
+    private List<Integer> length;
+
     private List<Integer> width;
-    private List<Integer> colorStage ;
+
+    private List<Integer> colorStage;
+
     private List<Integer> headWeight;
-    private String variety;
-    private String country;
-    private String grower;
-    private String harvestDate;
-    private String likeForLike;
-    private String lotNumber;
-    private String day;
-    private String room;
-    private String rtaNumber;
-    private String ggn;
-    private String twa;
-    private String healthMark;
-    private String expiryDate;
-    private String count;
+
+    private String comments = "";
+
+    private String variety = "";
+
+    private String country = "";
+
+    private String grower = "";
+
+    private String harvestDate = "";
+
+    private String lotNumber = "";
+
+    private String day = "";
+
+    private String room = "";
+
+    private String rtaNumber = "";
+
+    private String ggn = "";
+
+    private String twa = "";
+
+    private String healthMark = "";
+
+    private String expiryDate = "";
+
+    private String count = "";
+
+    private String containerNo = "";
+
     private int samples;
+
     private boolean major;
+
     private boolean major1;
+
     private boolean major2;
+
     private boolean major3;
+
     private boolean major4;
+
     private boolean major5;
+
     private boolean major6;
+
     private boolean critical;
+
     private boolean critical1;
+
     private boolean critical2;
+
     private boolean critical3;
+
     private boolean critical4;
+
     private boolean critical5;
+
     private boolean critical6;
+
     private boolean minor;
+
     private boolean minor1;
+
     private boolean minor2;
+
     private boolean minor3;
+
     private boolean minor4;
+
     private boolean minor5;
+
     private boolean minor6;
-    private String minorText;
-    private String majorText;
-    private String criticalText;
+
+    private String minorText = "";
+
+    private String majorText = "";
+
+    private String criticalText = "";
+
+
+    public double getLorryTemp() {
+
+        return lorryTemp;
+    }
+
+
+    public void setLorryTemp(double lorryTemp) {
+
+        this.lorryTemp = lorryTemp;
+    }
+
+
+    public double getMaterialTemp() {
+
+        return materialTemp;
+    }
+
+
+    public void setMaterialTemp(double materialTemp) {
+
+        this.materialTemp = materialTemp;
+    }
 
 
     public int getYield() {
@@ -133,15 +214,15 @@ public class RmtQaIntakeDetails {
     }
 
 
-    public List<Integer> getDensityNetWeight() {
+    public List<Integer> getDensityDiameters() {
 
-        return densityNetWeight;
+        return densityDiameters;
     }
 
 
-    public void setDensityNetWeight(List<Integer> densityNetWeight) {
+    public void setDensityDiameters(List<Integer> densityDiameters) {
 
-        this.densityNetWeight = densityNetWeight;
+        this.densityDiameters = densityDiameters;
     }
 
 
@@ -265,18 +346,6 @@ public class RmtQaIntakeDetails {
     }
 
 
-    public String getLikeForLike() {
-
-        return likeForLike;
-    }
-
-
-    public void setLikeForLike(String likeForLike) {
-
-        this.likeForLike = likeForLike;
-    }
-
-
     public String getLotNumber() {
 
         return lotNumber;
@@ -382,6 +451,18 @@ public class RmtQaIntakeDetails {
     public void setCount(String count) {
 
         this.count = count;
+    }
+
+
+    public String getContainerNo() {
+
+        return containerNo;
+    }
+
+
+    public void setContainerNo(String containerNo) {
+
+        this.containerNo = containerNo;
     }
 
 
@@ -688,55 +769,101 @@ public class RmtQaIntakeDetails {
     @Override
     public String toString() {
 
-        return "RmtQaRecordDetails{" +
-               "comments='" + comments + '\'' +
-               ", density=" + density +
-               ", brix=" + brix +
-               ", pressure=" + pressure +
-               ", length=" + length +
-               ", width=" + width +
-               ", colorStage=" + colorStage +
-               ", headWeight=" + headWeight +
-               ", yield=" + yield +
-               ", variety='" + variety + '\'' +
-               ", country='" + country + '\'' +
-               ", growerId='" + grower + '\'' +
-               ", harvestDate='" + harvestDate + '\'' +
-               ", likeForLike='" + likeForLike + '\'' +
-               ", lotNumber='" + lotNumber + '\'' +
-               ", day='" + day + '\'' +
-               ", room='" + room + '\'' +
-               ", rtaNumber='" + rtaNumber + '\'' +
-               ", ggn='" + ggn + '\'' +
-               ", twa='" + twa + '\'' +
-               ", healthMark='" + healthMark + '\'' +
-               ", expiryDate='" + expiryDate + '\'' +
-               ", count='" + count + '\'' +
-               ", major=" + major +
-               ", major1=" + major1 +
-               ", major2=" + major2 +
-               ", major3=" + major3 +
-               ", major4=" + major4 +
-               ", major5=" + major5 +
-               ", major6=" + major6 +
-               ", critical=" + critical +
-               ", critical1=" + critical1 +
-               ", critical2=" + critical2 +
-               ", critical3=" + critical3 +
-               ", critical4=" + critical4 +
-               ", critical5=" + critical5 +
-               ", critical6=" + critical6 +
-               ", minor=" + minor +
-               ", minor1=" + minor1 +
-               ", minor2=" + minor2 +
-               ", minor3=" + minor3 +
-               ", minor4=" + minor4 +
-               ", minor5=" + minor5 +
-               ", minor6=" + minor6 +
-               ", minorText='" + minorText + '\'' +
-               ", majorText='" + majorText + '\'' +
-               ", criticalText='" + criticalText + '\'' +
-               ", samples=" + samples +
-               '}';
+        return
+                "Yield: " + yield +
+                "\nVariety: " + variety +
+                "\nCountry: " + country +
+                "\nComments: " + comments +
+                "\nGrower: " + grower +
+
+                "\nExpiry date: " + expiryDate +
+                "\nLorry temp: " + lorryTemp +
+                "\nMaterial temp: " + materialTemp +
+
+                "\nHarvest date: " + harvestDate +
+                "\nLot number: " + lotNumber +
+                "\nGGN: " + ggn +
+                "\nTWA: " + twa +
+                "\nHealth mark: " + healthMark +
+                "\nCount: " + count +
+                "\nContainer No: " + containerNo +
+                "\nRTA: " + rtaNumber +
+                "\nRoom: " + room +
+                "\nDay: " + day
+                ;
+
     }
+
+
+    public String getGeneralDetails() {
+
+        @Language("HTML")
+        String params = (variety != null && variety.length() > 0 ? "Variety: " + variety + "<br/>" : "") +
+                        (country != null && country.length() > 0 ? "Country: " + country + "<br/>" : "") +
+                        (grower != null && grower.length() > 0 ? "Grower: " + grower + "<br/>" + variety +
+                                                                 "<br/>" : "") +
+                        (expiryDate != null && expiryDate.length() > 0 ? "Expiry date: " + expiryDate + "<br/>" : "") +
+                        (harvestDate != null && harvestDate.length() > 0 ? "Harvest date: " + harvestDate +
+                                                                           "<br/>" : "") +
+                        (lotNumber != null && lotNumber.length() > 0 ? "Lot number: " + lotNumber + "<br/>" : "") +
+                        (ggn != null && ggn.length() > 0 ? "GGN: " + ggn + "<br/>" : "") +
+                        (twa != null && twa.length() > 0 ? "TWA: " + twa + "<br/>" : "") +
+                        (healthMark != null && healthMark.length() > 0 ? "Health mark: " + healthMark + "<br/>" : "") +
+                        (count != null && count.length() > 0 ? "Count: " + count + "<br/>" : "") +
+                        (containerNo != null && containerNo.length() > 0 ? "Container No: " + containerNo +
+                                                                           "<br/>" : "") +
+                        (rtaNumber != null && rtaNumber.length() > 0 ? "RTA: " + rtaNumber + "<br/>" : "") +
+                        (room != null && room.length() > 0 ? "Room: " + room + "<br/>" : "") +
+                        (day != null && day.length() > 0 ? "Day: " + day : "");
+
+
+        return params;
+    }
+
+
+    public String getNumericalParams() {
+
+
+        return (yield == 0 ? "" : "Yield: " + yield + "% <br/>") +
+               (lorryTemp == 0 ? "" : "Lorry temperature: " + lorryTemp + "C <br/>") +
+               (materialTemp == 0 ? "" : "Material temperature: " + materialTemp + "C <br/>") +
+               (density == 0.0 ? "" : "Density: " + density + "<br/>") +
+               ((brix != null && brix.size() > 0) ? "Brix:" + getDoubleListAverage(brix) + "<br/>" : "") +
+               ((pressure != null && pressure.size() > 0) ? "Pressure: " + getDoubleListAverage(pressure) +
+                                                            " <br/>" : "") +
+               ((length != null && length.size() > 0) ? "Length: " + getIntListAverage(length) + "mm" + " <br/>" : "") +
+               ((width != null && width.size() > 0) ? "Width: " + getIntListAverage(width) + "mm" + "<br/>" : "") +
+               ((headWeight != null && headWeight.size() > 0) ? "Head weight: " + getIntListAverage(headWeight) +
+                                                                "g" : "");
+
+    }
+
+
+    private double getIntListAverage(List<Integer> list) {
+
+        int total = list.stream()
+                .reduce(0, Integer::sum);
+
+        return new BigDecimal(total / list.size()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+
+    private double getDoubleListAverage(List<Double> list) {
+
+        double total = list.stream()
+                .reduce(0d, Double::sum);
+
+        return new BigDecimal(total / list.size()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+
+    public String getDefectsText() {
+
+        final String NONE = "NONE";
+        return "Critical defects: " + (criticalText.length() > 2 ? criticalText : NONE) +
+               "<br/>Major foreign bodies: " + (majorText.length() > 2 ? majorText : NONE) +
+               "<br/>Non-critical defects: " + (criticalText.length() > 2 ? minorText : NONE);
+    }
+
+
 }

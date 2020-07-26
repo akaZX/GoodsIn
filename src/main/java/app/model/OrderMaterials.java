@@ -8,11 +8,11 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 public class OrderMaterials extends RecursiveTreeObject<OrderMaterials> {
 
     private PoMaterials poMaterials;
+
     private Materials material;
 
 
     public OrderMaterials() {
-
 
 
     }

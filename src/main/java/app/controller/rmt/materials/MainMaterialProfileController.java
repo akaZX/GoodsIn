@@ -1,5 +1,6 @@
 package app.controller.rmt.materials;
 
+import app.controller.rmt.materials.nodes.MaterialListDrawerController;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawersStack;
 import javafx.fxml.FXML;
@@ -7,13 +8,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainMaterialProfileController implements Initializable {
+
     @FXML
     StackPane stackPane;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -22,7 +26,7 @@ public class MainMaterialProfileController implements Initializable {
 
         FXMLLoader drawerLoader = new FXMLLoader(
                 getClass().getResource(
-                        "/rmt/MaterialDrawer.fxml"
+                        "/rmt/materialProfiles/MaterialDrawer.fxml"
                 )
         );
         drawerLoader.setController(drawerController);
@@ -38,15 +42,14 @@ public class MainMaterialProfileController implements Initializable {
 
             stackPane.getChildren().add(form);
 
-            leftDrawer.setDefaultDrawerSize(275);
+            leftDrawer.setDefaultDrawerSize(250);
             leftDrawer.setResizeContent(true);
             leftDrawer.setOverLayVisible(false);
-            leftDrawer.setResizableOnDrag(false);
+
             leftDrawer.setMiniDrawerSize(3);
             JFXDrawersStack drawersStack = new JFXDrawersStack();
 
             drawersStack.setContent(form);
-            drawersStack.toggle(leftDrawer);
             drawersStack.toggle(leftDrawer);
 
 
@@ -56,7 +59,7 @@ public class MainMaterialProfileController implements Initializable {
 
             drawerController.selected(drawersStack, leftDrawer);
             stackPane.getChildren().add(drawersStack);
-
+            leftDrawer.setResizableOnDrag(false);
 
         }
         catch (IOException e) {

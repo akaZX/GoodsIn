@@ -17,7 +17,9 @@ public class OrderDetails extends RecursiveTreeObject<OrderDetails> {
 
     private final StringProperty bookedIn;
 
+
     public OrderDetails(String mCode, String description, String expected, String bookedIn) {
+
         this.mCode = new SimpleStringProperty(mCode);
         this.description = new SimpleStringProperty(description);
         this.expected = new SimpleStringProperty(expected);

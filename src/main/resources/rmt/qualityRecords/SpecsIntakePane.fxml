@@ -3,6 +3,9 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -13,11 +16,12 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root maxHeight="602.0" maxWidth="1.7976931348623157E308" minHeight="600.0" prefHeight="602.0" prefWidth="1178.0" style="-fx-border-color: black;" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="602.0" maxWidth="1.7976931348623157E308" minHeight="598.0" prefHeight="598.0" prefWidth="1040.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <StackPane layoutX="577.0" layoutY="10.0" prefHeight="592.0" prefWidth="601.0" styleClass="rmt-param-box" stylesheets="@../../style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -27,9 +31,9 @@
                      <children>
                         <VBox maxHeight="1.7976931348623157E308" prefHeight="600.0" prefWidth="673.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <HBox prefHeight="362.0" prefWidth="487.0">
+                              <HBox maxWidth="1.7976931348623157E308" prefHeight="362.0" prefWidth="487.0">
                                  <children>
-                                    <VBox minWidth="340.0" prefHeight="362.0" prefWidth="340.0" HBox.hgrow="SOMETIMES">
+                                    <VBox maxWidth="360.0" minWidth="250.0" prefHeight="362.0" prefWidth="300.0" HBox.hgrow="SOMETIMES">
                                        <children>
                                           <HBox alignment="CENTER_LEFT" prefHeight="40.0">
                                              <children>
@@ -41,14 +45,17 @@
                                                 <Insets />
                                              </VBox.margin>
                                              <content>
-                                                <GridPane fx:id="topGridPane" hgap="25.0" prefHeight="76.0" prefWidth="326.0" vgap="25.0">
+                                                <GridPane fx:id="topGridPane" hgap="5.0" vgap="25.0">
                                                   <columnConstraints>
-                                                    <ColumnConstraints hgrow="ALWAYS" maxWidth="300.0" minWidth="130.0" percentWidth="55.0" prefWidth="150.0" />
-                                                    <ColumnConstraints hgrow="ALWAYS" maxWidth="300.0" minWidth="130.0" prefWidth="150.0" />
+                                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="60.0" />
+                                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="40.0" />
                                                   </columnConstraints>
                                                    <padding>
                                                       <Insets bottom="20.0" left="5.0" right="5.0" top="10.0" />
                                                    </padding>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                   </rowConstraints>
                                                 </GridPane>
                                              </content>
                                              <padding>
@@ -99,10 +106,10 @@
                               </Separator>
                               <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <VBox maxWidth="360.0" minWidth="300.0" prefHeight="131.0" prefWidth="350.0" HBox.hgrow="SOMETIMES">
+                                    <VBox maxWidth="360.0" minWidth="270.0" prefHeight="199.0" prefWidth="330.0" HBox.hgrow="ALWAYS">
                                        <children>
                                           <Label styleClass="sched-form-label" text="Additional parameters:" />
-                                          <Separator prefWidth="200.0" />
+                                          <Separator />
                                           <ScrollPane fitToWidth="true" VBox.vgrow="SOMETIMES">
                                              <content>
                                                 <VBox fx:id="bottomLeftBox" />
@@ -118,11 +125,11 @@
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>
                                     </Separator>
-                                    <VBox prefHeight="131.0" HBox.hgrow="SOMETIMES">
+                                    <VBox HBox.hgrow="SOMETIMES">
                                        <children>
                                           <Label styleClass="sched-form-label" text="Comments:" />
                                           <Separator prefWidth="200.0" />
-                                          <TextArea fx:id="commentsField" prefHeight="200.0" prefWidth="200.0" styleClass="sched-form-text-area" wrapText="true">
+                                          <TextArea fx:id="commentsField" prefWidth="200.0" styleClass="sched-form-text-area" wrapText="true" VBox.vgrow="SOMETIMES">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
@@ -146,7 +153,7 @@
                         <Insets />
                      </opaqueInsets>
                   </Separator>
-                  <HBox maxWidth="600.0" prefHeight="568.0" prefWidth="435.0" HBox.hgrow="SOMETIMES">
+                  <HBox maxWidth="350.0" prefHeight="568.0" prefWidth="350.0" HBox.hgrow="SOMETIMES">
                      <children>
                         <VBox HBox.hgrow="ALWAYS">
                            <children>
@@ -164,7 +171,7 @@
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="majorValueLabel" text="3">
+                                          <Label fx:id="majorValueLabel">
                                              <font>
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
@@ -269,7 +276,7 @@
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="criticalValueLabel" text="3">
+                                          <Label fx:id="criticalValueLabel">
                                              <font>
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
@@ -374,7 +381,7 @@
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="minorValueLabel" text="3">
+                                          <Label fx:id="minorValueLabel">
                                              <font>
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
@@ -467,12 +474,94 @@
                                  </children>
                               </VBox>
                               <Separator layoutX="10.0" layoutY="273.0" prefWidth="200.0" />
-                              <HBox VBox.vgrow="ALWAYS">
+                              <HBox fillHeight="false" VBox.vgrow="NEVER">
                                  <children>
-                                    <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="SOMETIMES" />
-                                    <VBox alignment="BOTTOM_RIGHT" layoutX="62.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="SOMETIMES">
+                                    <VBox maxWidth="230.0">
                                        <children>
-                                          <JFXButton fx:id="btn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="217.0" />
+                                          <HBox fx:id="intakeResultBox" alignment="CENTER_LEFT" maxHeight="30.0" minHeight="30.0" prefHeight="30.0">
+                                             <children>
+                                                <Label styleClass="sched-form-label" text="QA intake result: " HBox.hgrow="SOMETIMES" />
+                                                <HBox HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <Separator prefWidth="200.0" />
+                                          <JFXTextArea fx:id="suggestionTextArea" editable="false" wrapText="true" VBox.vgrow="SOMETIMES">
+                                             <font>
+                                                <Font name="System Bold" size="13.0" />
+                                             </font></JFXTextArea>
+                                          <HBox alignment="BOTTOM_RIGHT">
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                             <children>
+                                                <JFXButton fx:id="showPopUpBtn" text="Show PopUp" HBox.hgrow="SOMETIMES">
+                                                   <graphic>
+                                                      <FontAwesomeIconView glyphName="ARROWS_ALT">
+                                                         <styleClass>
+                                                            <String fx:value="white-icon" />
+                                                            <String fx:value="small-icon" />
+                                                         </styleClass>
+                                                      </FontAwesomeIconView>
+                                                   </graphic>
+                                                </JFXButton>
+                                             </children>
+                                          </HBox>
+                                       </children></VBox>
+                                    <Separator maxWidth="3.0" minWidth="3.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="3.0">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <VBox layoutX="62.0" layoutY="10.0" HBox.hgrow="SOMETIMES">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" maxHeight="30.0" minHeight="30.0" prefHeight="30.0">
+                                             <children>
+                                                <Label styleClass="sched-form-label" text="Actions" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <Separator prefWidth="200.0" />
+                                          <VBox alignment="BOTTOM_LEFT">
+                                             <children>
+                                                <Label styleClass="sched-form-label" text="Decision:" VBox.vgrow="SOMETIMES">
+                                                   <VBox.margin>
+                                                      <Insets bottom="5.0" top="7.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <JFXComboBox fx:id="decisionCombo" />
+                                                <HBox prefHeight="82.0" prefWidth="192.0" />
+                                                <HBox alignment="BOTTOM_RIGHT" spacing="1.0">
+                                                   <children>
+                                                      <JFXButton fx:id="deleteBtn" text="Delete">
+                                                         <graphic>
+                                                            <FontAwesomeIconView glyphName="CLOSE">
+                                                               <styleClass>
+                                                                  <String fx:value="red-icon" />
+                                                                  <String fx:value="small-icon" />
+                                                               </styleClass>
+                                                            </FontAwesomeIconView>
+                                                         </graphic>
+                                                      </JFXButton>
+                                                      <HBox HBox.hgrow="SOMETIMES" />
+                                                      <JFXButton fx:id="saveBtn" text="Save">
+                                                         <graphic>
+                                                            <FontAwesomeIconView glyphName="SAVE">
+                                                               <styleClass>
+                                                                  <String fx:value="white-icon" />
+                                                                  <String fx:value="small-icon" />
+                                                               </styleClass>
+                                                            </FontAwesomeIconView>
+                                                         </graphic>
+                                                      </JFXButton>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
                                        </children>
                                     </VBox>
                                  </children>

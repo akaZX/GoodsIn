@@ -112,7 +112,12 @@
 }
 
 .jfx-text-area, .text-area {
-    -fx-font-weight: BOLD;
+
+    -fx-font-size: 13px;
+}
+
+.jfx-text-area .scroll-pane:fitToWidth:fitToHeight .viewport .content .text{
+    -fx-line-spacing: 0.06em;
 }
 
 .jfx-text-field:error, .jfx-password-field:error, .jfx-text-area:error {
@@ -227,7 +232,7 @@
 }
 
 .jfx-list-cell:odd:selected > .jfx-rippler > StackPane, .jfx-list-cell:even:selected > .jfx-rippler > StackPane {
-    -fx-background-color: #acacac;
+    -fx-background-color: rgba(162, 158, 158, 0.29);
 }
 
 .jfx-list-cell {
@@ -256,12 +261,12 @@
     -jfx-expanded: false;
 }
 
-/*.jfx-list-view .jfx-list-cell{*/
-/*    -fx-background-color: derive(#5ad5df, 0%);*/
-/*}*/
+.jfx-list-view .jfx-list-cell {
+    -fx-font-weight: bold;
+}
 
 .jfx-toggle-button {
-    -jfx-toggle-color: RED;
+    -jfx-toggle-color: BLUE;
 }
 
 .jfx-tool-bar {
@@ -358,20 +363,8 @@
     -fx-background-color: transparent;
 }
 
-.animated-option-button {
-    -fx-background-color: #F1F1F1;
-    -fx-background-radius: 50px;
-    -fx-pref-height: 50px;
-    -fx-pref-width: 50px;
-    -fx-min-width: -fx-pref-width;
-    -fx-max-width: -fx-pref-width;
-    -fx-min-height: -fx-pref-height;
-    -fx-max-height: -fx-pref-height;
-    -jfx-button-type: RAISED;
-}
-.animated-option-button .jfx-rippler{
-    -jfx-rippler-fill: rgb(113, 118, 114);
-}
+
+
 .sub-icon{
     -fx-fill: rgb(113, 118, 114);
 }
@@ -444,11 +437,13 @@
 
 
 .jfx-button {
-    -fx-min-width: 40px;
+    /*-fx-min-width: 40px;*/
     /*-fx-min-height: 30px;*/
     /*-fx-pref-width: 130px;*/
     -fx-background-color: #003f77;
     -fx-text-fill: WHITE;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
     -jfx-button-type: RAISED;
 }
 
@@ -506,7 +501,12 @@
 
 
 .jfx-date-picker{
-    -jfx-default-color: #0069a6;
+    -jfx-default-color: #003f77;
+}
+.jfx-date-picker .jfx-button{
+    -fx-background-color: white;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
 }
 
 
@@ -542,7 +542,6 @@
 .sched-form-label-top {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-
 }
 
 
@@ -558,35 +557,50 @@
 /*Icons*/
 
 
-.refresh-icon{
-    -fx-fill: white;
-    -glyph-size: 17px;
-    -fx-font-size: 17px;
+.drawer-top-icon{
+    -fx-fill: #6e6e73;
+    -glyph-size: 24px;
+    -fx-font-size: 24px;
+    -fx-font-family: "FontAwesome";
 
 }
+
+.label-button:hover > .drawer-top-icon {
+    -fx-fill: #0069a6;
+}
+.label-button:hover {
+    -fx-background-color: #c6c6c6;
+}
+
+
 
 .white-icon{
     -fx-fill: white;
 }
 .red-icon{
-    -fx-fill: red;
+    -fx-fill: rgba(255, 0, 0, 0.89);
 }
 .green-icon{
     -fx-fill: green;
 }
 
 .small-icon{
-    -glyph-size: 14px;
-    -fx-font-size: 14px;
+    /*-glyph-size: 16px;*/
+    -fx-font-size: 16px;
+    -fx-font-family: "FontAwesome";
+
 }
 
 .medium-icon{
-    -glyph-size: 18px;
-    -fx-font-size: 18px;
+    /*-glyph-size: 18px;*/
+    -fx-font-size: 20px;
+    -fx-font-family: "FontAwesome";
+
 }
 .large-icon{
     -glyph-size: 24px;
     -fx-font-size: 24px;
+    -fx-font-family: "FontAwesome";
 }
 
 
@@ -596,7 +610,7 @@
 
 .rmt-param-box{
     -fx-background-color: #eaeaea;
-    -fx-border-color: #9B9D9B;
+    /*-fx-border-color: #9B9D9B;*/
 }
 
 .jfx-combo-box-small{
@@ -607,4 +621,28 @@
     -fx-faint-focus-color: #0026a122;
     -fx-border-color: #0026a1;
 }
+
+
+.list-view .jfx-list-cell:odd:selected .label,
+.list-view .jfx-list-cell:even:selected .label{
+    -fx-text-fill: black;
+}
+
+.jfx-radio-button {
+    -jfx-selected-color: #0069a6;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.sched-table-top{
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+
+
+
+
+
 

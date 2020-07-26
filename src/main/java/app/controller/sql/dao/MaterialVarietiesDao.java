@@ -13,13 +13,17 @@ public class MaterialVarietiesDao implements Dao<MaterialVarieties> {
 
 
     private static final String TABLE = "MATERIAL_VARIETIES";
+
     MaterialVarieties variety = null;
+
+
     @Override
     public <R> MaterialVarieties get(R id) {
+
         ResultSet rs = SQLiteJDBC.select(TABLE, "rowid", id);
         try {
-            if(rs.next()){
-                variety =  mapRsToObject(rs);
+            if (rs.next()) {
+                variety = mapRsToObject(rs);
             }
         }
         catch (SQLException e) {
@@ -32,8 +36,9 @@ public class MaterialVarietiesDao implements Dao<MaterialVarieties> {
 
     @Override
     public List<MaterialVarieties> getAll() {
-        List<MaterialVarieties> list =  new ArrayList<>();
-        ResultSet rs = SQLiteJDBC.selectAll(TABLE, "m_code");
+
+        List<MaterialVarieties> list = new ArrayList<>();
+        ResultSet               rs   = SQLiteJDBC.selectAll(TABLE, "m_code");
         try {
             while (rs.next()) {
                 list.add(mapRsToObject(rs));
@@ -47,9 +52,10 @@ public class MaterialVarietiesDao implements Dao<MaterialVarieties> {
 
     }
 
-    public List<MaterialVarieties> getAll(String mCode){
 
-        List<MaterialVarieties> list =  new ArrayList<>();
+    public List<MaterialVarieties> getAll(String mCode) {
+
+        List<MaterialVarieties> list = new ArrayList<>();
 
         ResultSet rs = SQLiteJDBC.select(TABLE, "m_code", mCode);
 
@@ -70,27 +76,31 @@ public class MaterialVarietiesDao implements Dao<MaterialVarieties> {
     @Override
     public boolean save(MaterialVarieties materialVarieties) {
 
-        String values = "'" + materialVarieties.getMCode() + "', '" + materialVarieties.getVariety() +"'" ;
+        String values = "'" + materialVarieties.getMCode() + "', '" + materialVarieties.getVariety() + "'";
         @Language("SQLite")
-        String sql ="INSERT INTO MATERIAL_VARIETIES (m_code, variety) VALUES(" + values + ")";
-        return  SQLiteJDBC.update(sql);
+        String sql = "INSERT INTO MATERIAL_VARIETIES (m_code, variety) VALUES(" + values + ")";
+        return SQLiteJDBC.update(sql);
 
     }
 
 
     @Override
     public boolean update(MaterialVarieties materialVarieties) {
+
         return false;
     }
 
 
     @Override
     public boolean delete(MaterialVarieties materialVarieties) {
-       return SQLiteJDBC.delete(TABLE, "rowid", materialVarieties.getRowid());
+
+        return SQLiteJDBC.delete(TABLE, "rowid", materialVarieties.getRowid());
 
     }
 
-    private MaterialVarieties mapRsToObject(ResultSet rs) throws SQLException{
+
+    private MaterialVarieties mapRsToObject(ResultSet rs) throws SQLException {
+
         return new MaterialVarieties(rs.getString("m_code"),
                 rs.getString("variety"), rs.getInt("rowid"));
     }
