@@ -38,7 +38,7 @@ public class MaterialListDrawerController implements Initializable {
     private Label refreshIcon;
 
     @FXML
-    JFXTextField searchField;
+    private JFXTextField searchField;
 
     @FXML
     private AnchorPane listas;

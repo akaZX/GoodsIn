@@ -20,13 +20,11 @@ public class EmailClient {
 
     public static boolean sendEmailWithAttachement(String email, String psw, String filePath, String fileName, SupplierOrders supplierOrders) {
 
-
-        //Get the session object
+        //creates session object
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "outlook.office365.com");
-
         props.put("mail.smtp.port", "587");
 
         Session session = Session.getDefaultInstance(props,
@@ -38,7 +36,7 @@ public class EmailClient {
                     }
                 });
 
-        //Compose the message
+        //Composing the message
         try {
 
             MimeMessage message = new MimeMessage(session);
@@ -50,7 +48,6 @@ public class EmailClient {
             List<SuppEmails> emails = new SuppEmailsDao().getAll(supplierOrders.getSuppCode());
 
             if (emails.size() > 0) {
-
                 emails.forEach(suppEmails -> {
                     try {
                         message.addRecipient(Message.RecipientType.TO, new InternetAddress(suppEmails.getEmail()));
@@ -60,25 +57,22 @@ public class EmailClient {
                     }
                 });
 
-
                 message.setSubject("QA report for: " + supplierOrders.getPoNumber());
 
-                BodyPart messageBody = new MimeBodyPart();
-                messageBody.setText("");
+                BodyPart bodyPart = new MimeBodyPart();
+                bodyPart.setText("");
                 Multipart multipart = new MimeMultipart();
-                multipart.addBodyPart(messageBody);
-                messageBody = new MimeBodyPart();
+                multipart.addBodyPart(bodyPart);
+                bodyPart = new MimeBodyPart();
 
                 DataSource dataSource = new FileDataSource(filePath);
-                messageBody.setDataHandler(new DataHandler(dataSource));
-                messageBody.setFileName(fileName);
-                multipart.addBodyPart(messageBody);
+                bodyPart.setDataHandler(new DataHandler(dataSource));
+                bodyPart.setFileName(fileName);
+                multipart.addBodyPart(bodyPart);
                 message.setContent(multipart);
 
                 Transport.send(message);
-
-
-                System.out.println("EMAIL SENT TO: " + supplierOrders.getPoNumber());
+//                System.out.println("EMAIL SENT TO: " + supplierOrders.getPoNumber());
                 return true;
             }
 
@@ -86,13 +80,9 @@ public class EmailClient {
         }
         catch (MessagingException e) {
 //            e.printStackTrace();
-
-            System.out.println("Failed to send email");
+//            System.out.println("Failed to send email");
             return false;
-
         }
-
-
     }
 
 

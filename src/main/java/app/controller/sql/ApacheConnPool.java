@@ -17,24 +17,15 @@ public class ApacheConnPool {
             DB_LOC = new File(".").getCanonicalPath() + "/database/GI_RMT.db";
             ds.setDriverClassName("org.sqlite.JDBC");
             ds.setUrl("jdbc:sqlite:" + DB_LOC);
-
             ds.setMinIdle(5);
             ds.setMaxIdle(10);
-
-            ds.setMaxOpenPreparedStatements(100);
+            ds.setMaxOpenPreparedStatements(150);
 
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
-
-    private ApacheConnPool() {
-
-    }
-
 
     public static Connection getConnection() {
 

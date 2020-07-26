@@ -39,44 +39,45 @@ public class AppController implements Initializable {
     //ignores user access levels
     private void noRestrictionsAccess() {
 
+        restrictedAccess();
         //adds Calendar view
-        mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
-
-
-        //adds Schedule orders list
-        mainTabPane.getTabs().add(new POTableTab().createTable(false));
-
-
-        //adds supplier profiles view
-        FXMLLoader             loader = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
-        MainSupplierController contr  = new MainSupplierController();
-        loader.setController(contr);
-        mainTabPane.getTabs().add(loadTab(loader, new Tab("Supplier Profiles")));
-
-        //QA Records view
-        ReportView reportView = new ReportView();
-        Tab        reportTab  = new Tab("QA Records");
-        reportTab.setContent(reportView);
-        mainTabPane.getTabs().add(reportTab);
-
-
-        //Materials view
-        FXMLLoader              drawer = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
-        MainRmtIntakeController c      = new MainRmtIntakeController();
-        drawer.setController(c);
-        mainTabPane.getTabs().add(loadTab(drawer, new Tab("Material Intake")));
-
-
-        FXMLLoader                    matProf    = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
-        MainMaterialProfileController controller = new MainMaterialProfileController();
-        matProf.setController(controller);
-        mainTabPane.getTabs().add(loadTab(matProf, new Tab("Material Profiles")));
-
-
-        UserAccountsView view = new UserAccountsView();
-        Tab              tab  = new Tab("Users");
-        tab.setContent(view);
-        mainTabPane.getTabs().add(tab);
+//        mainTabPane.getTabs().addAll(CalendarViewController.loadCalendar());
+//
+//
+//        //adds Schedule orders list
+//        mainTabPane.getTabs().add(new POTableTab().createTable(false));
+//
+//
+//        //adds supplier profiles view
+//        FXMLLoader             loader = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
+//        MainSupplierController contr  = new MainSupplierController();
+//        loader.setController(contr);
+//        mainTabPane.getTabs().add(loadTab(loader, new Tab("Supplier Profiles")));
+//
+//        //QA Records view
+//        ReportView reportView = new ReportView();
+//        Tab        reportTab  = new Tab("QA Reports");
+//        reportTab.setContent(reportView);
+//        mainTabPane.getTabs().add(reportTab);
+//
+//
+//        //Materials view
+//        FXMLLoader              drawer = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
+//        MainRmtIntakeController c      = new MainRmtIntakeController();
+//        drawer.setController(c);
+//        mainTabPane.getTabs().add(loadTab(drawer, new Tab("Material Intake")));
+//
+//
+//        FXMLLoader                    matProf    = new FXMLLoader(getClass().getResource("/common/blankStackPane.fxml"));
+//        MainMaterialProfileController controller = new MainMaterialProfileController();
+//        matProf.setController(controller);
+//        mainTabPane.getTabs().add(loadTab(matProf, new Tab("Material Profiles")));
+//
+//
+//        UserAccountsView view = new UserAccountsView();
+//        Tab              tab  = new Tab("Users");
+//        tab.setContent(view);
+//        mainTabPane.getTabs().add(tab);
 
     }
 

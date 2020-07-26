@@ -14,7 +14,6 @@ public class PoMaterialsDao implements Dao<PoMaterials> {
 
     private final static String TABLE = "PO_MATERIALS";
 
-
     @Override
     public <R> PoMaterials get(R id) {
 

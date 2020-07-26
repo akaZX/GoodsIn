@@ -50,9 +50,9 @@ public class CalendarViewController {
 
             public void run() {
 
-
                 while (true) {
                     Platform.runLater(() -> {
+//                        System.gc();
 
                         calendarView.setToday(LocalDate.now());
                         calendarView.setTime(LocalTime.now());
@@ -61,6 +61,7 @@ public class CalendarViewController {
                     });
 
                     try {
+
                         sleep(60000L);
 
                     }
@@ -78,13 +79,14 @@ public class CalendarViewController {
     }
 
 
+
     private static void loadCalendarEntries() {
 
 
 //
         LocalDate calendarDate = calendarView.getDayPage().getDetailedDayView().getDayView().getDate();
 
-        List<ScheduleEntry> orders = ScheduleEntryService.getDeliveriesFromDb(calendarDate.minusDays(10L), calendarDate.plusDays(10L));
+        List<ScheduleEntry> orders = ScheduleEntryService.getDeliveriesFromDb(calendarDate.minusDays(20L), calendarDate.plusDays(40L));
 //
         try {
             sleep(50);

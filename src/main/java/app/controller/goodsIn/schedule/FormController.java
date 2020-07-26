@@ -46,7 +46,7 @@ public class FormController implements Initializable {
 
     private final Label supplier = new Label("Supplier:");
 
-    private final Label poNumber = new Label("Order Number::");
+    private final Label poNumber = new Label("Order Number:");
 
     private final Label haulier = new Label("Haulier:");
 
@@ -339,6 +339,7 @@ public class FormController implements Initializable {
         }
         if (expectedETA.getLocalDateTime() == null) {
             errorMessage += "\n Expected ETA  field is blank";
+            expectedETA.validateInput();
             error = true;
         }
         try {
@@ -363,9 +364,7 @@ public class FormController implements Initializable {
 
         if (! error) {
 
-
             if (scheduleEntry == null) {
-
 
                 SupplierOrders  supplierOrders  = getSupplierOrder();
                 ScheduleDetails scheduleDetails = getScheduleDetails();

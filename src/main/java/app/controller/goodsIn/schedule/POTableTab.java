@@ -30,7 +30,7 @@ import java.time.LocalDate;
 public class POTableTab {
 
 
-    private final Tab tab = new Tab("Orders List");
+    private final Tab tab = new Tab("Schedule entries");
 
     private final JFXTreeTableView<ScheduleEntry> table = new JFXTreeTableView<>();
 
@@ -98,7 +98,7 @@ public class POTableTab {
 
         //removes items if user has only security permissions
         if (security) {
-            toolBar.getItems().removeAll(build, importEntries, deleteEntry);
+            toolBar.getItems().removeAll(build, importEntries, deleteEntry, duplicateOrder );
         }
 
         toolBar.setPadding(new Insets(10, 35, 10, 35));

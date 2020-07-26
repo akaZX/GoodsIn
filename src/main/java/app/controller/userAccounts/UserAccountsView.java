@@ -37,8 +37,7 @@ public class UserAccountsView extends AnchorPane {
     @FXML
     private JFXCheckBox securityCb;
 
-    @FXML
-    private JFXCheckBox fruitCb;
+
 
     @FXML
     private JFXCheckBox rmtAdminCb;
@@ -130,14 +129,7 @@ public class UserAccountsView extends AnchorPane {
         setRmtGoodsInCb(user);
         setRmtAdminCb(user);
         setSecurityCb(user);
-        setFruitCb(user);
         setAdminCb(user);
-    }
-
-
-    private void setFruitCb(Users user) {
-
-        fruitCb.selectedProperty().setValue(user.getFruit());
     }
 
 
@@ -276,7 +268,7 @@ public class UserAccountsView extends AnchorPane {
         user.setRmtGoodsIn((rmtGoodsInCb.selectedProperty().getValue() ? 1 : 0));
         user.setRmtAdmin((rmtAdminCb.selectedProperty().getValue() ? 1 : 0));
         user.setSecurity((securityCb.selectedProperty().getValue() ? 1 : 0));
-        user.setFruit((fruitCb.selectedProperty().getValue() ? 1 : 0));
+
         user.setAdmin((adminCb.selectedProperty().getValue() ? 1 : 0));
 
         return user;
@@ -304,7 +296,7 @@ public class UserAccountsView extends AnchorPane {
         rmtGoodsInCb.selectedProperty().setValue(false);
         rmtAdminCb.selectedProperty().setValue(false);
         securityCb.selectedProperty().setValue(false);
-        fruitCb.selectedProperty().setValue(false);
+
         adminCb.selectedProperty().setValue(false);
     }
 

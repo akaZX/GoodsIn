@@ -15,12 +15,14 @@ public class IntakePane {
     private final JFXDrawersStack drawersStack = new JFXDrawersStack();
 
     PoMaterials poMaterials;
+    private OrderMaterialsDrawer leftDrawer;
 
 
-    public IntakePane(PoMaterials poMaterials) {
+    public IntakePane(PoMaterials poMaterials, OrderMaterialsDrawer drawer) {
 
         this();
         this.poMaterials = poMaterials;
+        this.leftDrawer = drawer;
         loadForm();
     }
 
@@ -35,7 +37,7 @@ public class IntakePane {
         JFXDrawer             rightDrawer   = new JFXDrawer();
         MaterialDetailsDrawer detailsDrawer = new MaterialDetailsDrawer(new MaterialsDao().get(poMaterials.getMCode()));
         rightDrawer.setSidePane(detailsDrawer);
-        SpecsIntakePaneView form = new SpecsIntakePaneView(poMaterials, drawersStack, rightDrawer);
+        SpecsIntakePaneView form = new SpecsIntakePaneView(poMaterials, drawersStack, rightDrawer, leftDrawer);
         rightDrawer.setId(RIGHT);
         rightDrawer.setDirection(JFXDrawer.DrawerDirection.RIGHT);
         stackPane.getChildren().add(form);

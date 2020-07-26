@@ -24,6 +24,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
@@ -125,7 +126,6 @@ public class ScheduleBuilder {
 
     private String getHaulier(ScheduleEntry scheduleEntry, List<ScheduleEntry> allSupplierEntries) {
 
-
         Classifier<String, String> hauliersClassification = new BayesClassifier<>();
 
 
@@ -147,8 +147,6 @@ public class ScheduleBuilder {
         for (PoMaterials materials : new PoMaterialsDao().getAll(scheduleEntry.getOrder().getPoNumber())) {
             poMaterials.add(materials.getMCode());
         }
-//            System.out.println(scheduleEntry.getSupplier().getSupplierName() + "   " + scheduleEntry.getOrder().getPoNumber() +"  " + hauliersClassification.classify(poMaterials).getCategory());
-
 
         return hauliersClassification.classify(poMaterials).getCategory();
     }
@@ -168,7 +166,6 @@ public class ScheduleBuilder {
         return getMostCommonString(bay);
 
     }
-
 
     private String getMostCommonString(Map<String, Long> map) {
 
@@ -223,9 +220,24 @@ public class ScheduleBuilder {
 
         if (pallets > 28) {
             int counter = pallets / 28;
-            for (int i = 0; i < counter; i++) {
-                new ScheduleDetailsDao().save(entry.getDetails());
+            int numberOfEntries = 0;
+            List<ScheduleDetails> entries = new ScheduleDetailsDao().getAll(entry.getOrder().getPoNumber());
+
+
+            for (ScheduleDetails details : entries) {
+                if(details.getOrderDate().equals(entry.getDetails().getOrderDate())){
+                    numberOfEntries++;
+                }
             }
+
+
+
+            if(numberOfEntries < counter){
+                for (int i = 0; i < (counter - numberOfEntries); i++) {
+                    new ScheduleDetailsDao().save(entry.getDetails());
+                }
+            }
+
             return 26;
         }
 

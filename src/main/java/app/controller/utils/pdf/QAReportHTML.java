@@ -12,12 +12,9 @@ import java.util.List;
 public class QAReportHTML {
 
     List<RmtQaRecords> list;
-
     String po;
 
-
     public QAReportHTML(String po) {
-
         this.po = po;
         list = new RmtQaRecordsDao().getAll(po);
     }
@@ -25,25 +22,16 @@ public class QAReportHTML {
 
     public String getReport() {
 
-
         StringBuilder html = new StringBuilder(getTop(po));
-
-
         if (list.size() > 0) {
-
             for (RmtQaRecords records : list) {
                 html.append(recordData(records));
             }
-
         }
         else {
             return null;
         }
-
-
         return html.append(getFooter()).toString();
-
-
     }
 
 
@@ -52,20 +40,24 @@ public class QAReportHTML {
         Materials      material = new MaterialsDao().get(record.getmCode());
         QaRecordWeight weight   = new QaRecordWeightDao().get(record.getRowid());
         String         color    = "";
+        String rowColor = "";
         if (record.getDecision().equalsIgnoreCase("REJECT")) {
             color += "bg-danger";
+            rowColor += "danger";
         }
         else if (record.getDecision().equalsIgnoreCase("ACCEPT")) {
             color += "bg-success";
+            rowColor += "success";
         }
         else {
             color += "bg-warning";
+            rowColor += "warning";
         }
 
 
         @Language("HTML")
         String html =
-                "    <div class=\"table-responsive\">\n" +
+                "    <div class=\"container\">\n" +
                 "\n<p>" +
                 "    <br/>\n" +
                 "    <div class=\"p-3 mb-2 " + color + " text-white\"><h3>" + material + " - " +
@@ -73,7 +65,7 @@ public class QAReportHTML {
                 "\n" +
                 "        <table class=\"table table-bordered table-striped\">\n" +
                 "            <thead>\n" +
-                "            <tr>\n" +
+                "            <tr class=\""+ rowColor + "\"> "+
                 "                <th style=\"width: 20%\">Material information</th>\n" +
                 "                <th style=\"width: 20%\">Test results</th>\n" +
                 "                <th style=\"width: 25%\">Defects/Foreign bodies</th>\n" +
@@ -83,7 +75,7 @@ public class QAReportHTML {
                 "            </tr>\n" +
                 "            </thead>\n" +
                 "            <tbody>\n" +
-                "            <tr>\n" +
+                "            <tr class=\""+ rowColor + "\">"+
                 "\n" +
                 "                <td><h5><strong>" + material.getMCode() + "<br/>" + material.getName() +
                 "</strong><h5/> <h5><strong>General Parameters:</strong></h5>" +
@@ -174,7 +166,6 @@ public class QAReportHTML {
 
 
     private String getFooter() {
-
         @Language("HTML")
         String footer = "<br/>\n" +
                         "\n" +
@@ -189,8 +180,6 @@ public class QAReportHTML {
                         "\n" +
                         "</body>\n" +
                         "</html>";
-
-
         return footer;
     }
 

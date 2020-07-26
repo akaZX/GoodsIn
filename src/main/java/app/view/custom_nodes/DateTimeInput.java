@@ -1,8 +1,10 @@
 package app.view.custom_nodes;
 
 
+import app.controller.utils.ValidateInput;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
@@ -41,11 +43,17 @@ public class DateTimeInput extends HBox {
         }
         formatTextFields(hours, 23);
         formatTextFields(minutes, 59);
+
+        ValidateInput.requiredFieldValidation(date, "Missing date", true, true);
+
     }
 
 
     private void formatTextFields(JFXTextField field, int limit) {
 
+        ValidateInput.requiredFieldValidation(field, " ", true, true);
+
+        field.setValidators(new RequiredFieldValidator());
 //TODO patvarkyti kad leistu ivesti valandas su vienu skaicium
         field.textProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue.length() > newValue.length()) {
@@ -94,9 +102,13 @@ public class DateTimeInput extends HBox {
         //for validating input and leaving it in two digit format
         field.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
             if (! newPropertyValue) {
-                System.out.println("out of focus");
+                if (field.getText().length() == 1) {
+                    field.setText("0" + field.getText());
+                }
             }
+
         });
+
 
     }
 
@@ -126,20 +138,25 @@ public class DateTimeInput extends HBox {
     public void setLocalDateTime(LocalDateTime localDateTime) {
 
         date.setValue(localDateTime.toLocalDate());
-        hours.setText(((localDateTime.getHour() < 10) ? "0" + localDateTime.getHour() : "" + localDateTime.getHour()));
-        minutes.setText(((localDateTime.getMinute() < 10) ? "0" + localDateTime.getMinute() : "" +
-                                                                                              localDateTime.getMinute()));
+        hours.setText(((localDateTime.getHour() < 10) ? ("0" + localDateTime.getHour()) : "" +
+                                                                                                          localDateTime.getHour()));
+        minutes.setText(((localDateTime.getMinute() < 10) ? ("0" + localDateTime.getMinute()) : "" +
+                                                                                                localDateTime.getMinute()));
     }
 
 
     public void setCurrentTime() {
 
-        LocalTime time   = LocalTime.now();
-        int       hour   = time.getHour();
-        int       minute = time.getMinute();
+        LocalDateTime time         = LocalDateTime.now();
+        int           hour         = time.getHour();
+        int           minute       = time.getMinute();
+        String        hourString   = hour < 10 ? "0" + hour : "" + hour;
+        String        minuteString = minute < 10 ? "0" + minute : "" + minute;
+        System.out.println("minute: " + minuteString);
 
-        hours.setText(String.valueOf(hour));
-        minutes.setText(String.valueOf(minute));
+        hours.setText(hourString);
+
+        minutes.setText(minuteString);
         date.setValue(LocalDate.now());
     }
 
@@ -172,6 +189,14 @@ public class DateTimeInput extends HBox {
     public void setDate(LocalDate date) {
 
         this.date.setValue(date);
+    }
+
+
+    public void validateInput() {
+
+        date.validate();
+        minutes.validate();
+        hours.validate();
     }
 
 

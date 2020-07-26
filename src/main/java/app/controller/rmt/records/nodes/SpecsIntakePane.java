@@ -308,13 +308,14 @@ public class SpecsIntakePane extends AnchorPane {
             if (new RmtQaRecordsDao().delete(intakeRecord)) {
                 msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Success"), new Label("Record deleted"));
                 parent.removeSpecsPane(this);
+                parent.reloadLeftDrawer();
             }
 
             else {
                 msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed"), new Label("Failed to delete record"));
             }
             alert.hideWithAnimation();
-
+            parent.reloadLeftDrawer();
         });
 
         cancel.setOnAction(b -> {
@@ -335,6 +336,7 @@ public class SpecsIntakePane extends AnchorPane {
         intakeRecord.setAuthor(System.getProperty("user.name"));
 
         //will show pop up message if it will fail to validate all present fields
+//        System.out.println(intakeRecord.getPo() + "   " + intakeRecord.getmCode() + "   " + intakeRecord.getRowid());
         if (validateAllFields()) {
             boolean update = new RmtQaRecordsDao().update(intakeRecord);
             boolean save   = false;
@@ -344,15 +346,20 @@ public class SpecsIntakePane extends AnchorPane {
                 save = new RmtQaRecordsDao().save(intakeRecord);
             }
             if (update && ! save) {
-                msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Success"), new Label("Material intake data updated"));
+                msg.continueAlert(parent, LabelWithIcons.largeCheckIconLabel("Success"), new Label("Material intake data updated"));
+
+                parent.reloadForm(this);
+
             }
             else if (! update && save) {
-                msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Success"), new Label("Material intake data saved"));
+                msg.continueAlert(parent, LabelWithIcons.largeCheckIconLabel("Success"), new Label("Material intake data saved"));
+                parent.reloadForm(this);
             }
             else {
-                msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed"), new Label("Error occurred while saving/updating intake data"));
+                msg.continueAlert(parent, LabelWithIcons.largeWarningIconLabel("Failed"), new Label("Error occurred while saving/updating intake data"));
             }
         }
+        parent.reloadLeftDrawer();
     }
 
 
@@ -483,22 +490,28 @@ public class SpecsIntakePane extends AnchorPane {
             if (majorMain.selectedProperty().getValue()) {
                 if (! checkCheckBoxes(majorCbList)) {
                     valid = false;
-                    message += "\nMajor foreign bodies: Select one of provided options";
+                    message += "\nMajor foreign bodies: Select one of the provided options";
                 }
             }
 
             if (minorMain.selectedProperty().getValue()) {
                 if (! checkCheckBoxes(minorCbList)) {
                     valid = false;
-                    message += "\nNon-Critical quality defects: Select one of provided options";
+                    message += "\nNon-Critical quality defects: Select one of the provided options";
                 }
             }
 
             if (criticalMain.selectedProperty().getValue()) {
                 if (! checkCheckBoxes(criticalCbList)) {
                     valid = false;
-                    message += "\nCritical quality defects: Select one of provided options";
+                    message += "\nCritical quality defects: Select one of the provided options";
                 }
+            }
+            System.out.println("cia");
+            if (decisionCombo.getSelectionModel().getSelectedItem().isEmpty()) {
+                valid = false;
+                message += "\nSelect decision";
+                System.out.println("ten");
             }
         }
         catch (Exception ignored) {
@@ -1006,7 +1019,7 @@ public class SpecsIntakePane extends AnchorPane {
 
         List<String> stringList = new ArrayList<>(Arrays.asList(DECISIONLIST));
         decisionCombo.setItems(FXCollections.observableArrayList(stringList));
-        decisionCombo.getSelectionModel().select(0);
+        decisionCombo.getSelectionModel().selectFirst();
 
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < 30; i++) {

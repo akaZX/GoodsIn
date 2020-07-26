@@ -21,12 +21,9 @@ public class PDFFile {
 
     public static void createPDFFile(String email, String password, String po, Map<String, String> map) {
 
-
         SupplierOrders supplierOrders = new SupplierOrderDao().getBy(po, "po");
-
         QAReportHTML reportHTML = new QAReportHTML(po);
         String       report     = reportHTML.getReport();
-
 
         if (report != null) {
             try {
@@ -37,14 +34,13 @@ public class PDFFile {
                     directory.mkdirs();
                 }
 
-                try {// IO
-                    System.out.println(LocalTime.now());
+                try {
+                    //gets nano-date and uses it as part of file name
                     String      fileName   = po + "_" + (LocalDateTime.now().getNano() / 10000 * 3) + ".pdf";
                     String      reportPath = supplierFolder + "/" + fileName;
                     PdfWriter   writer     = new PdfWriter(reportPath);
                     PdfDocument pdf        = new PdfDocument(writer);
                     Document    document   = new Document(pdf, PageSize.A4.rotate());
-
 
                     // pdfHTML specific code
                     ConverterProperties converterProperties = new ConverterProperties();
@@ -52,35 +48,28 @@ public class PDFFile {
                     HtmlConverter.convertToPdf(report,
                             pdf, converterProperties);
 
-
                     boolean sent = EmailClient.sendEmailWithAttachement(email, password, reportPath, fileName, supplierOrders);
 
                     if (! sent) {
-                        map.put(supplierOrders.getPoNumber(), "No emails found");
+                        map.put(supplierOrders.getPoNumber(), "No emails found or wrong password");
                     }
-
 
                 }
                 catch (IOException e) {
                     map.put(supplierOrders.getPoNumber(), " Unknown error");
-                    System.out.println("Failed");
+//                    System.out.println("Failed");
                     e.printStackTrace();
                 }
-
-
             }
             catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
         else {
             map.put(supplierOrders.getPoNumber(), "No material records found");
         }
 
-
     }
-
 
 }
 

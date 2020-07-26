@@ -9,6 +9,7 @@ import app.pojos.Suppliers;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXHamburger;
+import com.sun.prism.shader.DrawEllipse_Color_Loader;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class SpecsIntakePaneView extends AnchorPane {
 
-    private final List<RmtQaRecords> records = new ArrayList<>();
+    private  List<RmtQaRecords> records;
 
     private final Messages msg = new Messages();
 
@@ -37,6 +38,7 @@ public class SpecsIntakePaneView extends AnchorPane {
     private JFXDrawer detailsDrawer;
 
     private PoMaterials poMaterial;
+    private OrderMaterialsDrawer leftDrawer;
 
     private int minRows = 0;
 
@@ -58,20 +60,17 @@ public class SpecsIntakePaneView extends AnchorPane {
     private HBox bottomButtons;
 
 
-    public SpecsIntakePaneView(PoMaterials poMaterial, JFXDrawersStack drawersStack, JFXDrawer detailsDrawer) {
+    public SpecsIntakePaneView(PoMaterials poMaterial, JFXDrawersStack drawersStack, JFXDrawer detailsDrawer, OrderMaterialsDrawer leftDrawer) {
 
         this();
         this.poMaterial = poMaterial;
         this.drawersStack = drawersStack;
         this.detailsDrawer = detailsDrawer;
+        this.leftDrawer = leftDrawer;
         setRightHamburger();
-        List<RmtQaRecords> allRecords = new RmtQaRecordsDao().getAll(poMaterial.getPo());
+        records = new RmtQaRecordsDao().getAll(poMaterial.getPo());
 
-        for (RmtQaRecords record : allRecords) {
-            if (record.getmCode().equalsIgnoreCase(poMaterial.getMCode())) {
-                records.add(record);
-            }
-        }
+
         showButtons(true);
 
         setTopLabel();
@@ -132,7 +131,7 @@ public class SpecsIntakePaneView extends AnchorPane {
 
     private void loadSpecPanes() {
 
-        gridPane.getChildren().removeAll();
+        gridPane.getChildren().clear();
 
 
         for (RmtQaRecords record : records) {
@@ -203,13 +202,9 @@ public class SpecsIntakePaneView extends AnchorPane {
 
 
         this.poMaterial = poMaterial;
-        List<RmtQaRecords> allRecords = new RmtQaRecordsDao().getAll(poMaterial.getPo());
+        records = new RmtQaRecordsDao().getAll(poMaterial.getPo());
 
-        for (RmtQaRecords record : allRecords) {
-            if (record.getmCode().equalsIgnoreCase(poMaterial.getMCode())) {
-                records.add(record);
-            }
-        }
+
         setTopLabel();
         loadSpecPanes();
     }
@@ -218,5 +213,28 @@ public class SpecsIntakePaneView extends AnchorPane {
     public void removeSpecsPane(SpecsIntakePane pane) {
 
         gridPane.getChildren().remove(pane);
+
+    }
+
+    public void reloadLeftDrawer(){
+        leftDrawer.loadList();
+    }
+
+
+    public void reloadForm(SpecsIntakePane pane) {
+
+        row = 0;
+        minRows = 0;
+
+        System.out.println(records.size());
+        records.clear();
+        records = new RmtQaRecordsDao().getAll(poMaterial.getPo());
+
+
+        gridPane.getChildren().remove(pane);
+
+        System.out.println(records.size());
+        load(poMaterial);
+
     }
 }

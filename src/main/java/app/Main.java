@@ -37,7 +37,7 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
 
-        primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("images/bakkavor_log.jpeg")));
+        primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("images/logo.jpg")));
 
 
         URL url = this.getClass().getResource("/style.css");

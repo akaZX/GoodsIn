@@ -384,7 +384,6 @@ public class ReportView extends AnchorPane {
         alert.setContent(layout);
 
         alert.show();
-
         bar.setProgress(0);
 
         Thread thread = new Thread(() -> {
@@ -392,7 +391,6 @@ public class ReportView extends AnchorPane {
         });
         thread.setDaemon(true);
         thread.start();
-
 
     }
 
@@ -409,7 +407,6 @@ public class ReportView extends AnchorPane {
 
         });
         alert.hideWithAnimation();
-
 
         Platform.runLater(() -> {
 
@@ -440,10 +437,9 @@ public class ReportView extends AnchorPane {
     private void sendSingleReport() {
 
         if (record != null) {
-            System.out.println(record.getPoNumber());
+//            System.out.println(record.getPoNumber());
             setPassword(Collections.singletonList(record));
         }
-
 
     }
 

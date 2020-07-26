@@ -1,15 +1,13 @@
 package app.controller.rmt.records.nodes;
 
+import app.controller.sql.dao.MaterialSpecsDao;
 import app.controller.sql.dao.MaterialsDao;
 import app.controller.sql.dao.PoMaterialsDao;
 import app.controller.sql.dao.RmtQaRecordsDao;
 import app.controller.utils.LabelWithIcons;
 import app.controller.utils.Messages;
 import app.controller.utils.ValidateInput;
-import app.pojos.Materials;
-import app.pojos.PoMaterials;
-import app.pojos.RmtQaRecords;
-import app.pojos.SupplierOrders;
+import app.pojos.*;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -158,8 +156,9 @@ public class OrderMaterialsDrawer extends AnchorPane {
 
         Thread thread = new Thread(() -> {
 
+
             Platform.runLater(() -> {
-                IntakePane intakePane = new IntakePane(materials);
+                IntakePane intakePane = new IntakePane(materials, this);
                 drawersStack.setContent(intakePane.getPane());
             });
         });
@@ -174,7 +173,7 @@ public class OrderMaterialsDrawer extends AnchorPane {
     }
 
 
-    private void loadList() {
+    public void loadList() {
 
         materialList.getItems().removeAll();
 
@@ -246,16 +245,29 @@ public class OrderMaterialsDrawer extends AnchorPane {
 
                 poMaterials.setExpectedDate(orders.getOrderDate());
 
+                List<PoMaterials> list = new PoMaterialsDao().getAll(orders.getPoNumber());
+                boolean duplicate = false;
+                for (PoMaterials materials : list) {
 
-                boolean saved = new PoMaterialsDao().save(poMaterials);
-                if (saved) {
-                    alert.hideWithAnimation();
-                    msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Material added"), new Label(""));
-                    loadList();
+                    if (material.getMCode().equalsIgnoreCase(materials.getMCode())) {
+                        duplicate = true;
+                        break;
+                    }
 
                 }
-                else {
-                    msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed to add material"), new Label(""));
+                if (duplicate) {
+                    msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Error"), new Label("Duplicate material"));
+                }else {
+                    boolean saved = new PoMaterialsDao().save(poMaterials);
+                    if (saved) {
+                        alert.hideWithAnimation();
+                        msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Material added"), new Label(""));
+                        loadList();
+
+                    }
+                    else {
+                        msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed to add material"), new Label(""));
+                    }
                 }
             }
         });
@@ -270,11 +282,22 @@ public class OrderMaterialsDrawer extends AnchorPane {
 
 
     @FXML
-    private void deleteBtn(ActionEvent event) {
+    private void deleteBtn() {
 
         boolean deleted = new PoMaterialsDao().delete(materialList.getSelectionModel().getSelectedItem());
+        List<RmtQaRecords> specs = new RmtQaRecordsDao().getAll(orders.getPoNumber());
         if (deleted) {
+                System.out.println("soutinam : " + specs.isEmpty());
+            if (specs.size() > 0) {
+
+                for (RmtQaRecords spec : specs) {
+                    if(materialList.getSelectionModel().getSelectedItem().getMCode().equalsIgnoreCase(spec.getmCode())){
+                        new RmtQaRecordsDao().delete(spec);
+                    }
+                }
+            }
             msg.continueAlert(this, LabelWithIcons.largeCheckIconLabel("Material deleted"), new Label(""));
+
         }
         else {
             msg.continueAlert(this, LabelWithIcons.largeWarningIconLabel("Failed to delete material"), new Label(""));

@@ -113,8 +113,6 @@ public class RmtQaRecordsDao implements Dao<RmtQaRecords> {
         record.setDecision(rs.getString("decision"));
         record.setDate(LocalDateTime.parse(rs.getString("date")));
         record.setDetails(new Gson().fromJson(rs.getString("details_JSON"), RmtQaIntakeDetails.class));
-//        System.out.println("Viduje: " + rs.getString("details_JSON"));
-
         return record;
     }
 }

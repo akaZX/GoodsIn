@@ -45,25 +45,6 @@ public class SQLiteJDBC {
     }
 
 
-    public static void close() {
-
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public static <T> ResultSet select(String table, String field, T param) {
 
         close();
@@ -156,6 +137,27 @@ public class SQLiteJDBC {
             return false;
         }
     }
+
+
+    public static void close() {
+
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
 
